@@ -1,6 +1,4 @@
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,7 +10,7 @@
   background-position: "center"
 }
 
-@layer base {
+/* @layer base {
   :root {
       --background: oklch(1 0 0);
       --foreground: oklch(0.145 0 0);
@@ -92,4 +90,4 @@
   html {
     @apply font-sans;
    }
-}
+} */
