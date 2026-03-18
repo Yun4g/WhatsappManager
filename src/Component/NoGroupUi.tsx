@@ -26,7 +26,7 @@ const GroupsCard: React.FC = () => {
                 </div>
 
 
-                <p className="text-[14px] font-medium text-[#999999]  leading-[20px]">
+                <p className="text-[14px] font-medium text-[#999999]  leading-[20px] max-w-[250px] mt-2">
                     No groups or communities created. Sync your WhatsApp to the platform
                 </p>
             </div>
