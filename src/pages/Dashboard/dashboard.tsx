@@ -1,8 +1,10 @@
-import { useState } from "react";
 
 
 function Dashboard() {
-    const [isConnected, setIsConnected] = useState<boolean>(false);
+    const isConnected = false;
+
+
+  
 
 
     return (
@@ -95,7 +97,7 @@ function Dashboard() {
                         )}
                         {isConnected ? 'Connected' : 'Inactive'}
                     </div>
-                    <div className="py-[12px] px-[14px] bg-[#F9F9F9] rounded-full flex items-center gap-[5px] text-[#999999] text-[12px] font-bold">
+                    <div className="py-[12px] cursor-pointer px-[14px] bg-[#F9F9F9] rounded-full flex items-center gap-[5px] text-[#999999] text-[12px] font-bold">
                         <button>
                             Refresh QR Code
                         </button>
