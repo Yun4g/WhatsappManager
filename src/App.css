@@ -4,10 +4,13 @@
 @tailwind utilities;
 
 .auth-background {
-   background-image: url('/sign up bg image.png');
-   background-size: 'cover';
-    background-repeat: no-repeat;
-  background-position: "center"
+  background-image: 
+   linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)),
+    url('/sign up bg image.png');
+
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 /* @layer base {
