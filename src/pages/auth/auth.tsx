@@ -1,7 +1,9 @@
 import { LanguageSwitcher } from '@/Component/LanguageSwitch';
 import React from 'react';
+// import { useNavigate } from 'react-router-dom';
 
 const Auth: React.FC = () => {
+    // const navigate = useNavigate();
     return (
         <div className='bg-[#F7F7F7]  min-h-screen h-screen'>
             <section className='auth-background  w-full h-full flex flex-col relative items-center justify-center px-4'>
@@ -22,7 +24,9 @@ const Auth: React.FC = () => {
 
 
                     <div className='mt-[56px]'>
-                        <button className='flex py-[16px] px-4 md:px-[56px] items-center justify-center gap-2 w-full bg-[#F5F5F5] text-[#181925] text-[16px] font-bold  rounded-full'>
+                        <button 
+                         onClick={() => window.location.href = 'https://manajer-22u7.onrender.com/auth/google'}
+                        className='flex py-[16px] px-4 md:px-[56px] items-center justify-center gap-2 w-full bg-[#F5F5F5] text-[#181925] text-[16px] font-bold  rounded-full'>
                             <span>
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M15.68 8.18177C15.68 7.6145 15.6291 7.06905 15.5345 6.54541H8V9.64359H12.3055C12.1164 10.64 11.5491 11.4836 10.6982 12.0509V14.0654H13.2945C14.8073 12.669 15.68 10.6181 15.68 8.18177Z" fill="#5881F3" />
