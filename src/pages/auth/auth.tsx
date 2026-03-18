@@ -53,7 +53,7 @@ const Auth: React.FC = () => {
 
                 <footer className='absolute bottom-6 left-0 w-full px-6 md:px-[44px] flex justify-between items-center'>
                     <p className='text-[#5C5C5C] text-sm font-semibold'>
-                        © 2025 Group Manager
+                        © {new Date().getFullYear()}  Group Manager
                     </p>
 
                     <LanguageSwitcher />
