@@ -1,4 +1,5 @@
-
+import { getUser } from "@/api/user";
+import { useEffect, useState } from "react";
 
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -10,7 +11,16 @@ interface Nav {
 
 function Layout() {
     const location = useLocation();
+    const [userData, setUserData] = useState();
+    console.log(userData, 'userData')
+    useEffect(() => {
+        const fetchUser = async () => {
+            const data = await getUser();
+            setUserData(data);
+        };
 
+        fetchUser();
+    }, []);
     const NavItem: Nav[] = [
         {
             icon: (
@@ -83,7 +93,7 @@ function Layout() {
     return (
         <section className="bg-[#F9F9F9]">
             <main className="max-w-3xl mx-auto h-screen relative flex flex-col overflow-hidden">
-                
+
                 <header className="flex justify-between items-center py-6 absolute  w-full top-0 z-20 
                          bg-white/10 backdrop-blur-lg">
                     <div className="flex items-center gap-6">
@@ -130,11 +140,10 @@ function Layout() {
                         {NavItem.map((item) => (
                             <div
                                 key={item.path}
-                                className={`flex items-center gap-2 mt-[12px] ${
-                                    location.pathname.startsWith(item.path)
+                                className={`flex items-center gap-2 mt-[12px] ${location.pathname.startsWith(item.path)
                                         ? "text-[#181925]"
                                         : "text-[#999999]"
-                                }`}
+                                    }`}
                             >
                                 {item.icon}
                                 <a href={item.path} className="text-sm font-bold">
