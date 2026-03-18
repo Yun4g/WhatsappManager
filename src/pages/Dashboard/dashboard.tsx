@@ -1,10 +1,11 @@
+import GroupsCard from "@/Component/NoGroupUi";
+
 
 
 function Dashboard() {
     const isConnected = false;
-
-
-  
+    const group = false
+      const hasGroup = !group
 
 
     return (
@@ -112,6 +113,14 @@ function Dashboard() {
                         </span>
                     </div>
                 </section>
+            </section>
+
+            <section  className="w-full h-fit bg-white rounded-3xl p-4 mt-[16px] mb-[300px]">
+                 {hasGroup ? (
+                    <GroupsCard/>
+                 ) : (
+                    <div>hello</div>
+                 )}
             </section>
 
 
