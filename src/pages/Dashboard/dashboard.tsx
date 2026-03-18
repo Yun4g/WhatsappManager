@@ -95,7 +95,7 @@ function Dashboard() {
                         )}
                         {isConnected ? 'Connected' : 'Inactive'}
                     </div>
-                    <div>
+                    <div className="py-[12px] px-[14px] bg-[#F9F9F9] rounded-full flex items-center gap-[5px] text-[#999999] text-[12px] font-bold">
                         <button>
                             Refresh QR Code
                         </button>
