@@ -15,7 +15,7 @@ interface Nav {
 function Layout() {
     const location = useLocation();
     const setUser = useUserStore(state => state.setUserData)
-    const getUserData = getUser
+
     const user = useUserStore(state => state.user)
     const NavItem: Nav[] = [
         {
@@ -90,24 +90,27 @@ function Layout() {
 
 
     const fetchUser = async () => {
-        try {
-            const res = await getUserData();
-            setUser({
-                id: res.id,
-                email: res.email,
-                name: res.name,
-                profile_pic: res.profile_pic,
-                connected: res.connected,
-            });
-            setLoading(false)
-        } catch (error) {
-            setLoading(false)
-            console.log(error);
-        } finally {
-            setLoading(false)
-        }
-
+  setLoading(true);
+  try {
+    const res = await getUser();
+    if (!res) {
+      console.log("User data is undefined");
+      return;
     }
+
+    setUser({
+      id: res.id,
+      email: res.email,
+      name: res.name,
+      profile_pic: res.profile_pic,
+      connected: res.connected,
+    });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+};
 
     useEffect(() => {
         fetchUser()

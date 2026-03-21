@@ -7,9 +7,6 @@ interface PropsType {
 
 function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
      
-    
-
-
 
     return (
         <section className="w-full bg-white rounded-3xl p-4 mt-[16px]">

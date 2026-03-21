@@ -18,7 +18,7 @@ export default function PhonePairingUi({ setConnectMethodPhone }: PropsType) {
     const [loading, setLoading] = useState(false);
 
 
-    const handleSendCode = () => {
+    const handleSendCode = async () => {
         if (!user?.id) {
             console.log("User not available");
             return;
@@ -27,7 +27,7 @@ export default function PhonePairingUi({ setConnectMethodPhone }: PropsType) {
         setLoading(true);
 
         try {
-            connectWithPhone(user?.id, phone)
+          await  connectWithPhone(user?.id, phone)
         } catch (error) {
             console.log(error)
             setLoading(false)
