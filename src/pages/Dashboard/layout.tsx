@@ -136,7 +136,7 @@ function Layout() {
                 </header>
 
                 <section className="flex-1 h-full overflow-y-auto hide-scrollbar">
-                    <aside className="w-[244px] h-full shrink-0 absolute left-0 top-[200px]">
+                    <aside className="w-[244px] h-full shrink-0 absolute left-0 top-[160px]">
                         {NavItem.map((item) => (
                             <div
                                 key={item.path}
@@ -153,7 +153,7 @@ function Layout() {
                         ))}
                     </aside>
 
-                    <div className="flex-1 ml-[265px] mt-[200px] ">
+                    <div className="flex-1 ml-[265px] mt-[160px] ">
                         <Outlet />
                     </div>
                 </section>

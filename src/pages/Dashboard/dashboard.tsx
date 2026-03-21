@@ -1,11 +1,30 @@
+import { ConnectToWhatsappQrCode } from "@/api/dashboard";
 import GroupsCard from "@/Component/NoGroupUi";
+import PhonePairingUi from "@/Component/phoneConnectUi";
+import QrcodeUi from "@/Component/QrcodeUi";
+import { useDashboardStore } from "@/store/dashboardStore";
+import { useEffect, useState } from "react";
 
 
 
 function Dashboard() {
-    const isConnected = false;
+    const {isConnected } = useDashboardStore();
     const group = false
-      const hasGroup = !group
+    const hasGroup = !group
+
+    const getQrCode = ConnectToWhatsappQrCode;
+    const [connectMethod, setConnectMethod] = useState<'qr' | 'phone'>('qr');
+
+
+    useEffect(() => {
+        const fetchQr = async () => {
+            if (isConnected) return;
+
+            await getQrCode();
+        };
+
+        fetchQr();
+    }, []);
 
 
     return (
@@ -16,7 +35,7 @@ function Dashboard() {
 
             <p className="text-[#999999] text-[12px] font-medium">Hi, welcome to Manajer</p>
 
-
+{/* 
             <section className="w-full bg-white rounded-3xl p-4 mt-[16px]">
                 <h1 className="text-[#181925] text-[16px] font-bold">
                     Scan QR Code
@@ -113,14 +132,31 @@ function Dashboard() {
                         </span>
                     </div>
                 </section>
-            </section>
 
-            <section  className="w-full h-fit bg-white rounded-3xl p-4 mt-[16px] mb-[300px]">
-                 {hasGroup ? (
-                    <GroupsCard/>
-                 ) : (
+              
+            </section> */}
+
+              <section>
+                    {
+                        connectMethod === 'qr' ? (
+                             <QrcodeUi 
+                             isConnected={isConnected}
+                             setConnectMethodPhone={()=> setConnectMethod('phone')}
+                                />
+                        ) : (
+                            <PhonePairingUi  
+                            setConnectMethodPhone={()=> setConnectMethod('qr')}
+                            />
+                        )
+                    }
+                </section>
+
+            <section className="w-full h-fit bg-white rounded-3xl p-4 mt-[16px] mb-[300px]">
+                {hasGroup ? (
+                    <GroupsCard />
+                ) : (
                     <div>hello</div>
-                 )}
+                )}
             </section>
 
 
