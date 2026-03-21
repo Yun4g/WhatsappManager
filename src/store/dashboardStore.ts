@@ -2,21 +2,20 @@ import { create } from "zustand";
 
 
 interface UserDataType {
-  userId: string
+  id: string,
+  email: string,
+  name: string,
+  profile_pic: string,
+  connected: boolean
 }
 interface DashboardStore {
-  isConnected: boolean;
   userData: UserDataType[];
-  setIsConnected: (isConnected: boolean) => void;
   setUserData: (userData: UserDataType[]) => void; 
 }
 
 export const useDashboardStore = create<DashboardStore>((set) => ({
-  isConnected: false,
   userData: [],
   setUserData: (userData: UserDataType[]) =>
     set({ userData }),
 
-  setIsConnected: (isConnected: boolean) =>
-    set({ isConnected }),
 }));

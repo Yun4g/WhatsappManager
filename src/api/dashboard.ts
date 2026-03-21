@@ -1,10 +1,15 @@
+
 import axios from "axios";
 
 
-export const ConnectToWhatsappQrCode = async ()=> {
+
+export const ConnectToWhatsappQrCode = async (userId: string)=> {
      try {
         const res = await axios.post('https://manajer-22u7.onrender.com/data/whatsapp/connect', 
-             { type: 'qr', },
+             {
+                 userId: userId,
+                 type: 'qr',
+                 },
              {withCredentials: true}
     )
         return res.data;
@@ -15,10 +20,11 @@ export const ConnectToWhatsappQrCode = async ()=> {
      }
 }
 
-export const ConnectToWhatsappPhoneNumber = async (phoneNumber: string)=> {
+export const ConnectToWhatsappPhoneNumber = async ( userId: string, phoneNumber: string)=> {
      try {
         const res = await axios.post('https://manajer-22u7.onrender.com/data/whatsapp/connect', 
              { 
+               userId: userId,
                 type: "phone",
                 phoneNumber: phoneNumber,
               },

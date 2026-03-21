@@ -1,13 +1,13 @@
 
 interface PropsType {
     isConnected: boolean,
-
     setConnectMethodPhone: () => void,
 }
 
 
 function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
-
+     
+    
 
 
 

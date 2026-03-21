@@ -1,5 +1,8 @@
+
 import { getUser } from "@/api/user";
-import { useEffect, useState } from "react";
+import { useUserStore } from "@/store/userData";
+import { useEffect } from "react";
+
 
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -11,16 +14,9 @@ interface Nav {
 
 function Layout() {
     const location = useLocation();
-    const [userData, setUserData] = useState();
-    console.log(userData, 'userData')
-    useEffect(() => {
-        const fetchUser = async () => {
-            const data = await getUser();
-            setUserData(data);
-        };
-
-        fetchUser();
-    }, []);
+    const setUser = useUserStore(state => state.setUserData)
+    const getUserData = getUser
+    const user = useUserStore(state => state.user)
     const NavItem: Nav[] = [
         {
             icon: (
@@ -90,6 +86,25 @@ function Layout() {
         },
     ];
 
+
+
+    const fetchUser = async () => {
+        const res = await getUserData();
+        setUser({
+            id: res.id,
+            email: res.email,
+            name: res.name,
+            profile_pic: res.profile_pic,
+            connected: res.connected,
+        });
+    }
+
+    useEffect(() => {
+        fetchUser()
+    }, [])
+
+
+
     return (
         <section className="bg-[#F9F9F9]">
             <main className="max-w-3xl mx-auto h-screen relative flex flex-col overflow-hidden">
@@ -106,8 +121,8 @@ function Layout() {
                             </span>
 
                             <div>
-                                <p className="text-[12px] text-[#242424] font-bold">Braide Shekinah</p>
-                                <p className="text-[#B5B5B5] text-[10px] font-medium">0812 407 6934</p>
+                                <p className="text-[12px] text-[#242424] font-bold">{user?.name}</p>
+                                <p className="text-[#B5B5B5] text-[10px] font-medium">{user?.email}</p>
                             </div>
                         </div>
 
@@ -128,7 +143,7 @@ function Layout() {
 
                     <div>
                         <img
-                            src={"/placeholderManjaer.jpg"}
+                            src={user?.profile_pic || "/placeholderManjaer.jpg"}
                             alt="user profile"
                             className="h-[30px] w-[30px] rounded-full"
                         />
@@ -141,8 +156,8 @@ function Layout() {
                             <div
                                 key={item.path}
                                 className={`flex items-center gap-2 mb-[12px] ${location.pathname.startsWith(item.path)
-                                        ? "text-[#181925]"
-                                        : "text-[#999999]"
+                                    ? "text-[#181925]"
+                                    : "text-[#999999]"
                                     }`}
                             >
                                 {item.icon}
@@ -153,7 +168,7 @@ function Layout() {
                         ))}
                     </aside>
 
-                    
+
 
                     <div className="flex-1 ml-[265px] mt-[160px] ">
                         <Outlet />
