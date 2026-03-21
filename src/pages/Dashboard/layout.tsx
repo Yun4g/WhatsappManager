@@ -140,7 +140,7 @@ function Layout() {
                         {NavItem.map((item) => (
                             <div
                                 key={item.path}
-                                className={`flex items-center gap-2 mt-[12px] ${location.pathname.startsWith(item.path)
+                                className={`flex items-center gap-2 mb-[12px] ${location.pathname.startsWith(item.path)
                                         ? "text-[#181925]"
                                         : "text-[#999999]"
                                     }`}
