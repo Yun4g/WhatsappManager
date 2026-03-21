@@ -1,7 +1,7 @@
 
 import { getUser } from "@/api/user";
 import { useUserStore } from "@/store/userData";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 import { Outlet, useLocation } from "react-router-dom";
@@ -85,24 +85,44 @@ function Layout() {
             path: "/dashboard/Pricing",
         },
     ];
+    const [loading, setLoading] = useState<boolean>(false)
 
 
 
     const fetchUser = async () => {
-        const res = await getUserData();
-        setUser({
-            id: res.id,
-            email: res.email,
-            name: res.name,
-            profile_pic: res.profile_pic,
-            connected: res.connected,
-        });
+        try {
+            const res = await getUserData();
+            setUser({
+                id: res.id,
+                email: res.email,
+                name: res.name,
+                profile_pic: res.profile_pic,
+                connected: res.connected,
+            });
+            setLoading(false)
+        } catch (error) {
+            setLoading(false)
+            console.log(error);
+        } finally {
+            setLoading(false)
+        }
+
     }
 
     useEffect(() => {
         fetchUser()
     }, [])
 
+
+
+    if(loading) {
+                <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
+                        <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A3A2A] rounded-full animate-spin" />
+                        <p className="text-sm font-medium text-gray-700">Processing...</p>
+                    </div>
+                </div>
+    }
 
 
     return (
