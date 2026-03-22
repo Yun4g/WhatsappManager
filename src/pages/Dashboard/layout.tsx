@@ -130,11 +130,11 @@ function Layout() {
 
     return (
         <section className="bg-[#F9F9F9]">
-            <main className="max-w-3xl mx-auto h-screen relative flex flex-col overflow-x-hidden">
+            <main className="max-w-3xl w-full mx-auto h-screen relative flex flex-col overflow-x-hidden">
 
-                <header className="flex justify-between items-center py-6 absolute  w-full top-0 z-20 
+                <header className="flex justify-between items-center py-4 px-4 md:px-0 md:py-6 absolute w-full top-0 z-20 
                          bg-white/10 backdrop-blur-lg">
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-3 md:gap-6">
                         <div className="flex items-center gap-2">
                             <span>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -174,17 +174,17 @@ function Layout() {
                 </header>
 
                 <section className=" block  md:flex-1 h-full overflow-y-auto hide-scrollbar">
-                    <aside className="w-[244px] h-full shrink-0 absolute left-0 top-[160px]">
+                    <aside className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 flex justify-around py-2 md:py-0 md:block md:w-[244px] md:h-full md:shrink-0 md:absolute md:left-0 md:top-[160px] md:bottom-auto md:bg-transparent md:border-none md:z-auto">
                         {NavItem.map((item) => (
                             <div
                                 key={item.path}
-                                className={`flex items-center gap-2 mb-[12px] ${location.pathname.startsWith(item.path)
+                                className={`flex flex-col md:flex-row items-center gap-1 md:gap-2 md:mb-[12px] ${location.pathname.startsWith(item.path)
                                     ? "text-[#181925]"
                                     : "text-[#999999]"
                                     }`}
                             >
                                 {item.icon}
-                                <a href={item.path} className="text-sm font-bold">
+                                <a href={item.path} className="text-[10px] md:text-sm font-bold">
                                     {item.label}
                                 </a>
                             </div>
@@ -193,7 +193,7 @@ function Layout() {
 
 
 
-                    <div className="flex-1 md:ml-[265px] mt-[160px] ">
+                    <div className="w-full px-4 pt-24 pb-24 md:p-0 md:flex-1 md:ml-[265px] md:mt-[160px] ">
                         <Outlet />
                     </div>
                 </section>

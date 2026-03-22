@@ -1,5 +1,7 @@
 import { ConnectToWhatsappQrCode } from "@/api/dashboard";
 import { useUserStore } from "@/store/userData";
+import { get } from "node_modules/axios/index.d.cts";
+import { useEffect } from "react";
 
 
 interface PropsType {
@@ -17,7 +19,11 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 await getQrCode(user.id);
             };
     
-           
+       useEffect(() => {
+        if (!user) return;
+        getQrCode(user.id);
+      }, []);
+   
     
 
     return (
