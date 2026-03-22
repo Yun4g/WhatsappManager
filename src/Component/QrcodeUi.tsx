@@ -19,6 +19,9 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 await getQrCode(user.id);
             };
     
+
+
+
        useEffect(() => {
         if (!user) return;
         getQrCode(user.id);
@@ -27,7 +30,10 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
     
 
     return (
-        <section className="w-full bg-white  rounded-3xl p-4 mt-[16px]">
+        <section className="w-full bg-white  rounded-3xl  mt-[16px]">
+            <div className="p-4">
+
+            
             <h1 className="text-[#181925] text-[16px] font-bold">
                 Scan QR Code
             </h1>
@@ -61,9 +67,10 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
                 </div>
             </div>
+            </div>
 
 
-            <section className="flex justify-between py-[27px]">
+            <section className="flex justify-between py-[27px] border-t border-[#F9F9F9] p-4 mt-5">
                 <div className="flex items-center gap-[6px] text-[#999999] font-bold">
 
                     {isConnected ? (
@@ -124,7 +131,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 </div>
             </section>
 
-            <section>
+            <section className="p-4">
                 {
                     !isConnected && (
                         <button

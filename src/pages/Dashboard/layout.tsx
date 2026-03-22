@@ -129,8 +129,8 @@ function Layout() {
 
 
     return (
-        <section className="bg-[#F9F9F9]">  
-            <main className="max-w-3xl w-full mx-auto h-screen relative hide-scrollbar flex flex-col ">
+        <section className="bg-[#F9F9F9] h-screen overflow-y-hidden border-2">  
+            <main className="max-w-3xl w-full mx-auto   relative flex flex-col ">
 
                 <header className="flex justify-between items-center py-4 px-4 md:px-0 md:py-6 absolute w-full top-0 z-20 
                          bg-white/10 backdrop-blur-lg">
@@ -173,7 +173,7 @@ function Layout() {
                     </div>
                 </header>
 
-                <section className=" block  md:flex-1 h-full overflow-y-auto hide-scrollbar">
+                <section className=" block  md:flex-1 h-full overflow-y-auto  hide-scrollbar">
                     <aside className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 flex justify-around py-2 md:py-0 md:block md:w-[244px] md:h-full md:shrink-0 md:absolute md:left-0 md:top-[160px] md:bottom-auto md:bg-transparent md:border-none md:z-auto">
                         {NavItem.map((item) => (
                             <div
@@ -193,7 +193,7 @@ function Layout() {
 
 
 
-                    <div className=" max-w-xl pt-24 pb-24 md:p-0 md:flex-1 md:ml-[245px] md:mt-[160px]  ">
+                    <div className=" overflow-y-auto  py-24 px-4  md:p-0 md:flex-1 md:ml-[245px] md:pt-[160px] h-screen hide-scrollbar ">
                         <Outlet />
                     </div>
                 </section>
