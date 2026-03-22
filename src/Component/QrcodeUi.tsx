@@ -85,7 +85,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                     {
                         initialQrloading ? (
                             <div className="h-[130px] w-[130px] flex items-center justify-center">
-                                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-green-600"></div>
+                                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-[#999999]"></div>
                             </div>
                         ) : (
                             <img
