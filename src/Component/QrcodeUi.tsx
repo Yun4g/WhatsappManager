@@ -12,13 +12,24 @@ interface PropsType {
 
 function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
     const user = useUserStore((state) => state.user);
+    const [initialQrloading, setInitialQrLoading] = useState<boolean>(false);
     console.log(user, 'user')
     const [qrCode, setQrcode] = useState<string>("")
     const getQrCode = ConnectToWhatsappQrCode
 
-    const  RefrehQrCode = async () => {
-        if (!user?.connected) return;
-        await getQrCode(user.id);
+    const RefrehQrCode = async () => {
+        try {
+            setInitialQrLoading(true)
+            if (user?.connected) return;
+            if (!user?.id) return;
+            await getQrCode(user.id);
+        } catch (error) {
+            console.log(error);
+            setInitialQrLoading(false)
+        } finally {
+            setInitialQrLoading(false)
+        }
+
     };
 
 
@@ -26,14 +37,18 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
     useEffect(() => {
         if (!user) return;
-          
-        if(user.connected) return
+
+        if (user.connected) return
         const fetchQr = async () => {
             try {
-                const res = await getQrCode(user.id); 
-                setQrcode(res.qrCode); 
+                setInitialQrLoading(true)
+                const res = await getQrCode(user.id);
+                setQrcode(res.qrCode);
             } catch (err) {
                 console.error(err);
+                setInitialQrLoading(false)
+            } finally {
+                setInitialQrLoading(false)
             }
         };
 
@@ -44,6 +59,17 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
     return (
         <section className="w-full bg-white  rounded-3xl  mt-[16px]">
+
+
+
+            {/* {loading && (
+                <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
+                        <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A3A2A] rounded-full animate-spin" />
+                        <p className="text-sm font-medium text-gray-700">Processing...</p>
+                    </div>
+                </div>
+            )} */}
             <div className="p-4">
 
 
@@ -56,7 +82,22 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 </p>
 
                 <div className="bg-[#F9F9F9] h-fit flex flex-col items-center w-full py-[33px] mt-[16px] rounded-[18px]">
-                    <img src={ qrCode || "/qrCode.png"} className="h-[130px] w-[130px]" alt="" />
+                    {
+                        initialQrloading ? (
+                            <div className="h-[130px] w-[130px] flex items-center justify-center">
+                                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-green-600"></div>
+                            </div>
+                        ) : (
+                            <img
+                                src={qrCode || "/qrCode.png"}
+                                className="h-[130px] w-[130px]"
+                                alt="QR Code"
+                            />
+                        )
+                    }
+
+
+
                     <p className="text-[#999999] text-[12px] mt-[5px] font-bold">
                         Sync WhatsApp to App
                     </p>
