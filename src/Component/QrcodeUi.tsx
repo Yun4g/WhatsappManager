@@ -1,6 +1,6 @@
 import { ConnectToWhatsappQrCode } from "@/api/dashboard";
 import { useUserStore } from "@/store/userData";
-import { get } from "node_modules/axios/index.d.cts";
+
 import { useEffect } from "react";
 
 
@@ -27,7 +27,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
     
 
     return (
-        <section className="w-full bg-white rounded-3xl p-4 mt-[16px]">
+        <section className="w-full bg-white  rounded-3xl p-4 mt-[16px]">
             <h1 className="text-[#181925] text-[16px] font-bold">
                 Scan QR Code
             </h1>

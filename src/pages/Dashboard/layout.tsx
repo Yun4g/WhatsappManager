@@ -129,8 +129,8 @@ function Layout() {
 
 
     return (
-        <section className="bg-[#F9F9F9]">
-            <main className="max-w-3xl w-full mx-auto h-screen relative flex flex-col overflow-x-hidden">
+        <section className="bg-[#F9F9F9]">  
+            <main className="max-w-3xl w-full mx-auto h-screen relative hide-scrollbar flex flex-col ">
 
                 <header className="flex justify-between items-center py-4 px-4 md:px-0 md:py-6 absolute w-full top-0 z-20 
                          bg-white/10 backdrop-blur-lg">
@@ -193,7 +193,7 @@ function Layout() {
 
 
 
-                    <div className="w-full px-4 pt-24 pb-24 md:p-0 md:flex-1 md:ml-[265px] md:mt-[160px] ">
+                    <div className=" max-w-xl pt-24 pb-24 md:p-0 md:flex-1 md:ml-[245px] md:mt-[160px]  ">
                         <Outlet />
                     </div>
                 </section>
