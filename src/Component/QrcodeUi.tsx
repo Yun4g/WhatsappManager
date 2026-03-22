@@ -16,7 +16,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
     const [qrCode, setQrcode] = useState<string>("")
     const getQrCode = ConnectToWhatsappQrCode
 
-    const fetchQr = async () => {
+    const  RefrehQrCode = async () => {
         if (!user?.connected) return;
         await getQrCode(user.id);
     };
@@ -31,7 +31,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
         const fetchQr = async () => {
             try {
                 const res = await getQrCode(user.id); 
-                setQrcode(res); 
+                setQrcode(res.qrCode); 
             } catch (err) {
                 console.error(err);
             }
@@ -129,7 +129,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                     {isConnected ? 'Connected' : 'Inactive'}
                 </div>
                 <div className="py-[12px] cursor-pointer px-[14px] bg-[#F9F9F9] rounded-full flex items-center gap-[5px] text-[#999999] text-[12px] font-bold">
-                    <button onClick={fetchQr}>
+                    <button onClick={RefrehQrCode}>
                         Refresh QR Code
                     </button>
 
