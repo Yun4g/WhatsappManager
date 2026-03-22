@@ -12,6 +12,16 @@
   background-position: center;
 }
 
+@media (max-width: 768px) {
+  
+.auth-background {
+  background-image:   url('/sign up bg image.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+}
+
 /* @layer base {
   :root {
       --background: oklch(1 0 0);

@@ -130,7 +130,7 @@ function Layout() {
 
     return (
         <section className="bg-[#F9F9F9]">
-            <main className="max-w-3xl mx-auto h-screen relative flex flex-col overflow-hidden">
+            <main className="max-w-3xl mx-auto h-screen relative flex flex-col overflow-x-hidden">
 
                 <header className="flex justify-between items-center py-6 absolute  w-full top-0 z-20 
                          bg-white/10 backdrop-blur-lg">
@@ -173,7 +173,7 @@ function Layout() {
                     </div>
                 </header>
 
-                <section className="flex-1 h-full overflow-y-auto hide-scrollbar">
+                <section className=" block  md:flex-1 h-full overflow-y-auto hide-scrollbar">
                     <aside className="w-[244px] h-full shrink-0 absolute left-0 top-[160px]">
                         {NavItem.map((item) => (
                             <div
@@ -193,7 +193,7 @@ function Layout() {
 
 
 
-                    <div className="flex-1 ml-[265px] mt-[160px] ">
+                    <div className="flex-1 md:ml-[265px] mt-[160px] ">
                         <Outlet />
                     </div>
                 </section>

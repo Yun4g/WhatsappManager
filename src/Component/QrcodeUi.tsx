@@ -1,3 +1,6 @@
+import { ConnectToWhatsappQrCode } from "@/api/dashboard";
+import { useUserStore } from "@/store/userData";
+
 
 interface PropsType {
     isConnected: boolean,
@@ -6,7 +9,16 @@ interface PropsType {
 
 
 function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
-     
+      const user =  useUserStore((state) => state.user);
+     const getQrCode = ConnectToWhatsappQrCode
+
+            const fetchQr = async () => {
+                if (!user?.connected) return;
+                await getQrCode(user.id);
+            };
+    
+           
+    
 
     return (
         <section className="w-full bg-white rounded-3xl p-4 mt-[16px]">
@@ -91,7 +103,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                     {isConnected ? 'Connected' : 'Inactive'}
                 </div>
                 <div className="py-[12px] cursor-pointer px-[14px] bg-[#F9F9F9] rounded-full flex items-center gap-[5px] text-[#999999] text-[12px] font-bold">
-                    <button>
+                    <button onClick={fetchQr}>
                         Refresh QR Code
                     </button>
 
