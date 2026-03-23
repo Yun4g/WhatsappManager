@@ -201,7 +201,7 @@ function Layout() {
                     </aside>
 
                  
-                    <div className="flex flex-col max-w-lg mx-auto w-full md:mt-[46px] md:py-6 mdpx-4 md:p-0 ">
+                    <div className="flex flex-col max-w-lg mx-auto w-full  md:mt-[45px]  md:px-4 md:p-0 ">
                         <Outlet />
                     </div>
 
