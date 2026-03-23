@@ -73,7 +73,7 @@ export default function GroupManager() {
                             <div className="h-10 w-full bg-gray-200 rounded-full animate-pulse" />
 
 
-                            {[...Array(5)].map((_, i) =>  (
+                            {[...Array(5)].map((_, i) => (
                                 <div key={i} className="flex items-center justify-between animate-pulse">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full bg-gray-200" />
@@ -99,26 +99,48 @@ export default function GroupManager() {
 
                             <div className="space-y-4">
                                 {paginatedGroups.map((group) => (
-                                    <div key={group.id} className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <img src={group.profilePicture} className="w-10 h-10 rounded-full" />
-                                            <div>
-                                                <p className="text-sm font-medium">{group.name}</p>
-                                                <p className="text-xs text-gray-500 leading-4">
-                                                    {group.description}
+                                    <div
+                                        key={group.id}
+                                        className="flex items-center justify-between gap-3"
+                                    >
+
+                                        <div className="flex items-center gap-3 min-w-0">
+
+                                            <div className="w-10 h-10 flex-shrink-0">
+                                                {group.profilePicture ? (
+                                                    <img
+                                                        src={group.profilePicture}
+                                                        alt={group.name}
+                                                        className="w-full h-full rounded-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center text-xs font-semibold text-gray-700 uppercase">
+                                                        {group.name?.slice(0, 2)}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="min-w-0">
+                                                <p className="text-sm font-medium text-[#181925] truncate">
+                                                    {group.name || "Unnamed group"}
+                                                </p>
+
+                                                <p className="text-xs text-gray-500  leading-snug line-clamp-2">
+                                                    {group.description || "No description"}
                                                 </p>
                                             </div>
                                         </div>
 
+
                                         <button
                                             onClick={() => toggleGroup(group.id)}
-                                            className={`w-10 h-6 rounded-full flex items-center px-1 transition ${selected.includes(group.id) ? "bg-black" : "bg-gray-300"
+                                            className={`w-10 h-6 flex-shrink-0 rounded-full flex items-center px-1 transition ${selected.includes(group.id) ? "bg-black" : "bg-gray-300"
                                                 }`}
                                         >
                                             <div
                                                 className={`w-4 h-4 bg-white rounded-full transition ${selected.includes(group.id)
-                                                        ? "translate-x-4"
-                                                        : "translate-x-0"
+                                                    ? "translate-x-4"
+                                                    : "translate-x-0"
                                                     }`}
                                             />
                                         </button>
@@ -146,8 +168,8 @@ export default function GroupManager() {
                                                 key={page}
                                                 onClick={() => setCurrentPage(page)}
                                                 className={`w-8 h-8 p-[4px] rounded-lg text-sm flex text-[#999999] items-center justify-center transition ${currentPage === page
-                                                        ? "bg-[#F9F9F9] font-semibold"
-                                                        : "border"
+                                                    ? "bg-[#F9F9F9] font-semibold"
+                                                    : "border"
                                                     }`}
                                             >
                                                 {page}
