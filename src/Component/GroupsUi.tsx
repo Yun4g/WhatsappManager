@@ -216,7 +216,7 @@ export default function GroupManager() {
                                             <button onClick={() => setOpen(false)}>✕</button>
                                         </div>
 
-                                        <p className="text-base text-[#71717A] mt-6 pt-4 border-t-2 border-dashed">
+                                        <p className="text-base text-[#71717A] mt-6 pt-4 border-t border-dashed">
                                             Once you confirm these groups,{" "}
                                             <b>you cannot change them</b> - even if you log out.
                                         </p>
