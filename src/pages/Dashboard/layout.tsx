@@ -107,7 +107,7 @@ function Layout() {
             });
         } catch (error) {
             console.log(error);
-             toast.error("Error Getting user data")
+            toast.error("Error Getting user data")
         } finally {
             setLoading(false);
         }
@@ -132,26 +132,26 @@ function Layout() {
 
 
     return (
-        <section className="bg-[#F9F9F9] h-screen overflow-y-hidden border-2">
-            <main className="max-w-3xl w-full mx-auto   relative flex flex-col ">
+        <section className="bg-[#F9F9F9] w-full h-screen overflow-y-auto hide-scrollbar">
 
-                <header className="flex justify-between items-center py-4 px-4 md:px-0 md:py-6 absolute w-full top-0 z-20 
-                         bg-white/10 backdrop-blur-lg">
+            <main className="max-w-3xl w-full mx-auto pt-[100px]">
+
+                {/* HEADER */}
+                <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl z-50
+                       flex justify-between items-center py-4 px-4 md:px-0 md:py-6
+                       bg-white/10 backdrop-blur-lg">
+
                     <div className="flex items-center gap-3 md:gap-6">
-                        <div className="flex items-center gap-2">
-                            <span>
-                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M3.19971 3.19971H15.9997C23.069 3.19971 28.7997 8.93046 28.7997 15.9997H15.9997C8.93046 15.9997 3.19971 10.269 3.19971 3.19971Z" fill="#181925" />
-                                    <path d="M3.19971 16H15.9997C23.069 16 28.7997 21.7308 28.7997 28.8H15.9997C8.93046 28.8 3.19971 23.0692 3.19971 16Z" fill="#181925" />
-                                </svg>
-                            </span>
-
-                            <div>
-                                <p className="text-[12px] text-[#242424] font-bold">{user?.name}</p>
-                                <p className="text-[#B5B5B5] text-[10px] font-medium">{user?.email}</p>
-                            </div>
+                        <span>
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.19971 3.19971H15.9997C23.069 3.19971 28.7997 8.93046 28.7997 15.9997H15.9997C8.93046 15.9997 3.19971 10.269 3.19971 3.19971Z" fill="#181925" />
+                                <path d="M3.19971 16H15.9997C23.069 16 28.7997 21.7308 28.7997 28.8H15.9997C8.93046 28.8 3.19971 23.0692 3.19971 16Z" fill="#181925" />
+                            </svg>
+                        </span>
+                        <div>
+                            <p className="text-[12px] font-bold">{user?.name}</p>
+                            <p className="text-[10px] text-gray-400">{user?.email}</p>
                         </div>
-
                         <button>
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clipPath="url(#clip0_184_589)">
@@ -167,18 +167,23 @@ function Layout() {
                         </button>
                     </div>
 
-                    <div>
-                        <img
-                            src={user?.profile_pic || "/placeholderManjaer.jpg"}
-                            alt="user profile"
-                            className="h-[30px] w-[30px] rounded-full"
-                        />
-                    </div>
+                    <img
+                        src={user?.profile_pic || "/placeholderManjaer.jpg"}
+                        className="h-[30px] w-[30px] rounded-full"
+                    />
                 </header>
 
-                <section className=" block  md:flex-1 h-full overflow-y-auto  hide-scrollbar">
-                    <aside className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 flex justify-around py-2 md:py-0 md:block md:w-[244px] md:h-full md:shrink-0 md:absolute md:left-0 md:top-[160px] md:bottom-auto md:bg-transparent md:border-none md:z-auto">
-                       
+            
+                <section className="md:flex md:items-start gap-6">
+
+                 
+                    <aside className="
+                   fixed bottom-0 left-0  bg-white border-t z-50 flex py-2 justify-around
+           
+                   md:sticky md:top-[140px] md:w-[220px] md:flex-col md:justify-start
+                   md:bg-transparent md:border-none md:z-auto w-[224px]
+                 ">
+
                         {NavItem.map((item) => (
                             <div
                                 key={item.path}
@@ -195,11 +200,11 @@ function Layout() {
                         ))}
                     </aside>
 
-
-
-                    <div className=" overflow-y-auto  py-24 px-4  md:p-0 md:flex-1 md:ml-[245px] md:pt-[160px] h-screen hide-scrollbar ">
+                 
+                    <div className="flex flex-col max-w-lg w-full mt-[46px] py-6 px-4 md:p-0 ">
                         <Outlet />
                     </div>
+
                 </section>
             </main>
         </section>
