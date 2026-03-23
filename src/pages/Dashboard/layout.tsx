@@ -132,13 +132,13 @@ function Layout() {
 
 
     return (
-        <section className="bg-[#F9F9F9] w-full h-screen overflow-y-auto hide-scrollbar">
+        <section className="bg-[#F9F9F9]  w-full h-screen overflow-y-auto hide-scrollbar">
 
             <main className="max-w-3xl w-full mx-auto pt-[100px]">
 
-                {/* HEADER */}
+             
                 <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl z-50
-                       flex justify-between items-center py-4 px-4 md:px-0 md:py-6
+                       flex justify-between items-center py-4 px-4 lg:px-0 md:py-6
                        bg-white/10 backdrop-blur-lg">
 
                     <div className="flex items-center gap-3 md:gap-6">
@@ -174,14 +174,14 @@ function Layout() {
                 </header>
 
             
-                <section className="md:flex md:items-start gap-6">
+                <section className="md:flex md:items-start gap-6 px-3 md:px-0">
 
                  
                     <aside className="
                    fixed bottom-0 left-0  bg-white border-t z-50 flex py-2 justify-around
            
                    md:sticky md:top-[140px] md:w-[220px] md:flex-col md:justify-start
-                   md:bg-transparent md:border-none md:z-auto w-[224px]
+                   md:bg-transparent md:border-none md:z-auto w-full lg:w-[224px]
                  ">
 
                         {NavItem.map((item) => (
@@ -201,7 +201,7 @@ function Layout() {
                     </aside>
 
                  
-                    <div className="flex flex-col max-w-lg w-full mt-[46px] py-6 px-4 md:p-0 ">
+                    <div className="flex flex-col max-w-lg mx-auto w-full md:mt-[46px] py-6 px-4 md:p-0 ">
                         <Outlet />
                     </div>
 
