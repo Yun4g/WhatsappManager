@@ -90,27 +90,28 @@ function Layout() {
 
 
     const fetchUser = async () => {
-  setLoading(true);
-  try {
-    const res = await getUser();
-    if (!res) {
-      console.log("User data is undefined");
-      return;
-    }
+        
+        try {
+            setLoading(true);
+            const res = await getUser();
+            if (!res) {
+                console.log("User data is undefined");
+                return;
+            }
 
-    setUser({
-      id: res.id,
-      email: res.email,
-      name: res.name,
-      profile_pic: res.profile_pic,
-      connected: res.connected,
-    });
-  } catch (error) {
-    console.log(error);
-  } finally {
-    setLoading(false);
-  }
-};
+            setUser({
+                id: res.id,
+                email: res.email,
+                name: res.name,
+                profile_pic: res.profile_pic,
+                connected: res.connected,
+            });
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         fetchUser()
@@ -118,18 +119,18 @@ function Layout() {
 
 
 
-    if(loading) {
-                <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
-                        <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A3A2A] rounded-full animate-spin" />
-                        <p className="text-sm font-medium text-gray-700">Processing...</p>
-                    </div>
-                </div>
+    if (loading) {
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+            <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
+                <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A3A2A] rounded-full animate-spin" />
+                <p className="text-sm font-medium text-gray-700">Processing...</p>
+            </div>
+        </div>
     }
 
 
     return (
-        <section className="bg-[#F9F9F9] h-screen overflow-y-hidden border-2">  
+        <section className="bg-[#F9F9F9] h-screen overflow-y-hidden border-2">
             <main className="max-w-3xl w-full mx-auto   relative flex flex-col ">
 
                 <header className="flex justify-between items-center py-4 px-4 md:px-0 md:py-6 absolute w-full top-0 z-20 
