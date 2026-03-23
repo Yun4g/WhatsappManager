@@ -90,7 +90,7 @@ function Layout() {
 
 
     const fetchUser = async () => {
-        
+
         try {
             setLoading(true);
             const res = await getUser();
@@ -120,13 +120,22 @@ function Layout() {
 
 
     if (loading) {
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
-                <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A3A2A] rounded-full animate-spin" />
-                <p className="text-sm font-medium text-gray-700">Processing...</p>
+        return (
+            <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+                <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
+                    <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A3A2A] rounded-full animate-spin" />
+                    <p className="text-sm font-medium text-gray-700">Processing...</p>
+                </div>
             </div>
-        </div>
+        );
     }
+
+
+
+
+
+
+    
 
 
     return (
@@ -176,6 +185,7 @@ function Layout() {
 
                 <section className=" block  md:flex-1 h-full overflow-y-auto  hide-scrollbar">
                     <aside className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 flex justify-around py-2 md:py-0 md:block md:w-[244px] md:h-full md:shrink-0 md:absolute md:left-0 md:top-[160px] md:bottom-auto md:bg-transparent md:border-none md:z-auto">
+                       
                         {NavItem.map((item) => (
                             <div
                                 key={item.path}
