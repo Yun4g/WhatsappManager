@@ -132,7 +132,7 @@ function Layout() {
 
     return (
         <section className="bg-[#F9F9F9] h-screen overflow-y-hidden border-2">
-            <main className="max-w-3xl w-full mx-auto   relative flex flex-col ">
+            <main className="max-w-[90%] w-full mx-auto   relative flex flex-col ">
 
                 <header className="flex justify-between items-center py-4 px-4 md:px-0 md:py-6 absolute w-full top-0 z-20 
                          bg-white/10 backdrop-blur-lg">

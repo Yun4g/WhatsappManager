@@ -40,15 +40,15 @@ export default function GroupManager() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setLoading(true)
+                setLoading(true);
                 const res = await getGroup();
-                console.log(res, 'group response')
-                setGroups(res.data);
+                console.log(res, 'group response');
+                setGroups(res || [])
             } catch (error) {
                 console.log(error);
-                setLoading(false)
+                setLoading(false);
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
         };
 
