@@ -43,7 +43,7 @@ export default function GroupManager() {
                 setLoading(true);
                 const res = await getGroup();
                 console.log(res, 'group response');
-                setGroups(res || [])
+                setGroups(Array.isArray(res?.groups) ? res.groups : []);
             } catch (error) {
                 console.log(error);
                 setLoading(false);
