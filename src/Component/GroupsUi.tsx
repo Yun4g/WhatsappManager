@@ -219,11 +219,33 @@ export default function GroupManager() {
 
                                         <div className="mt-4 space-y-3">
                                             {selectedGroups.map((group) => (
-                                                <div key={group.id} className="flex items-center gap-3">
-                                                    <img src={group.profilePicture} className="w-10 h-10 rounded-full" />
-                                                    <div>
-                                                        <p className="text-sm font-medium">{group.name}</p>
-                                                        <p className="text-xs text-gray-500">{group.description}</p>
+
+
+                                                <div key={group.id} className="flex items-center gap-3 min-w-0">
+                                                 
+                                                    <div className="w-10 h-10 flex-shrink-0">
+                                                        {group.profilePicture ? (
+                                                            <img
+                                                                src={group.profilePicture}
+                                                                alt={group.name}
+                                                                className="w-full h-full rounded-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center text-xs font-semibold text-gray-700 uppercase">
+                                                                {group.name}
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                  
+                                                    <div className="min-w-0">
+                                                        <p className="text-sm font-medium truncate" title={group.name}>
+                                                            {group.name || "Unnamed group"}
+                                                        </p>
+
+                                                        <p className="text-xs text-gray-500 leading-snug line-clamp-2">
+                                                            {group.description || "No description"}
+                                                        </p>
                                                     </div>
                                                 </div>
                                             ))}
