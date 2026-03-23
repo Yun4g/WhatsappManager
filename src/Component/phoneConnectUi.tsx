@@ -1,6 +1,5 @@
 import { ConnectToWhatsappPhoneNumber } from "@/api/dashboard";
 import { useUserStore } from "@/store/userData";
-import { ArrowBigLeft } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -33,7 +32,7 @@ export default function PhonePairingUi({ setConnectMethodPhone }: PropsType) {
             const res = await connectWithPhone(user?.id, phone);
             if (res) {
                 toast.success("requst sent successfully")
-                 setCode(res.pairingCode)
+                setCode(res.pairingCode)
             }
         } catch (error) {
             console.log(error)
@@ -66,11 +65,12 @@ export default function PhonePairingUi({ setConnectMethodPhone }: PropsType) {
                     className="flex items-center gap-2 mt-6"
                     onClick={setConnectMethodPhone}
                 >
-                    <span>
-                        <ArrowBigLeft className="h-4 w-4" />
-                    </span>
+                    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="38" height="38" rx="19" fill="white" />
+                        <path d="M14.1299 25.3101H22.1299C24.8899 25.3101 27.1299 23.0701 27.1299 20.3101C27.1299 17.5501 24.8899 15.3101 22.1299 15.3101H11.1299" stroke="#181925" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M13.4301 17.8099L10.8701 15.2499L13.4301 12.6899" stroke="#181925" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
 
-                    Back
                 </button>
             </section>
 
@@ -103,7 +103,7 @@ export default function PhonePairingUi({ setConnectMethodPhone }: PropsType) {
                     </>
                 ) : (
                     <>
-                 
+
                         <p className="text-[#999999] mt-1 text-sm">
                             Use the code below to link your WhatsApp
                         </p>

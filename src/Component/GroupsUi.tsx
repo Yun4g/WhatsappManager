@@ -98,8 +98,6 @@ export default function GroupManager() {
                                     placeholder="Search for group"
                                     className="w-full bg-gray-100 rounded-full px-4 py-3 text-sm mb-4 outline-none"
                                 />
-
-
                                 <div className="space-y-4">
                                     {paginatedGroups.map((group) => (
                                         <div
@@ -195,7 +193,7 @@ export default function GroupManager() {
                                     >
                                         ›
                                     </button>
-                                    
+
                                 </div>
 
                                 <button

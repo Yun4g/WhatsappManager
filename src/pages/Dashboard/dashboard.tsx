@@ -56,7 +56,6 @@ function Dashboard() {
             <section className="w-full h-fit bg-white rounded-3xl  mt-[16px] mb-[300px]">
                 {user?.connected ? (
                     <GroupManager/>
-                  
                 ) : (
                     <NoGroupsCard />
                 )}
