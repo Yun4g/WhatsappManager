@@ -38,23 +38,16 @@ function Layout() {
         {
             icon: (
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M12.6665 5.3335C13.7711 5.3335 14.6665 4.43807 14.6665 3.3335C14.6665 2.22893 13.7711 1.3335 12.6665 1.3335C11.5619 1.3335 10.6665 2.22893 10.6665 3.3335C10.6665 4.43807 11.5619 5.3335 12.6665 5.3335Z"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    />
-                    <path d="M4.6665 8.6665H7.99984" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M4.6665 11.3335H10.6665" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    <path
-                        d="M9.3335 1.3335H6.00016C2.66683 1.3335 1.3335 2.66683 1.3335 6.00016V10.0002C1.3335 13.3335 2.66683 14.6668 6.00016 14.6668H10.0002C13.3335 14.6668 14.6668 13.3335 14.6668 10.0002V6.66683"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    />
+                    <path d="M12.8799 6.66651H3.12652C2.13985 6.66651 1.33984 5.85985 1.33984 4.87985V3.12652C1.33984 2.13985 2.14652 1.33984 3.12652 1.33984H12.8799C13.8665 1.33984 14.6665 2.14652 14.6665 3.12652V4.87985C14.6665 5.85985 13.8599 6.66651 12.8799 6.66651Z" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M12.8799 14.6665H3.12652C2.13985 14.6665 1.33984 13.8599 1.33984 12.8799V11.1265C1.33984 10.1398 2.14652 9.33984 3.12652 9.33984H12.8799C13.8665 9.33984 14.6665 10.1465 14.6665 11.1265V12.8799C14.6665 13.8599 13.8599 14.6665 12.8799 14.6665Z" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M4 3.3335V4.66683" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M6.66699 3.3335V4.66683" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M4 11.3335V12.6668" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M6.66699 11.3335V12.6668" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M9.33301 4H11.9997" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M9.33301 12H11.9997" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
+
             ),
             label: "Groups",
             path: "/dashboard/Groups",
@@ -136,7 +129,7 @@ function Layout() {
 
             <main className="max-w-3xl w-full mx-auto pt-[100px]">
 
-             
+
                 <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl z-50
                        flex justify-between items-center py-4 px-4 lg:px-0 md:py-6
                        bg-white/10 backdrop-blur-lg">
@@ -173,10 +166,10 @@ function Layout() {
                     />
                 </header>
 
-            
+
                 <section className="md:flex md:items-start gap-6 px-3 md:px-0">
 
-                 
+
                     <aside className="
                    fixed bottom-0 left-0  bg-white border-t z-50 flex py-2 justify-around
            
@@ -200,7 +193,7 @@ function Layout() {
                         ))}
                     </aside>
 
-                 
+
                     <div className="flex flex-col max-w-lg mx-auto w-full  md:mt-[45px]  md:px-4 md:p-0 ">
                         <Outlet />
                     </div>
