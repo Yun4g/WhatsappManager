@@ -135,7 +135,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
 
             <section className="flex justify-between py-[27px] border-t border-[#F9F9F9] p-4 mt-5">
-                <div className="flex items-center gap-[6px] text-[#999999] font-bold">
+                <div className="flex flex-wrap items-center gap-[6px] text-[#999999] font-bold">
 
                     {isConnected ? (
                         <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">

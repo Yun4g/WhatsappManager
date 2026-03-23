@@ -1,5 +1,7 @@
 import { ConnectToWhatsappQrCode } from "@/api/dashboard";
-import GroupsCard from "@/Component/NoGroupUi";
+import GroupManager from "@/Component/GroupsUi";
+import NoGroupsCard from "@/Component/NoGroupUi";
+
 import PhonePairingUi from "@/Component/phoneConnectUi";
 import QrcodeUi from "@/Component/QrcodeUi";
 
@@ -10,8 +12,7 @@ import { useEffect, useState } from "react";
 
 function Dashboard() {
     const user = useUserStore((state) => state.user);
-    const group = false
-    const hasGroup = !group
+   
 
     const getQrCode = ConnectToWhatsappQrCode;
     const [connectMethod, setConnectMethod] = useState<'qr' | 'phone'>('qr');
@@ -52,11 +53,12 @@ function Dashboard() {
                     }
                 </section>
 
-            <section className="w-full h-fit bg-white rounded-3xl p-4 mt-[16px] mb-[300px]">
-                {hasGroup ? (
-                    <GroupsCard />
+            <section className="w-full h-fit bg-white rounded-3xl  mt-[16px] mb-[300px]">
+                {user?.connected ? (
+                    <GroupManager/>
+                  
                 ) : (
-                    <div>hello</div>
+                    <NoGroupsCard />
                 )}
             </section>
 

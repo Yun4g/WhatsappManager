@@ -1,8 +1,8 @@
 import React from "react";
 
-const GroupsCard: React.FC = () => {
+const NoGroupsCard: React.FC = () => {
     return (
-        <div className="">
+        <div className=" p-4">
 
             <div className="">
                 <h2 className="text-[16px] font-bold text-[#181925]">
@@ -34,4 +34,4 @@ const GroupsCard: React.FC = () => {
     );
 };
 
-export default GroupsCard;
+export default NoGroupsCard;
