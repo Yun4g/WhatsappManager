@@ -154,7 +154,7 @@ export default function GroupManager() {
 
 
 
-                            <div className="flex flex-wrap items-center justify-between mt-6 border-t p-[15px]">
+                            <div className="flex flex-wrap md:placeholder:flex-nowrap items-center justify-between mt-6 border-t p-[15px]">
                                 <div className="flex items-center gap-2">
                                     <button
                                         disabled={currentPage === 1}
@@ -199,7 +199,7 @@ export default function GroupManager() {
 
                                 <button
                                     onClick={() => setOpen(true)}
-                                    className="bg-[#111827] text-white px-5 py-2 rounded-full text-sm font-bold"
+                                    className="bg-[#111827] text-white px-5 py-2 mt-2 mx-auto md:mt-0 md:mx-0 rounded-full text-sm font-bold"
                                 >
                                     Manage groups
                                 </button>
