@@ -33,7 +33,7 @@ export default function PhonePairingUi({ setConnectMethodPhone }: PropsType) {
             const res = await connectWithPhone(user?.id, phone);
             if (res) {
                 toast.success("requst sent successfully")
-                setCode(res.paringCode)
+                 setCode(res.pairingCode)
             }
         } catch (error) {
             console.log(error)
