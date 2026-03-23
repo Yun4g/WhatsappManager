@@ -154,7 +154,7 @@ export default function GroupManager() {
 
 
 
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-6 border-t p-[15px]">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-6 border-t md:p-[15px]">
 
                            
                                 <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
