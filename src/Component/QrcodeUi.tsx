@@ -2,6 +2,7 @@ import { ConnectToWhatsappQrCode } from "@/api/dashboard";
 import { useUserStore } from "@/store/userData";
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 
 interface PropsType {
@@ -21,11 +22,19 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
         try {
             setInitialQrLoading(true)
             if (user?.connected) return;
-            if (!user?.id) return;
-            await getQrCode(user.id);
+            if (!user?.id) {
+               return  toast.error("User not available");
+            }
+            
+          const res =  await getQrCode(user.id);
+          if(res) {
+            toast.success(res.message)
+          }
+
         } catch (error) {
             console.log(error);
             setInitialQrLoading(false)
+            toast.error('an error occured while generating qr code')
         } finally {
             setInitialQrLoading(false)
         }
@@ -43,6 +52,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             try {
                 setInitialQrLoading(true)
                 const res = await getQrCode(user.id);
+                
                 setQrcode(res.qrCode);
             } catch (err) {
                 console.error(err);

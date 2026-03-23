@@ -2,6 +2,7 @@ import { ConnectToWhatsappPhoneNumber } from "@/api/dashboard";
 import { useUserStore } from "@/store/userData";
 import { ArrowBigLeft } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 
 interface PropsType {
@@ -16,10 +17,12 @@ export default function PhonePairingUi({ setConnectMethodPhone }: PropsType) {
     const user = useUserStore(state => state.user);
     const connectWithPhone = ConnectToWhatsappPhoneNumber;
     const [loading, setLoading] = useState(false);
+    const [code, setCode] = useState<string | null>()
 
 
     const handleSendCode = async () => {
         if (!user?.id) {
+            toast.error("User not available")
             console.log("User not available");
             return;
         }
@@ -27,7 +30,11 @@ export default function PhonePairingUi({ setConnectMethodPhone }: PropsType) {
         setLoading(true);
 
         try {
-          await  connectWithPhone(user?.id, phone)
+            const res = await connectWithPhone(user?.id, phone);
+            if (res) {
+                toast.success("requst sent successfully")
+                setCode(res.paringCode)
+            }
         } catch (error) {
             console.log(error)
             setLoading(false)
@@ -70,28 +77,70 @@ export default function PhonePairingUi({ setConnectMethodPhone }: PropsType) {
                     Connect via Phone
                 </h1>
 
-                <p className="text-[#999999] mt-1 text-sm">
-                    Enter your number to receive a pairing code
-                </p>
+                {!code ? (
+                    <>
+                        <p className="text-[#999999] mt-1 text-sm">
+                            Enter your number to receive a pairing code
+                        </p>
 
-                <div className="bg-[#F9F9F9] flex flex-col items-center w-full py-[33px] mt-[16px] rounded-[18px] px-4">
-                    <input
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="Enter phone number"
-                        className="w-full max-w-[260px] border rounded-xl px-4 py-2.5 text-sm bg-white"
-                    />
+                        <div className="bg-[#F9F9F9] flex flex-col items-center w-full py-[33px] mt-[16px] rounded-[18px] px-4">
+                            <input
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                placeholder="Enter phone number"
+                                className="w-full max-w-[260px] border rounded-xl px-4 py-2.5 text-sm bg-white"
+                            />
 
-                    <button
-                        onClick={handleSendCode}
-                        className="mt-4 bg-[#181925] text-white px-4 py-2 rounded-xl text-sm font-semibold"
-                    >
-                        Send Code
-                    </button>
+                            <button
+                                onClick={handleSendCode}
+                                className="mt-4 bg-[#181925] text-white px-4 py-2 rounded-xl text-sm font-semibold"
+                            >
+                                Send Code
+                            </button>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                 
+                        <p className="text-[#999999] mt-1 text-sm">
+                            Use the code below to link your WhatsApp
+                        </p>
 
+                        <div className="bg-[#F9F9F9] flex flex-col items-center w-full py-[33px] mt-[16px] rounded-[18px] px-4 gap-4">
 
+                            <div className="flex items-center gap-3 bg-white border rounded-xl px-4 py-3">
+                                <span className="text-lg font-semibold tracking-widest">
+                                    {code}
+                                </span>
 
-                </div>
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(code);
+                                        toast.success("Code copied!");
+                                    }}
+                                    className="text-xs text-blue-600 font-medium"
+                                >
+                                    Copy
+                                </button>
+                            </div>
+
+                            <div className="text-xs text-gray-600 text-center leading-relaxed max-w-[280px]">
+                                <p>
+                                    Open WhatsApp on your phone.
+                                </p>
+                                <p>
+                                    Go to <span className="font-medium">Linked Devices</span>.
+                                </p>
+                                <p>
+                                    Tap <span className="font-medium">Link with phone number</span>.
+                                </p>
+                                <p>
+                                    Paste the code above to connect.
+                                </p>
+                            </div>
+                        </div>
+                    </>
+                )}
             </section>
         </>
     );
