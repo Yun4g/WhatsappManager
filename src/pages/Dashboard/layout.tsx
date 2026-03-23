@@ -3,8 +3,6 @@ import { getUser } from "@/api/user";
 import { useUserStore } from "@/store/userData";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
-
 import { Outlet, useLocation } from "react-router-dom";
 
 interface Nav {
