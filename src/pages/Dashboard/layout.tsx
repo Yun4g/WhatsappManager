@@ -2,6 +2,7 @@
 import { getUser } from "@/api/user";
 import { useUserStore } from "@/store/userData";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 
 import { Outlet, useLocation } from "react-router-dom";
@@ -108,6 +109,7 @@ function Layout() {
             });
         } catch (error) {
             console.log(error);
+             toast.error("Error Getting user data")
         } finally {
             setLoading(false);
         }
@@ -135,7 +137,7 @@ function Layout() {
 
 
 
-    
+
 
 
     return (
