@@ -154,8 +154,12 @@ export default function GroupManager() {
 
 
 
-                            <div className="flex items-center justify-between mt-6 border-t p-[15px]">
-                                <div className="flex items-center gap-2">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-6 border-t p-[15px]">
+
+                           
+                                <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
+
+                             
                                     <button
                                         disabled={currentPage === 1}
                                         onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
@@ -164,6 +168,7 @@ export default function GroupManager() {
                                         ‹
                                     </button>
 
+                            
                                     {[...Array(totalPages)].map((_, i) => {
                                         const page = i + 1;
                                         if (page > 5) return null;
@@ -172,9 +177,9 @@ export default function GroupManager() {
                                             <button
                                                 key={page}
                                                 onClick={() => setCurrentPage(page)}
-                                                className={`w-8 h-8 p-[4px] rounded-lg text-sm flex text-[#999999] items-center justify-center transition ${currentPage === page
-                                                    ? "bg-[#F9F9F9] font-semibold"
-                                                    : "border"
+                                                className={`w-8 h-8 rounded-lg text-sm flex items-center justify-center transition ${currentPage === page
+                                                        ? "bg-[#F9F9F9] font-semibold text-[#111827]"
+                                                        : "border text-[#999999]"
                                                     }`}
                                             >
                                                 {page}
@@ -186,6 +191,7 @@ export default function GroupManager() {
                                         <span className="px-2 text-gray-400">...</span>
                                     )}
 
+                                 
                                     <button
                                         disabled={currentPage === totalPages}
                                         onClick={() =>
@@ -197,12 +203,14 @@ export default function GroupManager() {
                                     </button>
                                 </div>
 
+                           
                                 <button
                                     onClick={() => setOpen(true)}
-                                    className="bg-[#111827] text-white px-5 py-2 rounded-full text-sm font-bold"
+                                    className="w-full sm:w-auto bg-[#111827] text-white px-5 py-2 rounded-full text-sm font-bold"
                                 >
                                     Manage groups
                                 </button>
+
                             </div>
 
                             {open && (
