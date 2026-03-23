@@ -232,7 +232,7 @@ export default function GroupManager() {
                                                             />
                                                         ) : (
                                                             <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center text-xs font-semibold text-gray-700 uppercase">
-                                                                {group.name}
+                                                               {group.name?.slice(0, 2)}
                                                             </div>
                                                         )}
                                                     </div>
