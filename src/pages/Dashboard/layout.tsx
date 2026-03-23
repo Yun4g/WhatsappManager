@@ -130,14 +130,6 @@ function Layout() {
         );
     }
 
-
-
-
-
-
-
-
-
     return (
         <section className="bg-[#F9F9F9] h-screen overflow-y-hidden border-2">
             <main className="max-w-3xl w-full mx-auto   relative flex flex-col ">

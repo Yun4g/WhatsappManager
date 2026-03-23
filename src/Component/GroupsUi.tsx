@@ -16,6 +16,7 @@ export default function GroupManager() {
     const [selected, setSelected] = useState<number[]>([]);
     const [open, setOpen] = useState(false);
     const [groups, setGroups] = useState<Group[]>([]);
+    const [loading, setLoading] = useState<boolean>(false)
     console.log(groups)
     const getGroup = GetGroups
 
@@ -39,11 +40,15 @@ export default function GroupManager() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setLoading(true)
                 const res = await getGroup();
                 console.log(res, 'group response')
                 setGroups(res.data);
             } catch (error) {
                 console.log(error);
+                setLoading(false)
+            } finally {
+                setLoading(false)
             }
         };
 
@@ -60,143 +65,169 @@ export default function GroupManager() {
                     Find and select groups to manage
                 </p>
 
-                <input
-                    placeholder="Search for group"
-                    className="w-full bg-gray-100 rounded-full px-4 py-3 text-sm mb-4 outline-none"
-                />
 
-                <div className="space-y-4">
-                    {paginatedGroups.map((group) => (
-                        <div key={group.id} className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <img src={group.profilePicture} className="w-10 h-10 rounded-full" />
-                                <div>
-                                    <p className="text-sm font-medium">{group.name}</p>
-                                    <p className="text-xs text-gray-500 leading-4">{group.description}</p>
+                {
+                    loading ? (
+                        <div className="space-y-4">
+
+                            <div className="h-10 w-full bg-gray-200 rounded-full animate-pulse" />
+
+
+                            {[...Array(5)].map((_, i) =>  (
+                                <div key={i} className="flex items-center justify-between animate-pulse">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-gray-200" />
+                                        <div className="space-y-2">
+                                            <div className="h-3 w-32 bg-gray-200 rounded" />
+                                            <div className="h-3 w-48 bg-gray-100 rounded" />
+                                        </div>
+                                    </div>
+                                    <div className="w-10 h-6 rounded-full bg-gray-200" />
                                 </div>
+
+                            ))}
+
+                        </div>
+                    ) : (
+                        <section>
+
+                            <input
+                                placeholder="Search for group"
+                                className="w-full bg-gray-100 rounded-full px-4 py-3 text-sm mb-4 outline-none"
+                            />
+
+
+                            <div className="space-y-4">
+                                {paginatedGroups.map((group) => (
+                                    <div key={group.id} className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <img src={group.profilePicture} className="w-10 h-10 rounded-full" />
+                                            <div>
+                                                <p className="text-sm font-medium">{group.name}</p>
+                                                <p className="text-xs text-gray-500 leading-4">
+                                                    {group.description}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            onClick={() => toggleGroup(group.id)}
+                                            className={`w-10 h-6 rounded-full flex items-center px-1 transition ${selected.includes(group.id) ? "bg-black" : "bg-gray-300"
+                                                }`}
+                                        >
+                                            <div
+                                                className={`w-4 h-4 bg-white rounded-full transition ${selected.includes(group.id)
+                                                        ? "translate-x-4"
+                                                        : "translate-x-0"
+                                                    }`}
+                                            />
+                                        </button>
+                                    </div>
+                                ))}
                             </div>
 
-                            <button
-                                onClick={() => toggleGroup(group.id)}
-                                className={`w-10 h-6 rounded-full flex items-center px-1 transition ${selected.includes(group.id)
-                                    ? "bg-black"
-                                    : "bg-gray-300"
-                                    }`}
-                            >
-                                <div
-                                    className={`w-4 h-4 bg-white rounded-full transition ${selected.includes(group.id)
-                                        ? "translate-x-4"
-                                        : "translate-x-0"
-                                        }`}
-                                />
-                            </button>
-                        </div>
-                    ))}
-                </div>
 
+                            <div className="flex items-center justify-between mt-6 border-t p-[15px]">
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        disabled={currentPage === 1}
+                                        onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                                        className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 disabled:opacity-40"
+                                    >
+                                        ‹
+                                    </button>
 
-            </div>
-            <div className="flex items-center justify-between mt-6 border-t p-[15px]">
+                                    {[...Array(totalPages)].map((_, i) => {
+                                        const page = i + 1;
+                                        if (page > 5) return null;
 
-                <div className="flex items-center gap-2">
+                                        return (
+                                            <button
+                                                key={page}
+                                                onClick={() => setCurrentPage(page)}
+                                                className={`w-8 h-8 p-[4px] rounded-lg text-sm flex text-[#999999] items-center justify-center transition ${currentPage === page
+                                                        ? "bg-[#F9F9F9] font-semibold"
+                                                        : "border"
+                                                    }`}
+                                            >
+                                                {page}
+                                            </button>
+                                        );
+                                    })}
 
+                                    {totalPages > 5 && (
+                                        <span className="px-2 text-gray-400">...</span>
+                                    )}
 
-                    <button
-                        disabled={currentPage === 1}
-                        onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-                        className="w-8 h-8 flex items-center justify-center rounded-lg  text-gray-500 disabled:opacity-40"
-                    >
-                        ‹
-                    </button>
+                                    <button
+                                        disabled={currentPage === totalPages}
+                                        onClick={() =>
+                                            setCurrentPage((p) => Math.min(p + 1, totalPages))
+                                        }
+                                        className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 disabled:opacity-40"
+                                    >
+                                        ›
+                                    </button>
+                                </div>
 
-
-                    {[...Array(totalPages)].map((_, i) => {
-                        const page = i + 1;
-
-
-                        if (page > 5) return null;
-
-                        return (
-                            <button
-                                key={page}
-                                onClick={() => setCurrentPage(page)}
-                                className={`w-8 h-8 p-[4px] rounded-lg text-sm flex text-[#999999] items-center justify-center transition
-                                 ${currentPage === page
-                                        ? "bg-[#F9F9F9] font-semibold"
-                                        : "border "
-                                    }`}
-                            >
-                                {page}
-                            </button>
-                        );
-                    })}
-
-
-                    {totalPages > 5 && (
-                        <span className="px-2 text-gray-400">...</span>
-                    )}
-
-                    <button
-                        disabled={currentPage === totalPages}
-                        onClick={() =>
-                            setCurrentPage((p) => Math.min(p + 1, totalPages))
-                        }
-                        className="w-8 h-8 flex items-center justify-center rounded-lg  text-gray-500 disabled:opacity-40"
-                    >
-                        ›
-                    </button>
-                </div>
-
-                <button
-                    onClick={() => setOpen(true)}
-                    className="bg-[#111827] text-white px-5 py-2 rounded-full text-sm font-bold"
-                >
-                    Manage groups
-                </button>
-            </div>
-
-            {open && (
-                <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-4">
-                    <div className="bg-white w-full max-w-md rounded-3xl p-8">
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <h3 className="text-lg font-semibold">Confirm Group</h3>
-                                <p className="text-sm text-gray-500">Add group automation</p>
+                                <button
+                                    onClick={() => setOpen(true)}
+                                    className="bg-[#111827] text-white px-5 py-2 rounded-full text-sm font-bold"
+                                >
+                                    Manage groups
+                                </button>
                             </div>
-                            <button onClick={() => setOpen(false)}>✕</button>
-                        </div>
 
-                        <p className="text-base text-[#71717A] mt-6 pt-4 border-t-2 border-dashed">
-                            Once you confirm these groups, <b className="bg-white">you cannot change them</b>  - even if you log out. Please confirm these are the groups you want to manage.
-                        </p>
+                            {/* Modal */}
+                            {open && (
+                                <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-4">
+                                    <div className="bg-white w-full max-w-md rounded-3xl p-8">
+                                        <div className="flex justify-between items-center">
+                                            <div>
+                                                <h3 className="text-lg font-semibold">Confirm Group</h3>
+                                                <p className="text-sm text-gray-500">Add group automation</p>
+                                            </div>
+                                            <button onClick={() => setOpen(false)}>✕</button>
+                                        </div>
 
-                        <div className="mt-4 space-y-3">
-                            {selectedGroups.map((group) => (
-                                <div key={group.id} className="flex items-center gap-3">
-                                    <img src={group.profilePicture} className="w-10 h-10 rounded-full" />
-                                    <div>
-                                        <p className="text-sm font-medium">{group.name}</p>
-                                        <p className="text-xs text-gray-500">{group.description}</p>
+                                        <p className="text-base text-[#71717A] mt-6 pt-4 border-t-2 border-dashed">
+                                            Once you confirm these groups,{" "}
+                                            <b>you cannot change them</b> - even if you log out.
+                                        </p>
+
+                                        <div className="mt-4 space-y-3">
+                                            {selectedGroups.map((group) => (
+                                                <div key={group.id} className="flex items-center gap-3">
+                                                    <img src={group.profilePicture} className="w-10 h-10 rounded-full" />
+                                                    <div>
+                                                        <p className="text-sm font-medium">{group.name}</p>
+                                                        <p className="text-xs text-gray-500">{group.description}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className="flex justify-between mt-6">
+                                            <button
+                                                onClick={() => setOpen(false)}
+                                                className="px-4 py-2 rounded-full border"
+                                            >
+                                                Cancel
+                                            </button>
+
+                                            <button className="px-4 py-2 rounded-full bg-black text-white">
+                                                Yes, I want these groups
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                            )}
+                        </section>
+                    )
 
-                        <div className="flex justify-between mt-6">
-                            <button
-                                onClick={() => setOpen(false)}
-                                className="px-4 py-2 rounded-full border"
-                            >
-                                Cancel
-                            </button>
+                }
 
-                            <button className="px-4 py-2 rounded-full bg-black text-white">
-                                Yes, I want these groups
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            </div>
         </div>
     );
 }
