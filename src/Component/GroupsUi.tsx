@@ -59,16 +59,19 @@ export default function GroupManager() {
 
     return (
         <div>
-            <div className="w-full  p-4">
-                <h2 className="text-lg font-semibold">Select Groups</h2>
-                <p className="text-sm text-gray-500 mb-4">
-                    Find and select groups to manage
-                </p>
+            <div className="w-full  ">
+                <div className="p-4">
+                    <h2 className="text-lg font-semibold">Select Groups</h2>
+                    <p className="text-sm text-gray-500 mb-4">
+                        Find and select groups to manage
+                    </p>
+                </div>
+
 
 
                 {
                     loading ? (
-                        <div className="space-y-4">
+                        <div className="space-y-4 p-4">
 
                             <div className="h-10 w-full bg-gray-200 rounded-full animate-pulse" />
 
@@ -90,63 +93,65 @@ export default function GroupManager() {
                         </div>
                     ) : (
                         <section>
-
-                            <input
-                                placeholder="Search for group"
-                                className="w-full bg-gray-100 rounded-full px-4 py-3 text-sm mb-4 outline-none"
-                            />
-
-
-                            <div className="space-y-4">
-                                {paginatedGroups.map((group) => (
-                                    <div
-                                        key={group.id}
-                                        className="flex items-center justify-between gap-3"
-                                    >
-
-                                        <div className="flex items-center gap-3 min-w-0">
-
-                                            <div className="w-10 h-10 flex-shrink-0">
-                                                {group.profilePicture ? (
-                                                    <img
-                                                        src={group.profilePicture}
-                                                        alt={group.name}
-                                                        className="w-full h-full rounded-full object-cover"
-                                                    />
-                                                ) : (
-                                                    <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center text-xs font-semibold text-gray-700 uppercase">
-                                                        {group.name?.slice(0, 2)}
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            <div className="min-w-0">
-                                                <p className="text-sm font-medium text-[#181925] truncate">
-                                                    {group.name || "Unnamed group"}
-                                                </p>
-
-                                                <p className="text-xs text-gray-500  leading-snug line-clamp-2">
-                                                    {group.description || "No description"}
-                                                </p>
-                                            </div>
-                                        </div>
+                            <div className="p-4">
+                                <input
+                                    placeholder="Search for group"
+                                    className="w-full bg-gray-100 rounded-full px-4 py-3 text-sm mb-4 outline-none"
+                                />
 
 
-                                        <button
-                                            onClick={() => toggleGroup(group.id)}
-                                            className={`w-10 h-6 flex-shrink-0 rounded-full flex items-center px-1 transition ${selected.includes(group.id) ? "bg-black" : "bg-gray-300"
-                                                }`}
+                                <div className="space-y-4">
+                                    {paginatedGroups.map((group) => (
+                                        <div
+                                            key={group.id}
+                                            className="flex items-center justify-between gap-3"
                                         >
-                                            <div
-                                                className={`w-4 h-4 bg-white rounded-full transition ${selected.includes(group.id)
-                                                    ? "translate-x-4"
-                                                    : "translate-x-0"
+
+                                            <div className="flex items-center gap-3 min-w-0">
+
+                                                <div className="w-10 h-10 flex-shrink-0">
+                                                    {group.profilePicture ? (
+                                                        <img
+                                                            src={group.profilePicture}
+                                                            alt={group.name}
+                                                            className="w-full h-full rounded-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center text-xs font-semibold text-gray-700 uppercase">
+                                                            {group.name?.slice(0, 2)}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                <div className="min-w-0">
+                                                    <p className="text-sm font-medium text-[#181925] truncate">
+                                                        {group.name || "Unnamed group"}
+                                                    </p>
+
+                                                    <p className="text-xs text-gray-500  leading-snug line-clamp-2">
+                                                        {group.description || "No description"}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+
+                                            <button
+                                                onClick={() => toggleGroup(group.id)}
+                                                className={`w-10 h-6 flex-shrink-0 rounded-full flex items-center px-1 transition ${selected.includes(group.id) ? "bg-black" : "bg-gray-300"
                                                     }`}
-                                            />
-                                        </button>
-                                    </div>
-                                ))}
+                                            >
+                                                <div
+                                                    className={`w-4 h-4 bg-white rounded-full transition ${selected.includes(group.id)
+                                                        ? "translate-x-4"
+                                                        : "translate-x-0"
+                                                        }`}
+                                                />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
+
 
 
                             <div className="flex items-center justify-between mt-6 border-t p-[15px]">
@@ -200,7 +205,6 @@ export default function GroupManager() {
                                 </button>
                             </div>
 
-                            {/* Modal */}
                             {open && (
                                 <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-4">
                                     <div className="bg-white w-full max-w-md rounded-3xl p-8">
@@ -222,7 +226,7 @@ export default function GroupManager() {
 
 
                                                 <div key={group.id} className="flex items-center gap-3 min-w-0">
-                                                 
+
                                                     <div className="w-10 h-10 flex-shrink-0">
                                                         {group.profilePicture ? (
                                                             <img
@@ -232,12 +236,12 @@ export default function GroupManager() {
                                                             />
                                                         ) : (
                                                             <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center text-xs font-semibold text-gray-700 uppercase">
-                                                               {group.name?.slice(0, 2)}
+                                                                {group.name?.slice(0, 2)}
                                                             </div>
                                                         )}
                                                     </div>
 
-                                                  
+
                                                     <div className="min-w-0">
                                                         <p className="text-sm font-medium truncate" title={group.name}>
                                                             {group.name || "Unnamed group"}
