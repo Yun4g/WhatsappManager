@@ -46,7 +46,7 @@ function Dashboard() {
                                 />
                         ) : (
                             <PhonePairingUi  
-                            setConnectMethodPhone={()=> setConnectMethod('qr')}
+                            setConnectMethodPhone={()=>  setConnectMethod('qr')}
                             />
                         )
                     }

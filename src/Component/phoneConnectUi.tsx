@@ -47,6 +47,8 @@ export default function PhonePairingUi({ setConnectMethodPhone }: PropsType) {
 
 
 
+
+
     return (
         <>
 
@@ -138,6 +140,13 @@ export default function PhonePairingUi({ setConnectMethodPhone }: PropsType) {
                                     Paste the code above to connect.
                                 </p>
                             </div>
+
+                            <button
+                                onClick={handleSendCode}
+                                className="mt-4 bg-[#181925] text-white px-4 py-2 rounded-xl text-sm font-semibold"
+                            >
+                                ReSend Code
+                            </button>
                         </div>
                     </>
                 )}

@@ -23,13 +23,13 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             setInitialQrLoading(true)
             if (user?.connected) return;
             if (!user?.id) {
-               return  toast.error("User not available");
+                return toast.error("User not available");
             }
-            
-          const res =  await getQrCode(user.id);
-          if(res) {
-            toast.success(res.message)
-          }
+
+            const res = await getQrCode(user.id);
+            if (res) {
+                toast.success(res.message)
+            }
 
         } catch (error) {
             console.log(error);
@@ -52,7 +52,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             try {
                 setInitialQrLoading(true)
                 const res = await getQrCode(user.id);
-                
+
                 setQrcode(res.qrCode);
             } catch (err) {
                 console.error(err);
@@ -139,22 +139,23 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
                     {isConnected ? (
                         <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g filter="url(#filter0_d_404_14)">
-                                <circle cx="10" cy="8" r="6" fill="#FB3748" />
+                            <g filter="url(#filter0_d_503_261)">
+                                <circle cx="10" cy="8" r="6" fill="#1FC16B" />
                                 <circle cx="10" cy="8" r="5" stroke="white" stroke-width="2" />
                             </g>
                             <defs>
-                                <filter id="filter0_d_404_14" x="0" y="0" width="20" height="20" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                <filter id="filter0_d_503_261" x="0" y="0" width="20" height="20" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
                                     <feFlood flood-opacity="0" result="BackgroundImageFix" />
                                     <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
                                     <feOffset dy="2" />
                                     <feGaussianBlur stdDeviation="2" />
                                     <feColorMatrix type="matrix" values="0 0 0 0 0.105882 0 0 0 0 0.109804 0 0 0 0 0.113725 0 0 0 0.04 0" />
-                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_404_14" />
-                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_404_14" result="shape" />
+                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_503_261" />
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_503_261" result="shape" />
                                 </filter>
                             </defs>
                         </svg>
+
 
                     ) : (
                         <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
