@@ -1,5 +1,5 @@
 import { GetGroups } from "@/api/Groups";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Group {
     id: number,
@@ -173,10 +173,10 @@ export default function GroupManager() {
                         <div className="mt-4 space-y-3">
                             {selectedGroups.map((group) => (
                                 <div key={group.id} className="flex items-center gap-3">
-                                    <img src={group.avatar} className="w-10 h-10 rounded-full" />
+                                    <img src={group.profilePicture} className="w-10 h-10 rounded-full" />
                                     <div>
                                         <p className="text-sm font-medium">{group.name}</p>
-                                        <p className="text-xs text-gray-500">{group.info}</p>
+                                        <p className="text-xs text-gray-500">{group.description}</p>
                                     </div>
                                 </div>
                             ))}
