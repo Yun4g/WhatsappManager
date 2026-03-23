@@ -2,34 +2,20 @@ import { GetGroups } from "@/api/Groups";
 import React, { useEffect, useState } from "react";
 
 interface Group {
-    id: number;
-    name: string;
-    info: string;
-    avatar: string;
+    id: number,
+    name: string,
+    description: string,
+    profilePicture: string,
+    isCommunity: boolean,
+    memberCount: number
 }
 
-const mockGroups: Group[] = [
-    { id: 1, name: "Techalab", info: "Group Info", avatar: "https://i.pravatar.cc/40?img=1" },
-    { id: 2, name: "Kingdom Hall", info: "Group Info", avatar: "https://i.pravatar.cc/40?img=2" },
-    { id: 3, name: "Adullam", info: "Group Info", avatar: "https://i.pravatar.cc/40?img=3" },
-    { id: 4, name: "Patreon Club", info: "Group Info", avatar: "https://i.pravatar.cc/40?img=4" },
-    { id: 5, name: "Schedio", info: "Group Info", avatar: "https://i.pravatar.cc/40?img=5" },
-    { id: 6, name: "Techalab", info: "Group Info", avatar: "https://i.pravatar.cc/40?img=1" },
-    { id: 7, name: "Kingdom Hall", info: "Group Info", avatar: "/placeholderManjaer.jpg" },
-    { id: 9, name: "Adullam", info: "Group Info", avatar: "/qrCode.png" },
-    { id: 10, name: "Patreon Club", info: "Group Info", avatar: "/sign up bg image.png" },
-    { id: 11, name: "Schedio", info: "Group Info", avatar: "https://i.pravatar.cc/40?img=5" },
-    { id: 12, name: "Techalab", info: "Group Info", avatar: "https://i.pravatar.cc/40?img=1" },
-    { id: 13, name: "Kingdom Hall", info: "Group Info", avatar: "https://i.pravatar.cc/40?img=2" },
-    { id: 14, name: "Adullam", info: "Group Info", avatar: "https://i.pravatar.cc/40?img=3" },
-    { id: 15, name: "Patreon Club", info: "Group Info", avatar: "https://i.pravatar.cc/40?img=4" },
-    { id: 15, name: "Schedio", info: "Group Info", avatar: "https://i.pravatar.cc/40?img=5" },
-];
+
 
 export default function GroupManager() {
     const [selected, setSelected] = useState<number[]>([]);
     const [open, setOpen] = useState(false);
-    const [groups, setGroups] = useState([]);
+    const [groups, setGroups] = useState<Group[]>([]);
     console.log(groups)
     const getGroup = GetGroups
 
@@ -41,14 +27,14 @@ export default function GroupManager() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
-    const totalPages = Math.ceil(mockGroups.length / itemsPerPage);
+    const totalPages = Math.ceil(groups.length / itemsPerPage);
 
-    const paginatedGroups = mockGroups.slice(
+    const paginatedGroups = groups.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
 
-    const selectedGroups = mockGroups.filter((g) => selected.includes(g.id));
+    const selectedGroups = groups.filter((g) => selected.includes(g.id));
 
     useEffect(() => {
         const fetchData = async () => {
@@ -83,10 +69,10 @@ export default function GroupManager() {
                     {paginatedGroups.map((group) => (
                         <div key={group.id} className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                                <img src={group.avatar} className="w-10 h-10 rounded-full" />
+                                <img src={group.profilePicture} className="w-10 h-10 rounded-full" />
                                 <div>
                                     <p className="text-sm font-medium">{group.name}</p>
-                                    <p className="text-xs text-gray-500">{group.info}</p>
+                                    <p className="text-xs text-gray-500 leading-4">{group.description}</p>
                                 </div>
                             </div>
 
@@ -171,7 +157,7 @@ export default function GroupManager() {
 
             {open && (
                 <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-4">
-                    <div className="bg-white w-full max-w-md rounded-3xl p-6">
+                    <div className="bg-white w-full max-w-md rounded-3xl p-8">
                         <div className="flex justify-between items-center">
                             <div>
                                 <h3 className="text-lg font-semibold">Confirm Group</h3>
@@ -180,9 +166,8 @@ export default function GroupManager() {
                             <button onClick={() => setOpen(false)}>✕</button>
                         </div>
 
-                        <p className="text-sm text-gray-500 mt-4">
-                            Once you confirm these groups, you cannot change them. Please
-                            confirm these are the groups you want to manage.
+                        <p className="text-base text-[#71717A] mt-6 pt-4 border-t-2 border-dashed">
+                            Once you confirm these groups, <b className="bg-white">you cannot change them</b>  - even if you log out. Please confirm these are the groups you want to manage.
                         </p>
 
                         <div className="mt-4 space-y-3">
