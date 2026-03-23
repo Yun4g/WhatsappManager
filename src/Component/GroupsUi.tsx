@@ -123,12 +123,12 @@ export default function GroupManager() {
                                                     )}
                                                 </div>
 
-                                                <div className="min-w-0">
+                                                <div className="min-w-0 mt-1">
                                                     <p className="text-sm font-medium text-[#181925] truncate">
                                                         {group.name || "Unnamed group"}
                                                     </p>
 
-                                                    <p className="text-xs text-gray-500  leading-snug line-clamp-2">
+                                                    <p className="text-xs text-gray-500 truncate  leading-snug line-clamp-2">
                                                         {group.description || "No description"}
                                                     </p>
                                                 </div>
@@ -242,7 +242,7 @@ export default function GroupManager() {
                                                     </div>
 
 
-                                                    <div className="min-w-0">
+                                                    <div className="min-w-0 mt-1">
                                                         <p className="text-sm font-medium truncate" title={group.name}>
                                                             {group.name || "Unnamed group"}
                                                         </p>
