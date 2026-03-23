@@ -154,7 +154,7 @@ export default function GroupManager() {
 
 
 
-                            <div className="flex flex-wrap md:placeholder:flex-nowrap items-center justify-between mt-6 border-t p-[15px]">
+                            <div className="flex flex-wrap md:flex-nowrap items-center justify-between mt-6 border-t p-[15px]">
                                 <div className="flex items-center gap-2">
                                     <button
                                         disabled={currentPage === 1}
