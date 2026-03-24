@@ -77,6 +77,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
     try {
       const res = await connectWithPhone(user?.id, phone);
+      console.log('Response from connectWithPhone:', res);
       toast.success("requst sent successfully");
       setCode(res.pairingCode);
       setPhoneInStore(phone);
