@@ -87,6 +87,8 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
       console.log(error);
       toast.error("An error occurred while sending the code.");
       setLoading(false);
+    }  finally  {
+        setLoading(false)
     }
   };
 
