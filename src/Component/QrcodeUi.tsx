@@ -1,4 +1,5 @@
 import { ConnectToWhatsappPhoneNumber, ConnectToWhatsappQrCode } from "@/api/dashboard";
+import { getUser } from "@/api/user";
 import { useDashboardStore } from "@/store/dashboardStore";
 import { useUserStore } from "@/store/userData";
 
@@ -109,6 +110,19 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
         const data = JSON.parse(event.data);
         if (data?.qrCode) {
           setQrcodeUrl(data.qrCode);
+           
+        }
+      } catch (err) {
+        console.error("Failed to parse QR SSE:", err);
+      }
+    });
+
+     es.addEventListener("connected", async (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data) {
+          await getUser
+           
         }
       } catch (err) {
         console.error("Failed to parse QR SSE:", err);
@@ -162,11 +176,14 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                                 </div>
                           
                             ) : (
-                                <img
+                                <section className="h-[130px] w-[130px] rounded-xl overflow-hidden">
+                                    <img
                                     src={qrCodeUrl || "/qrCode.png"}
-                                    className="h-[130px] w-[130px]"
+                                    className="h-full w-full"
                                     alt="QR Code"
                                 />
+                                </section>
+                               
                             )
                         }
 
