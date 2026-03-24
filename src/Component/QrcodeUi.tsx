@@ -85,13 +85,13 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
     const handleSendCode = async () => {
 
         if (!user) return;
-        const es: EventSource | null = null;
+        let es: EventSource | null = null;
 
         try {
             setLoading(true)
-            // es = new EventSource(
-            //     `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}&type=phone&phoneNumber=${phone}`
-            // );
+            es = new EventSource(
+                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}&type=phone&phoneNumber=${phone}`
+            );
 
             es.addEventListener("phone", (event) => {
                 try {
@@ -107,10 +107,10 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
 
 
-            // es.onerror = () => {
-            //     console.log("SSE error, reconnecting...");
-            //     es?.close();
-            // };
+            es.onerror = () => {
+                console.log("SSE error, reconnecting...");
+                es?.close();
+            };
         } catch (error) {
             console.log(error);
             toast.error("An error occurred while sending the code.");
