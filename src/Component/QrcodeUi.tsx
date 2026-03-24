@@ -1,8 +1,8 @@
-import { ConnectToWhatsappPhoneNumber, ConnectToWhatsappQrCode } from "@/api/dashboard";
+import { ConnectToWhatsappQrCode } from "@/api/dashboard";
 import { getUser } from "@/api/user";
 import { useDashboardStore } from "@/store/dashboardStore";
 import { useUserStore } from "@/store/userData";
-
+// 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 interface PropsType {
     isConnected: boolean,
     setConnectMethodPhone: () => void,
-    getUserData : () => void,
+    getUserData: () => void,
 }
 
 
@@ -24,7 +24,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
     console.log(user, 'user')
     const [qrCodeUrl, setQrcodeUrl] = useState<string>("");
     console.log(qrCodeUrl, 'qrCode')
-    const connectWithPhone = ConnectToWhatsappPhoneNumber
+
     const [loading, setLoading] = useState<boolean>(false);
     const [phone, setPhone] = useState("");
 
@@ -66,85 +66,98 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
 
 
-  const handleSendCode = async () => {
-    if (!user) return;
-    if (!user?.id) {
-        toast.error("User not available")
-        console.log("User not available");
-        return;
-    }
-
-    setLoading(true);
-
-    try {
-      const res = await connectWithPhone(user?.id, phone);
-      console.log('Response from connectWithPhone:', res);
-      toast.success("requst sent successfully");
-      setCode(res.pairingCode);
-      setPhoneInStore(phone);
-      setConnectMethodPhone();
-    } catch (error) {
-      console.log(error);
-      toast.error("An error occurred while sending the code.");
-      setLoading(false);
-    }  finally  {
-        setLoading(false)
-    }
-  };
-
-
-
-
-  useEffect(() => {
-  if (!user?.id || user.connected) return;
-
-  let es: EventSource | null = null; 
-
-
-
-  const connectSSE = () => {
-    es = new EventSource(
-      `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`
-    );
-
-    es.addEventListener("qr", (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data?.qrCode) {
-          setQrcodeUrl(data.qrCode);
-           
-        }
-      } catch (err) {
-        console.error("Failed to parse QR SSE:", err);
-      }
-    });
-
-     es.addEventListener("connected", async (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data) {
-          await getUser()
-           
-        }
-      } catch (err) {
-        console.error("Failed to parse QR SSE:", err);
-      }
-    });
-
-    es.onerror = () => {
-      console.log("SSE error, reconnecting...");
-      es?.close();
-      setTimeout(connectSSE, 3000);
-    };
-  };
 
  
-  connectSSE();     
 
-  return () => {
-    es?.close();    
-  };
-}, [user?.id, user?.connected]);
+    const handleSendCode = async () => {
+
+        if (!user) return;
+        let es: EventSource | null = null;
+
+        try {
+            setLoading(true)
+            es = new EventSource(
+          `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}&type=phone&phoneNumber=${phone}`
+            );
+
+            es.addEventListener("phone", (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    setCode(data.pairingCode);
+                    setPhoneInStore(phone);
+                    setConnectMethodPhone();
+                } catch (err) {
+                    console.error("Failed to parse QR SSE:", err);
+                }
+            });
+
+        
+
+            es.onerror = () => {
+                console.log("SSE error, reconnecting...");
+                es?.close();
+            };
+        } catch (error) {
+            console.log(error);
+            toast.error("An error occurred while sending the code.");
+        } finally{
+            setLoading(false)
+        }
+    };
+
+
+
+
+    useEffect(() => {
+        if (!user?.id || user.connected) return;
+
+        let es: EventSource | null = null;
+
+
+
+        const connectSSE = () => {
+            es = new EventSource(
+                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone`
+            );
+
+            es.addEventListener("qr", (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data?.qrCode) {
+                        setQrcodeUrl(data.qrCode);
+
+                    }
+                } catch (err) {
+                    console.error("Failed to parse QR SSE:", err);
+                }
+            });
+
+            es.addEventListener("connected", async (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data) {
+                        await getUser()
+
+                    }
+                } catch (err) {
+                    console.error("Failed to parse QR SSE:", err);
+                }
+            });
+
+            es.onerror = () => {
+                console.log("SSE error, reconnecting...");
+                es?.close();
+                setTimeout(connectSSE, 3000);
+            };
+        };
+
+
+        connectSSE();
+
+        return () => {
+            es?.close();
+        };
+    }, [user?.id, user?.connected]);
 
 
 
@@ -176,16 +189,16 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                                 <div className="h-[130px] w-[130px] flex items-center justify-center">
                                     <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-[#999999]"></div>
                                 </div>
-                          
+
                             ) : (
                                 <section className="h-[130px] w-[130px] rounded-xl bg-white p-1  overflow-hidden">
                                     <img
-                                    src={qrCodeUrl || "/qrCode.png"}
-                                    className="h-full w-full"
-                                    alt="QR Code"
-                                />
+                                        src={qrCodeUrl || "/qrCode.png"}
+                                        className="h-full w-full"
+                                        alt="QR Code"
+                                    />
                                 </section>
-                               
+
                             )
                         }
 
@@ -310,7 +323,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                                 value={phone}
                                 onChange={handlePhoneChange}
                                 placeholder="Enter phone number" className=" bg-[#F5F5F5] outline-none text-[#999999] py-[15.5px] px-[24px] rounded-full  w-[269px]" />
-                          
+
                             <button
                                 onClick={handleSendCode}
                                 className="py-[20px] px-[26px] bg-[#181925] rounded-full text-sm font-bold text-white">
