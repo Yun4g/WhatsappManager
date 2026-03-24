@@ -28,3 +28,4 @@ export const ConnectToWhatsappPhoneNumber = async ( userId: string, phoneNumber:
      
      }
 }
+// https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=2&type=phone&phoneNumber=08060329362

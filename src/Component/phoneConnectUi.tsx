@@ -4,6 +4,7 @@ import { useUserStore } from "@/store/userData";
 import { getUser } from "@/api/user";
 import { RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 
 interface propType {
@@ -40,9 +41,15 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                     const data = JSON.parse(e.data);
                     if (data) {
                         await refreshUserData();
+                        toast.success("success")
                     }
                 } catch (err) {
-                    console.error('Parse error:', err);
+                    if (err instanceof Error) {
+                        console.error("Failed to parse QR SSE:", err.message);
+                        toast.error(err.message)
+                    } else {
+                        console.error("Failed to parse QR SSE:", err);
+                    }
                 } finally {
                     setLoading(false);
                 }
