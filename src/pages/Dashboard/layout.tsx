@@ -14,7 +14,7 @@ interface Nav {
 function Layout() {
     const location = useLocation();
     const setUser = useUserStore(state => state.setUserData)
-
+   
     const user = useUserStore(state => state.user)
     const NavItem: Nav[] = [
         {
@@ -109,6 +109,13 @@ function Layout() {
     useEffect(() => {
         fetchUser()
     }, [])
+
+
+
+
+
+
+    
 
 
 

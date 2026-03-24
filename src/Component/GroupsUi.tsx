@@ -197,6 +197,7 @@ export default function GroupManager() {
                                 </div>
 
                                 <button
+                                    disabled={groups.length === 0}
                                     onClick={() => setOpen(true)}
                                     className="bg-[#111827] text-white px-5 py-2 mt-2 mx-auto md:mt-0 md:mx-0 rounded-full text-sm font-bold"
                                 >
