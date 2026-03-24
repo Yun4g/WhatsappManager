@@ -7,7 +7,7 @@ import PhonePairingUi from "@/Component/phoneConnectUi";
 import QrcodeUi from "@/Component/QrcodeUi";
 
 import { useUserStore } from "@/store/userData";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import { useCallback } from "react";
 
 
@@ -30,48 +30,27 @@ function Dashboard() {
 
 
   
-useEffect(() => {
-  if (!user?.id || user.connected) return;
+// useEffect(() => {
+//   if (!user?.id || user.connected) return;
 
-  let es: EventSource | null = null;
-  let isMounted = true;
+//   let es: EventSource | null = null;
 
-  const connect = () => {
-    if (!isMounted) return;
+//   const connect = () => {
+//     es.addEventListener("connected", async (event) => {
+//       // ...
+//     });
+//     es.onerror = () => {
+//       console.log("SSE error... reconnecting");
+//       es?.close();
+//     };
+//   };
 
-    es = new EventSource(
-      `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`
-    );
+//   connect();
 
-    es.addEventListener("connected", async (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data) {
-          await getUser(); 
-        }
-         console.log("qr code")
-      } catch (err) {
-        console.error("Failed to parse SSE:", err);
-      }
-    });
-
-    es.onerror = () => {
-      console.log("SSE error... reconnecting");
-      es?.close();
-
-      if (isMounted) {
-        setTimeout(connect, 3000); 
-      }
-    };
-  };
-
-  connect();
-
-  return () => {
-    isMounted = false;
-    es?.close();
-  };
-}, []);
+//   return () => {
+//     es?.close();
+//   };
+// }, []);
 
 
 
