@@ -49,6 +49,7 @@ useEffect(() => {
         if (data) {
           await getUser(); 
         }
+         console.log("qr code")
       } catch (err) {
         console.error("Failed to parse SSE:", err);
       }
@@ -70,7 +71,7 @@ useEffect(() => {
     isMounted = false;
     es?.close();
   };
-}, [user?.id, user?.connected]);
+}, []);
 
 
 

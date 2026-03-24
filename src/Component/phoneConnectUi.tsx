@@ -45,6 +45,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                 try {
                     const data = JSON.parse(event.data);
                     setCode(data.pairingCode);
+                     console.log("debuggong")
                     setPhoneInStore(phone);
                 } catch (err) {
                     console.error("Failed to parse QR SSE:", err);
