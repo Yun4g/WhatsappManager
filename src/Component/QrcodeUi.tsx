@@ -13,9 +13,10 @@ interface PropsType {
 }
 
 
-function QrcodeUi({ isConnected, setConnectMethodPhone, getUserData }: PropsType) {
+function QrcodeUi({ isConnected, setConnectMethodPhone, }: PropsType) {
     const user = useUserStore((state) => state.user);
     const setCode = useDashboardStore((state) => state.setCode);
+    const setPhoneInStore = useDashboardStore((state) => state.setPhone);
 
 
     const [initialQrloading, setInitialQrLoading] = useState<boolean>(false);
@@ -70,6 +71,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone, getUserData }: PropsType
             if (res) {
                 toast.success("requst sent successfully")
                 setCode(res.pairingCode);
+                setPhoneInStore(phone);
 
                 setConnectMethodPhone()
             }
@@ -107,49 +109,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone, getUserData }: PropsType
         };
 
         fetchQr();
-    }, []);
-
-  
-
-       useEffect(() => {
-        let es: EventSource;
-
-        const connect = () => {
-            es = new EventSource(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}?type=phone?phoneNumber=${phone}`);
-
-            es.addEventListener('connected', async (e) => {
-                try {
-                    setLoading(true)
-                    const data = JSON.parse(e.data);
-
-                    if (data) {
-                        await getUserData();
-                    }
-                } catch (err) {
-                    console.error('Parse error:', err);
-                } finally{
-                    setLoading(false)
-                }
-            });
-
-            es.onerror = () => {
-                console.log('SSE error... reconnecting');
-
-                es.close();
-
-           
-                setTimeout(() => {
-                    connect();
-                }, 3000);
-            };
-        };
-
-        connect();
-
-        return () => {
-            es?.close(); 
-        };
-    }, []);
+    }, [user, getQrCode]);
 
 
 

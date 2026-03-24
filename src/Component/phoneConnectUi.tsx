@@ -1,6 +1,9 @@
 
 import { useDashboardStore } from "@/store/dashboardStore";
+import { useUserStore } from "@/store/userData";
+import { getUser } from "@/api/user";
 import { RefreshCw } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
 
 interface propType {
@@ -9,10 +12,69 @@ interface propType {
 
 export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
     const code = useDashboardStore((state) => state.code);
-  
+    const phone = useDashboardStore((state) => state.phone);
+    const user = useUserStore((state) => state.user);
+    const setUser = useUserStore((state) => state.setUserData);
+    const [loading, setLoading] = useState(false);
+
+    const refreshUserData = useCallback(async () => {
+        const userData = await getUser();
+        if (userData) {
+            setUser(userData);
+        }
+    }, [setUser]);
+
+    useEffect(() => {
+        if (!phone || !user?.id || user.connected) {
+            return;
+        }
+
+        let es: EventSource;
+
+        const connect = () => {
+            es = new EventSource(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`);
+
+            es.addEventListener('connected', async (e) => {
+                try {
+                    setLoading(true);
+                    const data = JSON.parse(e.data);
+                    if (data) {
+                        await refreshUserData();
+                    }
+                } catch (err) {
+                    console.error('Parse error:', err);
+                } finally {
+                    setLoading(false);
+                }
+            });
+
+            es.onerror = () => {
+                console.log('SSE error... reconnecting');
+                es.close();
+                setTimeout(() => {
+                    connect();
+                }, 3000);
+            };
+        };
+
+        connect();
+
+        return () => {
+            es?.close();
+        };
+    }, [user?.id, user?.connected, phone, refreshUserData]);
+
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+            {loading && (
+                <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
+                        <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A3A2A] rounded-full animate-spin" />
+                        <p className="text-sm font-medium text-gray-700">Processing...</p>
+                    </div>
+                </div>
+            )}
             <div className="w-full max-w-2xl bg-white rounded-3xl shadow-sm p-6 md:p-8">
 
                 <div className="flex items-start justify-between mb-6">
@@ -102,4 +164,3 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
         </div>
     );
 }
-

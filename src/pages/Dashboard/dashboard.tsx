@@ -1,4 +1,4 @@
-import { ConnectToWhatsappQrCode } from "@/api/dashboard";
+// import { ConnectToWhatsappQrCode } from "@/api/dashboard";
 import { getUser } from "@/api/user";
 import GroupManager from "@/Component/GroupsUi";
 import NoGroupsCard from "@/Component/NoGroupUi";
@@ -8,25 +8,22 @@ import QrcodeUi from "@/Component/QrcodeUi";
 
 import { useUserStore } from "@/store/userData";
 import { useEffect, useState } from "react";
+import { useCallback } from "react";
 
 
 
 function Dashboard() {
     const user = useUserStore((state) => state.user);
-    const getUserData = getUser;
-    const getQrCode = ConnectToWhatsappQrCode;
+    const setUser = useUserStore((state) => state.setUserData);
+    const getUserData = useCallback(async () => {
+        const userData = await getUser();
+        if (userData) {
+            setUser(userData);
+        }
+    }, [setUser]);
+    // const getQrCode = ConnectToWhatsappQrCode;
     const [connectMethod, setConnectMethod] = useState<'qr' | 'phone'>('qr');
     const [loading, setLoading] = useState<boolean>(false)
-
-
-    useEffect(() => {
-        const fetchQr = async () => {
-            if (!user?.connected) return;
-            await getQrCode(user.id);
-        };
-
-        fetchQr();
-    }, []);
 
 
 
@@ -34,7 +31,8 @@ function Dashboard() {
         let es: EventSource;
 
         const connect = () => {
-            es = new EventSource(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}?type=qr`);
+            if (!user?.id || user.connected) return;
+            es = new EventSource(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}&type=qr`);
 
             es.addEventListener('connected', async (e) => {
                 try {
@@ -68,7 +66,7 @@ function Dashboard() {
         return () => {
             es?.close(); 
         };
-    }, []);
+    }, [user?.id, user?.connected, getUserData]);
 
   
     
