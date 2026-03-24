@@ -18,7 +18,7 @@ export const ConnectToWhatsappQrCode = async (userId: string)=> {
 
 export const ConnectToWhatsappPhoneNumber = async ( userId: string, phoneNumber: string)=> {
      try {
-        const res = await axios.post(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${userId}&type=phone&phoneNumber=${phoneNumber}`, 
+        const res = await axios.get(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${userId}&type=phone&phoneNumber=${phoneNumber}`, 
              {withCredentials: true}
     )
         return res.data;

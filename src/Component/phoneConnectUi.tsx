@@ -73,7 +73,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
 
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+        <div >
             {loading && (
                 <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
                     <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
@@ -82,32 +82,35 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                     </div>
                 </div>
             )}
-            <div className="w-full max-w-2xl bg-white rounded-3xl shadow-sm p-6 md:p-8">
 
-                <div className="flex items-start justify-between mb-6">
-                    <div>
-                        <h1 className="text-2xl font-semibold text-gray-900">
-                            Connect Account
-                        </h1>
-                        <p className="text-sm text-gray-500">
-                            Use phone number to connect to Manajer
-                        </p>
-                    </div>
 
-                    <button
-                        onClick={setConnectMethodPhone}
-                        className="p-2 rounded-full hover:bg-gray-100">
-                        <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="38" height="38" rx="19" fill="white" />
-                            <path d="M14.1299 25.3096H22.1299C24.8899 25.3096 27.1299 23.0696 27.1299 20.3096C27.1299 17.5496 24.8899 15.3096 22.1299 15.3096H11.1299" stroke="#181925" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M13.4301 17.8104L10.8701 15.2504L13.4301 12.6904" stroke="#181925" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
 
-                    </button>
+            <div className="flex items-start justify-between mb-6">
+                <div>
+                    <h1 className="text-[#181925] text-2xl font-bold">
+                        Connect Account
+                    </h1>
+
+                    <p className="text-[#999999] text-[12px] font-medium">Use phone number to connect to Manajer</p>
                 </div>
+                <button
+                    onClick={setConnectMethodPhone}
+                    className="p-2 rounded-full ">
+                    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="38" height="38" rx="19" fill="white" />
+                        <path d="M14.1299 25.3096H22.1299C24.8899 25.3096 27.1299 23.0696 27.1299 20.3096C27.1299 17.5496 24.8899 15.3096 22.1299 15.3096H11.1299" stroke="#181925" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M13.4301 17.8104L10.8701 15.2504L13.4301 12.6904" stroke="#181925" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+
+                </button>
+            </div>
 
 
-                <div className="bg-gray-50 rounded-2xl p-5 md:p-6">
+
+
+
+            <div className="w-full bg-white  rounded-3xl p-[16px] mt-[16px]">
+                <div>
                     <h2 className="text-lg font-semibold text-gray-900 mb-1">
                         Connect via Phone
                     </h2>

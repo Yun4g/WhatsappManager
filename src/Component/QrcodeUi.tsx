@@ -30,7 +30,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone, }: PropsType) {
 
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // Remove non-digit characters and limit to 11 digits
+
         const numericValue = e.target.value.replace(/\D/g, "");
         setPhone(numericValue.slice(0, 11));
     };

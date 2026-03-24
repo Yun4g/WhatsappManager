@@ -7,7 +7,7 @@ import PhonePairingUi from "@/Component/phoneConnectUi";
 import QrcodeUi from "@/Component/QrcodeUi";
 
 import { useUserStore } from "@/store/userData";
-import {  useState } from "react";
+import { useState } from "react";
 import { useCallback } from "react";
 
 
@@ -21,28 +21,30 @@ function Dashboard() {
             setUser(userData);
         }
     }, [setUser]);
-   
+
     const [connectMethod, setConnectMethod] = useState<'qr' | 'phone'>('qr');
-  
+
 
     return (
         <section className="" >
-            <h1 className="text-[#181925] text-2xl font-bold">
-                Overview
-            </h1>
-
-            <p className="text-[#999999] text-[12px] font-medium">Hi, welcome to Manajer</p>
-
-
 
             <section>
                 {
                     connectMethod === 'qr' ? (
-                        <QrcodeUi
-                            isConnected={user?.connected ?? false}
-                            getUserData={getUserData}
-                            setConnectMethodPhone={() => setConnectMethod('phone')}
-                        />
+                        <>
+                            <h1 className="text-[#181925] text-2xl font-bold">
+                                Overview
+                            </h1>
+
+                            <p className="text-[#999999] text-[12px] font-medium">Hi, welcome to Manajer</p>
+
+
+                            <QrcodeUi
+                                isConnected={user?.connected ?? false}
+                                getUserData={getUserData}
+                                setConnectMethodPhone={() => setConnectMethod('phone')}
+                            />
+                        </>
                     ) : (
                         <PhonePairingUi
                             setConnectMethodPhone={() => setConnectMethod('qr')}
