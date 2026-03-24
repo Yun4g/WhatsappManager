@@ -1,8 +1,8 @@
 
 import { useDashboardStore } from "@/store/dashboardStore";
 import { useUserStore } from "@/store/userData";
-import { getUser } from "@/api/user";
-import { useCallback, useEffect, useState } from "react";
+// import { getUser } from "@/api/user";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 
@@ -14,19 +14,19 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
     const code = useDashboardStore((state) => state.code);
     const phone = useDashboardStore((state) => state.phone);
     const user = useUserStore((state) => state.user);
-    const setUser = useUserStore((state) => state.setUserData);
+    // const setUser = useUserStore((state) => state.setUserData);
     const [loading, setLoading] = useState(false);
     const setCode = useDashboardStore((state) => state.setCode);
     const setPhoneInStore = useDashboardStore((state) => state.setPhone);
     const phoneInStore = useDashboardStore((state) => state.phone);
 
 
-    const refreshUserData = useCallback(async () => {
-        const userData = await getUser();
-        if (userData) {
-            setUser(userData);
-        }
-    }, [setUser]);
+    // const refreshUserData = useCallback(async () => {
+    //     const userData = await getUser();
+    //     if (userData) {
+    //         setUser(userData);
+    //     }
+    // }, [setUser]);
 
 
 
@@ -67,49 +67,49 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
 
 
 
-    useEffect(() => {
-        if (!phone || !user?.id || user.connected) {
-            return;
-        }
+    // useEffect(() => {
+    //     if (!phone || !user?.id || user.connected) {
+    //         return;
+    //     }
 
-        let es: EventSource;
+    //     let es: EventSource;
 
-        const connect = () => {
-            es = new EventSource(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`);
+    //     const connect = () => {
+    //         es = new EventSource(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`);
 
-            es.addEventListener('connected', async (e) => {
-                try {
-                    setLoading(true);
-                    const data = JSON.parse(e.data);
-                    if (data) {
-                        await refreshUserData();
-                        toast.success("success")
-                    }
-                } catch (err) {
-                    if (err instanceof Error) {
-                        console.error("Failed to parse QR SSE:", err.message);
-                        toast.error(err.message)
-                    } else {
-                        console.error("Failed to parse QR SSE:", err);
-                    }
-                } finally {
-                    setLoading(false);
-                }
-            });
+    //         es.addEventListener('connected', async (e) => {
+    //             try {
+    //                 setLoading(true);
+    //                 const data = JSON.parse(e.data);
+    //                 if (data) {
+    //                     await refreshUserData();
+    //                     toast.success("success")
+    //                 }
+    //             } catch (err) {
+    //                 if (err instanceof Error) {
+    //                     console.error("Failed to parse QR SSE:", err.message);
+    //                     toast.error(err.message)
+    //                 } else {
+    //                     console.error("Failed to parse QR SSE:", err);
+    //                 }
+    //             } finally {
+    //                 setLoading(false);
+    //             }
+    //         });
 
-            es.onerror = () => {
-                console.log('SSE error... reconnecting');
-                es.close();
+    //         es.onerror = () => {
+    //             console.log('SSE error... reconnecting');
+    //             es.close();
 
-            };
-        };
+    //         };
+    //     };
 
-        connect();
+    //     connect();
 
-        return () => {
-            es?.close();
-        };
-    }, []);
+    //     return () => {
+    //         es?.close();
+    //     };
+    // }, []);
 
 
     return (
