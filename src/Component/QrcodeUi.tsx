@@ -123,7 +123,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
       try {
         const data = JSON.parse(event.data);
         if (data) {
-          await getUser
+          await getUser()
            
         }
       } catch (err) {
