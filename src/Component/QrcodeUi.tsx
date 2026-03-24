@@ -117,7 +117,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
         const connectSSE = () => {
             es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone`
+                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`
             );
 
             es.addEventListener("qr", (event) => {
