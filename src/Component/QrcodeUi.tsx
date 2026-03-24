@@ -76,20 +76,17 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
     setLoading(true);
 
     try {
-        const res = await connectWithPhone(user?.id, phone);
-    
-            toast.success("requst sent successfully")
-            setCode(res.pairingCode);
-            setPhoneInStore(phone);
-            setConnectMethodPhone()
-
+      const res = await connectWithPhone(user?.id, phone);
+      toast.success("requst sent successfully");
+      setCode(res.pairingCode);
+      setPhoneInStore(phone);
+      setConnectMethodPhone();
     } catch (error) {
-        console.log(error)
-        setLoading(false)
-    } finally {
-        setLoading(false)
+      console.log(error);
+      toast.error("An error occurred while sending the code.");
+      setLoading(false);
     }
-};
+  };
 
 
 
