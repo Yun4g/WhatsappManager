@@ -146,7 +146,6 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             });
 
 
-
             es.onerror = () => {
                 console.log("SSE error, reconnecting...");
                 es?.close();

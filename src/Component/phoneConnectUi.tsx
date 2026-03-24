@@ -162,7 +162,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                             {code?.split('').map((char: string, index: number) => (
                                 <div
                                     key={index}
-                                    className="w-12 h-14 md:w-14 md:h-16 flex items-center justify-center bg-white rounded-xl border border-gray-200 text-lg md:text-xl font-semibold text-gray-800"
+                                    className="w-[40px] h-[48px]  flex items-center justify-center bg-white rounded-xl border border-gray-200 text-lg md:text-xl font-semibold text-gray-800"
                                 >
                                     {char}
                                 </div>
