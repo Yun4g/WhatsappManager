@@ -18,6 +18,9 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
     const [loading, setLoading] = useState(false);
     const setCode = useDashboardStore((state) => state.setCode);
     const setPhoneInStore = useDashboardStore((state) => state.setPhone);
+    const phoneInStore = useDashboardStore((state) => state.phone);
+
+
     const refreshUserData = useCallback(async () => {
         const userData = await getUser();
         if (userData) {
@@ -35,7 +38,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
         try {
             setLoading(true)
             es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}&type=phone&phoneNumber=${phone}`
+                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}&type=phone&phoneNumber=${phoneInStore}`
             );
 
             es.addEventListener("phone", (event) => {
@@ -43,7 +46,6 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                     const data = JSON.parse(event.data);
                     setCode(data.pairingCode);
                     setPhoneInStore(phone);
-                    setConnectMethodPhone();
                 } catch (err) {
                     console.error("Failed to parse QR SSE:", err);
                 }
