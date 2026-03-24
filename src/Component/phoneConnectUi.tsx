@@ -2,7 +2,6 @@
 import { useDashboardStore } from "@/store/dashboardStore";
 import { useUserStore } from "@/store/userData";
 import { getUser } from "@/api/user";
-import { RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -17,13 +16,54 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
     const user = useUserStore((state) => state.user);
     const setUser = useUserStore((state) => state.setUserData);
     const [loading, setLoading] = useState(false);
-
+    const setCode = useDashboardStore((state) => state.setCode);
+    const setPhoneInStore = useDashboardStore((state) => state.setPhone);
     const refreshUserData = useCallback(async () => {
         const userData = await getUser();
         if (userData) {
             setUser(userData);
         }
     }, [setUser]);
+
+
+
+    const handleSendCode = async () => {
+
+        if (!user) return;
+        let es: EventSource | null = null;
+
+        try {
+            setLoading(true)
+            es = new EventSource(
+                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}&type=phone&phoneNumber=${phone}`
+            );
+
+            es.addEventListener("phone", (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    setCode(data.pairingCode);
+                    setPhoneInStore(phone);
+                    setConnectMethodPhone();
+                } catch (err) {
+                    console.error("Failed to parse QR SSE:", err);
+                }
+            });
+
+
+
+            es.onerror = () => {
+                console.log("SSE error, reconnecting...");
+                es?.close();
+            };
+        } catch (error) {
+            console.log(error);
+            toast.error("An error occurred while sending the code.");
+        } finally {
+            setLoading(false)
+        }
+    };
+
+
 
     useEffect(() => {
         if (!phone || !user?.id || user.connected) {
@@ -58,7 +98,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
             es.onerror = () => {
                 console.log('SSE error... reconnecting');
                 es.close();
-               
+
             };
         };
 
@@ -80,8 +120,6 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                     </div>
                 </div>
             )}
-
-
 
             <div className="flex items-start justify-between mb-6">
                 <div>
@@ -117,7 +155,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                     </p>
 
 
-                    <div className="bg-gray-100 rounded-2xl p-4 md:p-6 flex flex-col items-center">
+                    <div className="bg-[#F9F9F9] rounded-2xl p-4 md:p-6 flex flex-col items-center">
                         <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6">
                             {code?.split('').map((char: string, index: number) => (
                                 <div
@@ -157,14 +195,65 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
 
 
                     <div className="flex items-center justify-between mt-6">
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                            <span className="w-2.5 h-2.5 bg-red-500 rounded-full"></span>
-                            Inactive
-                        </div>
+                        <div className="flex flex-wrap items-center gap-[6px] text-[#999999] font-bold">
 
-                        <button className="flex items-center gap-2 bg-[#0F172A] text-white text-sm px-4 py-2 rounded-full hover:bg-[#1E293B] transition">
+                        {user?.connected ? (
+                            <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g filter="url(#filter0_d_503_261)">
+                                    <circle cx="10" cy="8" r="6" fill="#1FC16B" />
+                                    <circle cx="10" cy="8" r="5" stroke="white" stroke-width="2" />
+                                </g>
+                                <defs>
+                                    <filter id="filter0_d_503_261" x="0" y="0" width="20" height="20" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="2" />
+                                        <feGaussianBlur stdDeviation="2" />
+                                        <feColorMatrix type="matrix" values="0 0 0 0 0.105882 0 0 0 0 0.109804 0 0 0 0 0.113725 0 0 0 0.04 0" />
+                                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_503_261" />
+                                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_503_261" result="shape" />
+                                    </filter>
+                                </defs>
+                            </svg>
+
+
+                        ) : (
+                            <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g filter="url(#filter0_d_404_14)">
+                                    <circle cx="10" cy="8" r="6" fill="#FB3748" />
+                                    <circle cx="10" cy="8" r="5" stroke="white" stroke-width="2" />
+                                </g>
+                                <defs>
+                                    <filter id="filter0_d_404_14" x="0" y="0" width="20" height="20" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="2" />
+                                        <feGaussianBlur stdDeviation="2" />
+                                        <feColorMatrix type="matrix" values="0 0 0 0 0.105882 0 0 0 0 0.109804 0 0 0 0 0.113725 0 0 0 0.04 0" />
+                                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_404_14" />
+                                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_404_14" result="shape" />
+                                    </filter>
+                                </defs>
+                            </svg>
+
+
+                        )}
+                        {user?.connected? 'Connected' : 'Inactive'}
+                    </div>
+
+                        <button
+                            onClick={handleSendCode}
+                            className="flex items-center gap-2 bg-[#0F172A] text-white text-sm px-4 py-2 rounded-full hover:bg-[#1E293B] transition">
                             Resend Code
-                            <RefreshCw size={14} />
+
+                            <span>
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6.99988 13.2712C3.96655 13.2712 1.50488 10.8037 1.50488 7.77622C1.50488 4.74872 3.96655 2.27539 6.99988 2.27539C7.62405 2.27539 8.23072 2.36289 8.81405 2.54372C9.04738 2.61372 9.17572 2.85872 9.10572 3.09206C9.03572 3.32539 8.79072 3.45372 8.55738 3.38372C8.06155 3.23206 7.53655 3.15039 6.99988 3.15039C4.45072 3.15039 2.37988 5.22122 2.37988 7.77039C2.37988 10.3196 4.45072 12.3904 6.99988 12.3904C9.54905 12.3904 11.6199 10.3196 11.6199 7.77039C11.6199 6.84872 11.3515 5.96206 10.844 5.20372C10.7099 5.00539 10.7624 4.73122 10.9665 4.59706C11.1649 4.46289 11.439 4.51539 11.5732 4.71956C12.1799 5.62372 12.5007 6.67956 12.5007 7.77622C12.4949 10.8037 10.0332 13.2712 6.99988 13.2712Z" fill="white" />
+                                    <path d="M9.40894 3.54063C9.28644 3.54063 9.16394 3.48813 9.07644 3.38896L7.3906 1.4523C7.2331 1.27146 7.2506 0.991463 7.43144 0.833963C7.61227 0.676463 7.89227 0.693963 8.04977 0.874796L9.7356 2.81146C9.8931 2.9923 9.8756 3.2723 9.69477 3.4298C9.61894 3.50563 9.51394 3.54063 9.40894 3.54063Z" fill="white" />
+                                    <path d="M7.44329 4.97603C7.30913 4.97603 7.17496 4.91186 7.08746 4.7952C6.94746 4.6027 6.98829 4.32853 7.18079 4.1827L9.14663 2.7477C9.33913 2.60186 9.61329 2.64853 9.75913 2.84103C9.90496 3.03353 9.85829 3.3077 9.66579 3.45353L7.69996 4.89436C7.62413 4.9527 7.53663 4.97603 7.44329 4.97603Z" fill="white" />
+                                </svg>
+
+                            </span>
                         </button>
                     </div>
                 </div>
