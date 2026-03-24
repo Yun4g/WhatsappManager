@@ -178,7 +178,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                                 </div>
                           
                             ) : (
-                                <section className="h-[130px] w-[130px] rounded-xl bg-white p-2  overflow-hidden">
+                                <section className="h-[130px] w-[130px] rounded-xl bg-white p-1  overflow-hidden">
                                     <img
                                     src={qrCodeUrl || "/qrCode.png"}
                                     className="h-full w-full"
