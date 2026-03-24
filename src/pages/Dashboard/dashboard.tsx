@@ -38,7 +38,6 @@ function Dashboard() {
 
                             <p className="text-[#999999] text-[12px] font-medium">Hi, welcome to Manajer</p>
 
-
                             <QrcodeUi
                                 isConnected={user?.connected ?? false}
                                 getUserData={getUserData}
@@ -46,6 +45,7 @@ function Dashboard() {
                             />
                         </>
                     ) : (
+
                         <PhonePairingUi
                             setConnectMethodPhone={() => setConnectMethod('qr')}
                         />

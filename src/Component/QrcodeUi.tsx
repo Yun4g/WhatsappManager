@@ -65,34 +65,31 @@ function QrcodeUi({ isConnected, setConnectMethodPhone, }: PropsType) {
 
 
 
-    const handleSendCode = async () => {
-        if (!user) return;
-        if (!user?.id) {
-            toast.error("User not available")
-            console.log("User not available");
-            return;
+  const handleSendCode = async () => {
+    if (!user) return;
+    if (!user?.id) {
+        toast.error("User not available")
+        console.log("User not available");
+        return;
+    }
+
+    setLoading(true);
+
+    try {
+        const res = await connectWithPhone(user?.id, phone);
+        if (res) {
+            toast.success("requst sent successfully")
+            setCode(res.pairingCode);
+            setPhoneInStore(phone);
+            setConnectMethodPhone()
         }
-
-        setLoading(true);
-
-        try {
-            const res = await connectWithPhone(user?.id, phone);
-            if (res) {
-                toast.success("requst sent successfully")
-                setCode(res.pairingCode);
-                setPhoneInStore(phone);
-
-                setConnectMethodPhone()
-            }
-        } catch (error) {
-            console.log(error)
-            setLoading(false)
-        } finally {
-            setLoading(false)
-        }
-
-
-    };
+    } catch (error) {
+        console.log(error)
+        setLoading(false)
+    } finally {
+        setLoading(false)
+    }
+};
 
 
 

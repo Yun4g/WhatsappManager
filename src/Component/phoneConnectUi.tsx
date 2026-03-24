@@ -58,9 +58,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
             es.onerror = () => {
                 console.log('SSE error... reconnecting');
                 es.close();
-                setTimeout(() => {
-                    connect();
-                }, 3000);
+               
             };
         };
 
