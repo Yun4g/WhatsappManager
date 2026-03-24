@@ -109,7 +109,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone, }: PropsType) {
         };
 
         fetchQr();
-    }, [user, getQrCode]);
+    }, []);
 
 
 
