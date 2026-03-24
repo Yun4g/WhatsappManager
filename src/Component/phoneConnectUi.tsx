@@ -109,7 +109,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
         return () => {
             es?.close();
         };
-    }, [user?.id, user?.connected, phone, refreshUserData]);
+    }, []);
 
 
     return (

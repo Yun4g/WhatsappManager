@@ -157,7 +157,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
         return () => {
             es?.close();
         };
-    }, [user?.id, user?.connected]);
+    }, []);
 
 
 
