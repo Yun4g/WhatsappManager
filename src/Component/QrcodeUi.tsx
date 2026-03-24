@@ -21,7 +21,8 @@ function QrcodeUi({ isConnected, setConnectMethodPhone, }: PropsType) {
 
     const [initialQrloading, setInitialQrLoading] = useState<boolean>(false);
     console.log(user, 'user')
-    const [qrCode, setQrcode] = useState<string>("");
+    const [qrCodeUrl, setQrcodeUrl] = useState<string>("");
+    console.log(qrCodeUrl, 'qrCode')
     const connectWithPhone = ConnectToWhatsappPhoneNumber
     const [loading, setLoading] = useState<boolean>(false);
     const [phone, setPhone] = useState("");
@@ -88,28 +89,55 @@ function QrcodeUi({ isConnected, setConnectMethodPhone, }: PropsType) {
 
 
 
-    useEffect(() => {
-        if (!user?.id) return;
+   useEffect(() => {
+    if (!user?.id || user.connected) return;
 
-  
-        if (user.connected) return;
+ 
 
-        const fetchQr = async () => {
-            try {
-                setInitialQrLoading(true);
+    const fetchInitialQr = async () => {
+        setInitialQrLoading(true);
+        try {
+            const res = await getQrCode(user.id);
+            setQrcodeUrl(res?.qrCode );
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to load QR code");
+        } finally {
+            setInitialQrLoading(false);
+        }
+    };
 
-                const res = await getQrCode(user.id);
+    // const connectSSE = () => {
+    //     es = new EventSource(
+    //         `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`
+    //     );
 
-                setQrcode(res?.qr || res?.qrCode);
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setInitialQrLoading(false);
-            }
-        };
+    //     es.addEventListener("qr", (event) => {
+    //         try {
+    //             const data = JSON.parse(event.data);
+    //             if (data?.qrCode) {
+    //                 setQrcode(data.qrCode);
+    //                 toast.success(data.message || "QR code updated");
+    //             }
+    //         } catch (err) {
+    //             console.error("Failed to parse QR SSE:", err);
+    //         }
+    //     });
 
-        fetchQr();
-    }, []);
+    //     es.onerror = () => {
+    //         console.log("SSE error, reconnecting...");
+    //         es.close();
+    //         setTimeout(connectSSE, 3000);
+    //     };
+    // };
+
+    fetchInitialQr();
+    // connectSSE();
+
+    // return () => {
+    //     es?.close();
+    // };
+}, [user?.id, user?.connected]);
 
 
 
@@ -141,12 +169,15 @@ function QrcodeUi({ isConnected, setConnectMethodPhone, }: PropsType) {
                     <div className="bg-[#F9F9F9] h-fit flex flex-col items-center w-full py-[33px] mt-[16px] rounded-[18px]">
                         {
                             initialQrloading ? (
-                                <div className="h-[130px] w-[130px] flex items-center justify-center">
-                                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-[#999999]"></div>
+                                // <div className="h-[130px] w-[130px] flex items-center justify-center">
+                                //     <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-[#999999]"></div>
+                                // </div>
+                                <div>
+
                                 </div>
                             ) : (
                                 <img
-                                    src={qrCode || "/qrCode.png"}
+                                    src={qrCodeUrl || "/qrCode.png"}
                                     className="h-[130px] w-[130px]"
                                     alt="QR Code"
                                 />
@@ -270,7 +301,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone, }: PropsType) {
                         </div>
                         <div className="flex items-center gap-2">
 
-                            <input type="text"
+                            <input type="number"
                                 onChange={(e) => setPhone(e.target.value)}
                                 placeholder="Enter phone number" className=" bg-[#F5F5F5] outline-none text-[#999999] py-[15.5px] px-[24px] rounded-full  w-[269px]" />
                             <button
