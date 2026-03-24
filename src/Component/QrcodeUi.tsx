@@ -14,15 +14,16 @@ interface PropsType {
 
 function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
     const user = useUserStore((state) => state.user);
-    const setCode =   useDashboardStore((state)=> state.setCode);
-     
+    const setCode = useDashboardStore((state) => state.setCode);
+
 
     const [initialQrloading, setInitialQrLoading] = useState<boolean>(false);
     console.log(user, 'user')
     const [qrCode, setQrcode] = useState<string>("");
-     const connectWithPhone = ConnectToWhatsappPhoneNumber
+    const connectWithPhone = ConnectToWhatsappPhoneNumber
     const [loading, setLoading] = useState<boolean>(false);
-    const [phone, setPhone]  = useState("")
+    const [phone, setPhone] = useState("")
+
     const getQrCode = ConnectToWhatsappQrCode
 
     const RefrehQrCode = async () => {
@@ -49,9 +50,9 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
     };
 
 
-    
+
     const handleSendCode = async () => {
-         if (!user) return;
+        if (!user) return;
         if (!user?.id) {
             toast.error("User not available")
             console.log("User not available");
@@ -82,20 +83,22 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
 
     useEffect(() => {
-        if (!user) return;
+        if (!user?.id) return;
 
-        if (user.connected) return
+  
+        if (user.connected) return;
+
         const fetchQr = async () => {
             try {
-                setInitialQrLoading(true)
+                setInitialQrLoading(true);
+
                 const res = await getQrCode(user.id);
 
-                setQrcode(res.qrCode);
+                setQrcode(res?.qr || res?.qrCode);
             } catch (err) {
                 console.error(err);
-                setInitialQrLoading(false)
             } finally {
-                setInitialQrLoading(false)
+                setInitialQrLoading(false);
             }
         };
 
@@ -111,13 +114,13 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
 
                 {loading && (
-                <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
-                        <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A3A2A] rounded-full animate-spin" />
-                        <p className="text-sm font-medium text-gray-700">Processing...</p>
+                    <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
+                            <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A3A2A] rounded-full animate-spin" />
+                            <p className="text-sm font-medium text-gray-700">Processing...</p>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
                 <div className="p-4">
 
 
@@ -262,12 +265,12 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                         <div className="flex items-center gap-2">
 
                             <input type="text"
-                             onChange={(e)=> setPhone(e.target.value)}
-                            placeholder="Enter phone number" className=" bg-[#F5F5F5] outline-none text-[#999999] py-[15.5px] px-[24px] rounded-full  w-[269px]" />
-                            <button 
-                            onClick={handleSendCode}
-                            className="py-[20px] px-[26px] bg-[#181925] rounded-full text-sm font-bold text-white">
-                                  Connect
+                                onChange={(e) => setPhone(e.target.value)}
+                                placeholder="Enter phone number" className=" bg-[#F5F5F5] outline-none text-[#999999] py-[15.5px] px-[24px] rounded-full  w-[269px]" />
+                            <button
+                                onClick={handleSendCode}
+                                className="py-[20px] px-[26px] bg-[#181925] rounded-full text-sm font-bold text-white">
+                                Connect
                             </button>
 
 

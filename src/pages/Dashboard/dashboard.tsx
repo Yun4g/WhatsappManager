@@ -41,7 +41,7 @@ function Dashboard() {
                     setLoading(true)
                     const data = JSON.parse(e.data);
 
-                    if (data.success) {
+                    if (data) {
                         await getUserData();
                     }
                 } catch (err) {
