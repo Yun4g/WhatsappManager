@@ -9,10 +9,11 @@ import toast from "react-hot-toast";
 interface PropsType {
     isConnected: boolean,
     setConnectMethodPhone: () => void,
+    getUserData : () => void,
 }
 
 
-function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
+function QrcodeUi({ isConnected, setConnectMethodPhone, getUserData }: PropsType) {
     const user = useUserStore((state) => state.user);
     const setCode = useDashboardStore((state) => state.setCode);
 
@@ -22,7 +23,10 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
     const [qrCode, setQrcode] = useState<string>("");
     const connectWithPhone = ConnectToWhatsappPhoneNumber
     const [loading, setLoading] = useState<boolean>(false);
-    const [phone, setPhone] = useState("")
+    const [phone, setPhone] = useState("");
+
+
+
 
     const getQrCode = ConnectToWhatsappQrCode
 
@@ -103,7 +107,49 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
         };
 
         fetchQr();
-    }, [user]);
+    }, []);
+
+  
+
+       useEffect(() => {
+        let es: EventSource;
+
+        const connect = () => {
+            es = new EventSource(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}?type=phone?phoneNumber=${phone}`);
+
+            es.addEventListener('connected', async (e) => {
+                try {
+                    setLoading(true)
+                    const data = JSON.parse(e.data);
+
+                    if (data) {
+                        await getUserData();
+                    }
+                } catch (err) {
+                    console.error('Parse error:', err);
+                } finally{
+                    setLoading(false)
+                }
+            });
+
+            es.onerror = () => {
+                console.log('SSE error... reconnecting');
+
+                es.close();
+
+           
+                setTimeout(() => {
+                    connect();
+                }, 3000);
+            };
+        };
+
+        connect();
+
+        return () => {
+            es?.close(); 
+        };
+    }, []);
 
 
 

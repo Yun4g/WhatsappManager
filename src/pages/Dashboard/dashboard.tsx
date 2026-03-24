@@ -34,7 +34,7 @@ function Dashboard() {
         let es: EventSource;
 
         const connect = () => {
-            es = new EventSource('/api/whatsapp/connect');
+            es = new EventSource(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}?type=qr`);
 
             es.addEventListener('connected', async (e) => {
                 try {
@@ -70,6 +70,10 @@ function Dashboard() {
         };
     }, []);
 
+  
+    
+  
+
 
     if (loading) {
         return (
@@ -97,6 +101,7 @@ function Dashboard() {
                     connectMethod === 'qr' ? (
                         <QrcodeUi
                             isConnected={user?.connected ?? false}
+                            getUserData={getUserData}
                             setConnectMethodPhone={() => setConnectMethod('phone')}
                         />
                     ) : (

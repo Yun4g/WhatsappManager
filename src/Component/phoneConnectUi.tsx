@@ -2,12 +2,14 @@
 import { useDashboardStore } from "@/store/dashboardStore";
 import { RefreshCw } from "lucide-react";
 
+
 interface propType {
     setConnectMethodPhone: () => void
 }
 
 export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
-    const code = useDashboardStore((state) => state.code)
+    const code = useDashboardStore((state) => state.code);
+  
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
