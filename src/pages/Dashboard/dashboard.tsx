@@ -23,7 +23,7 @@ function Dashboard() {
     }, [setUser]);
 
     const [connectMethod, setConnectMethod] = useState<'qr' | 'phone'>('qr');
-
+     console.log(connectMethod, 'connectMethod')
 
     return (
         <section className="" >

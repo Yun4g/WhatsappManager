@@ -13,7 +13,7 @@ interface PropsType {
 }
 
 
-function QrcodeUi({ isConnected, setConnectMethodPhone, }: PropsType) {
+function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
     const user = useUserStore((state) => state.user);
     const setCode = useDashboardStore((state) => state.setCode);
     const setPhoneInStore = useDashboardStore((state) => state.setPhone);
