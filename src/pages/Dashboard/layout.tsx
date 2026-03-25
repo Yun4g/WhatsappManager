@@ -191,12 +191,12 @@ function Layout() {
                             <div
                                 key={item.path}
                                 className={`flex flex-col md:flex-row items-center gap-1 md:gap-2 md:mb-[12px] ${location.pathname.startsWith(item.path)
-                                    ? "text-[#181925]"
+                                    ? "text-[#181925] font-bold"
                                     : "text-[#999999]"
                                     }`}
                             >
                                 {item.icon}
-                                <a href={item.path} className="text-[10px] md:text-sm font-bold">
+                                <a href={item.path} className="text-[10px] md:text-sm ">
                                     {item.label}
                                 </a>
                             </div>

@@ -1,5 +1,6 @@
 
 
+import { getUser } from "@/api/user";
 import { useDashboardStore } from "@/store/dashboardStore";
 import { useUserStore } from "@/store/userData";
 // 
@@ -105,6 +106,16 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 }
             });
 
+            es.addEventListener("connected", async (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data) {
+                        await getUser();
+                    }
+                } catch (err) {
+                    console.error("Failed to parse QR SSE:", err);
+                }
+            });
 
 
             es.onerror = () => {
@@ -146,6 +157,17 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 }
             });
 
+            es.addEventListener("connected", async (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data) {
+                        await getUser();
+                    }
+                } catch (err) {
+                    console.error("Failed to parse QR SSE:", err);
+                }
+            });
+
 
             es.onerror = () => {
                 console.log("SSE error, reconnecting...");
@@ -181,7 +203,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                         Scan QR Code
                     </h1>
 
-                    <p className="text-[#999999] mt-1 text-sm">
+                    <p className="text-[#999999]  text-sm">
                         Start managing your groups
                     </p>
 
@@ -311,11 +333,11 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
                     <section className=" space-y-[16px]">
                         <div>
-                            <h1 className="text-[20px] text-[#1A1D1F] font-semibold">
+                            <h1 className="text-[#181925] text-[16px] font-bold">
                                 Connect with Phone
                             </h1>
 
-                            <p className="text-[#6F767E] line-clamp-2 font-medium text-sm">
+                            <p className="text-[#999999]  line-clamp-2 font-medium text-sm">
                                 Use phone number to connect Manajer to your whatsapp account
                             </p>
                         </div>

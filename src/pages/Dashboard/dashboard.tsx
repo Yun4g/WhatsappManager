@@ -30,27 +30,7 @@ function Dashboard() {
 
 
   
-// useEffect(() => {
-//   if (!user?.id || user.connected) return;
 
-//   let es: EventSource | null = null;
-
-//   const connect = () => {
-//     es.addEventListener("connected", async (event) => {
-//       // ...
-//     });
-//     es.onerror = () => {
-//       console.log("SSE error... reconnecting");
-//       es?.close();
-//     };
-//   };
-
-//   connect();
-
-//   return () => {
-//     es?.close();
-//   };
-// }, []);
 
 
 

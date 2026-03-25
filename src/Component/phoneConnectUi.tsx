@@ -1,4 +1,5 @@
 
+import { getUser } from "@/api/user";
 import { useDashboardStore } from "@/store/dashboardStore";
 import { useUserStore } from "@/store/userData";
 // import { getUser } from "@/api/user";
@@ -51,6 +52,18 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                     console.error("Failed to parse QR SSE:", err);
                 }
             });
+
+               es.addEventListener("connected", async (event) => {
+                            try {
+                                const data = JSON.parse(event.data);
+                                if (data) {
+                                    await getUser();
+                                }
+                            } catch (err) {
+                                console.error("Failed to parse QR SSE:", err);
+                            }
+                        });
+            
 
 
 
