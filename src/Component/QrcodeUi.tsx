@@ -252,9 +252,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
                             )
                         }
-
-
-
+                        
                         <p className="text-[#999999] text-[12px] mt-[5px] font-bold">
                             Sync WhatsApp to App
                         </p>
