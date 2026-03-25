@@ -102,50 +102,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
 
 
 
-    // useEffect(() => {
-    //     if (!phone || !user?.id || user.connected) {
-    //         return;
-    //     }
-
-    //     let es: EventSource;
-
-    //     const connect = () => {
-    //         es = new EventSource(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`);
-
-    //         es.addEventListener('connected', async (e) => {
-    //             try {
-    //                 setLoading(true);
-    //                 const data = JSON.parse(e.data);
-    //                 if (data) {
-    //                     await refreshUserData();
-    //                     toast.success("success")
-    //                 }
-    //             } catch (err) {
-    //                 if (err instanceof Error) {
-    //                     console.error("Failed to parse QR SSE:", err.message);
-    //                     toast.error(err.message)
-    //                 } else {
-    //                     console.error("Failed to parse QR SSE:", err);
-    //                 }
-    //             } finally {
-    //                 setLoading(false);
-    //             }
-    //         });
-
-    //         es.onerror = () => {
-    //             console.log('SSE error... reconnecting');
-    //             es.close();
-
-    //         };
-    //     };
-
-    //     connect();
-
-    //     return () => {
-    //         es?.close();
-    //     };
-    // }, []);
-
+   
 
     return (
         <div >
