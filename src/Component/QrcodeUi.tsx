@@ -89,55 +89,51 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
 
     const handleSendCode = async () => {
+    if (!user) return;
 
-        if (!user) return;
-        let es: EventSource | null = null;
+    let es: EventSource | null = null;
 
-        try {
-            setLoading(true)
-            es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}&type=phone&phoneNumber=${phone}`
-            );
+    try {
+        setLoading(true); 
 
-            es.addEventListener("phone", (event) => {
-                try {
-                     setLoading(true)
-                    const data = JSON.parse(event.data);
-                    setCode(data.pairingCode);
-                    setPhoneInStore(phone);
-                    console.log("debuggong")
-                    setConnectMethodPhone();
-                } catch (err) {
-                    console.error("Failed to parse QR SSE:", err);
-                    toast.error("Failed to parse Phone SSE")
-                } finally {
-                     setLoading(false)
-                }
-            });
+        es = new EventSource(
+            `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`
+        );
 
-            es.addEventListener("connected", async (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    if (data) {
-                      window.location.reload();
-                    }
-                } catch (err) {
-                    console.error("Failed to parse QR SSE:", err);
-                }
-            });
+        es.addEventListener("phone", (event) => {
+            try {
+                const data = JSON.parse(event.data);
 
+                setCode(data.pairingCode);
+                setPhoneInStore(phone);
+                setConnectMethodPhone();
 
-            es.onerror = () => {
-                console.log("SSE error, reconnecting...");
-                es?.close();
-            };
-        } catch (error) {
-            console.log(error);
-            toast.error("An error occurred while sending the code.");
-        } finally {
-            setLoading(false)
-        }
-    };
+                setLoading(false); 
+            } catch (err) {
+                console.error("Failed to parse Phone SSE:", err);
+                toast.error("Failed to parse Phone SSE");
+                setLoading(false);
+            }
+        });
+
+        es.addEventListener("connected", () => {
+            setLoading(false); 
+            window.location.reload();
+        });
+
+        es.onerror = () => {
+            console.log("SSE error");
+            es?.close();
+            setLoading(false); 
+            toast.error("Connection failed. Try again.");
+        };
+
+    } catch (error) {
+        console.log(error);
+        setLoading(false);
+        toast.error("An error occurred while sending the code.");
+    }
+};
 
 
 

@@ -170,7 +170,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
 
 
                     <div className="bg-[#F9F9F9] rounded-2xl p-4 md:p-6 flex flex-col items-center">
-                        <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6">
+                        <div className="flex flex-wrap justify-center gap-2 md:gap-2 mb-6">
                             {code?.split('').map((char: string, index: number) => (
                                 <div
                                     key={index}
