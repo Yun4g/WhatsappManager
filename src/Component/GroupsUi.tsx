@@ -39,19 +39,21 @@ export default function GroupManager() {
     const selectedGroups = groups.filter((g) => selected.includes(g.id));
 
 useEffect(() => {
-    if (!user?.id || user.connected) return;
+    if (!user?.id ) return;
 
     let es: EventSource | null = null;
     let reconnectTimeout: NodeJS.Timeout;
 
     const connectSSE = () => {
         setLoading(true);
+       
         es = new EventSource(
             `https://manajer-22u7.onrender.com/data/whatsapp/groups`
         );
 
         es.addEventListener("groups_batch", (event) => {
             try {
+                 
                 const data = JSON.parse(event.data);
                 if (data.groups) {
                     setGroups(data.groups);
