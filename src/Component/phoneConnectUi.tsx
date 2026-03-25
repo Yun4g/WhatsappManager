@@ -1,4 +1,5 @@
 
+import { getUser } from "@/api/user";
 import { useDashboardStore } from "@/store/dashboardStore";
 import { useUserStore } from "@/store/userData";
 import { useState } from "react";
@@ -13,7 +14,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
     const code = useDashboardStore((state) => state.code);
     const phone = useDashboardStore((state) => state.phone);
     const user = useUserStore((state) => state.user);
-    // const setUser = useUserStore((state) => state.setUserData);
+    const setUser = useUserStore((state) => state.setUserData);
     const [loading, setLoading] = useState(false);
     const setCode = useDashboardStore((state) => state.setCode);
     const setPhoneInStore = useDashboardStore((state) => state.setPhone);
@@ -51,16 +52,17 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                 }
             });
 
-               es.addEventListener("connected", async (event) => {
-                            try {
-                                const data = JSON.parse(event.data);
-                                if (data) {
-                                    window.location.reload();
-                                }
-                            } catch (err) {
-                                console.error("Failed to parse QR SSE:", err);
-                            }
-                        });
+            es.addEventListener("connected", async () => {
+                const res = await getUser();
+                setUser({
+                    id: res.id,
+                    email: res.email,
+                    name: res.name,
+                    profile_pic: res.profile_pic,
+                    connected: res.connected,
+                });
+            });
+
             
 
 
