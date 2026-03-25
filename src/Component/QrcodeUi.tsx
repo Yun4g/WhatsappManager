@@ -192,7 +192,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 {loading && (
                     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
                         <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
-                            <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A3A2A] rounded-full animate-spin" />
+                            <div className="w-5 h-5 border-2 border-gray-300 border-t-[#8a9f95] rounded-full animate-spin" />
                             <p className="text-sm font-medium text-gray-700">Processing...</p>
                         </div>
                     </div>
