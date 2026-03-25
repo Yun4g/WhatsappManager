@@ -297,7 +297,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                         )}
                         {isConnected ? 'Connected' : 'Inactive'}
                     </div>
-                    <div className="py-[12px] cursor-pointer px-[14px] bg-[#F9F9F9] rounded-full flex items-center gap-[5px] text-[#999999] text-[12px] font-bold">
+                    <div className={`  ${user?.connected ? 'hidden' : 'block'}  py-[12px] cursor-pointer px-[14px] bg-[#F9F9F9] rounded-full flex items-center gap-[5px] text-[#999999] text-[12px] font-bold`}>
                         <button onClick={RefrehQrCode}>
                             Refresh QR Code
                         </button>
@@ -328,7 +328,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
                     </span>
 
-                    <section className=" space-y-[16px]">
+                    <section className={` ${user?.connected ? 'hidden' : 'block'} space-y-[16px]`}>
                         <div>
                             <h1 className="text-[#181925] text-[16px] font-bold">
                                 Connect with Phone

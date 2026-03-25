@@ -1,6 +1,7 @@
 
 import { getUser } from "@/api/user";
 import { useUserStore } from "@/store/userData";
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Outlet, useLocation } from "react-router-dom";
@@ -14,7 +15,7 @@ interface Nav {
 function Layout() {
     const location = useLocation();
     const setUser = useUserStore(state => state.setUserData)
-   
+
     const user = useUserStore(state => state.user)
     const NavItem: Nav[] = [
         {
@@ -81,33 +82,41 @@ function Layout() {
 
 
 
-    const fetchUser = async () => {
+   const fetchUser = async () => {
+    console.log("fetchUser called");
+    try {
+        setLoading(true);
+        const res = await getUser();
 
-        try {
-            setLoading(true);
-            const res = await getUser();
-            if (!res) {
-                console.log("User data is undefined");
-                return;
-            }
-
-      
-
-
-            setUser({
-                id: res.id,
-                email: res.email,
-                name: res.name,
-                profile_pic: res.profile_pic,
-                connected: res.connected,
-            });
-        } catch (error) {
-            console.log(error);
-            toast.error("Error Getting user data")
-        } finally {
-            setLoading(false);
+        if (!res) {
+            console.log("User data is undefined");
+            return;
         }
-    };
+        setUser({
+            id: res.id,
+            email: res.email,
+            name: res.name,
+            profile_pic: res.profile_pic,
+            connected: res.connected,
+        });
+    } catch (error) {
+        if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+            console.log("Session expired");
+            toast.error('Session expired. Please login again.');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 200);
+            return;
+        }
+    }
+
+        console.log(error);
+        toast.error("Error Getting user data");
+    } finally {
+        setLoading(false);
+    }
+};
 
     useEffect(() => {
         fetchUser()
@@ -118,7 +127,7 @@ function Layout() {
 
 
 
-    
+
 
 
 
