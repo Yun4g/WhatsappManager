@@ -1,5 +1,7 @@
 import { useUserStore } from "@/store/userData";
+
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface Group {
     id: number,
@@ -19,7 +21,7 @@ export default function GroupManager() {
     const [loading, setLoading] = useState<boolean>(false);
     const user = useUserStore(state => state.user)
     console.log(groups)
-   
+
 
     const toggleGroup = (id: number) => {
         setSelected((prev) =>
@@ -38,22 +40,20 @@ export default function GroupManager() {
 
     const selectedGroups = groups.filter((g) => selected.includes(g.id));
 
-useEffect(() => {
-    if (!user?.id ) return;
+    useEffect(() => {
+    if (!user?.id) return;
 
     let es: EventSource | null = null;
-    let reconnectTimeout: NodeJS.Timeout;
+    let reconnectTimeout: NodeJS.Timeout | null = null;
 
     const connectSSE = () => {
         setLoading(true);
-       
         es = new EventSource(
             `https://manajer-22u7.onrender.com/data/whatsapp/groups`
         );
 
         es.addEventListener("groups_batch", (event) => {
             try {
-                 
                 const data = JSON.parse(event.data);
                 if (data.groups) {
                     setGroups(data.groups);
@@ -65,10 +65,29 @@ useEffect(() => {
             }
         });
 
-        es.onerror = () => {
-            console.log("SSE error, reconnecting...");
-            es?.close();
-            reconnectTimeout = setTimeout(connectSSE, 3000);
+        es.onerror = (event) => {
+            console.log("SSE error", event);
+
+            if (es) es.close();
+
+        
+            fetch(`https://manajer-22u7.onrender.com/data/whatsapp/groups`, { method: 'HEAD' })
+                .then(res => {
+                    if (res.status === 401) {
+                        console.log("Session expired");
+                        toast.error('Session expired. Please login again.');
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 200);
+                    } else {
+                        reconnectTimeout = setTimeout(connectSSE, 3000);
+                    }
+                })
+                .catch(() => {
+                    reconnectTimeout = setTimeout(connectSSE, 3000);
+                });
+
+            setLoading(false);
         };
     };
 
@@ -76,9 +95,9 @@ useEffect(() => {
 
     return () => {
         if (es) es.close();
-        clearTimeout(reconnectTimeout);
+        if (reconnectTimeout) clearTimeout(reconnectTimeout);
     };
-}, []); 
+}, []);
 
 
 
@@ -135,7 +154,7 @@ useEffect(() => {
                                                 <div className="w-10 h-10 flex-shrink-0">
                                                     {group.profilePicture ? (
                                                         <img
-                                                            src={group.profilePicture }
+                                                            src={group.profilePicture}
                                                             alt={group.name}
                                                             className="w-full h-full rounded-full object-cover"
                                                         />
@@ -145,7 +164,7 @@ useEffect(() => {
                                                         </div>
                                                     )}
                                                 </div>
-                                                      
+
 
                                                 <div className="min-w-0 mt-1">
                                                     <p className="text-sm font-medium text-[#181925] truncate">

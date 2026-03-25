@@ -4,7 +4,7 @@
 import { getUser } from "@/api/user";
 import { useDashboardStore } from "@/store/dashboardStore";
 import { useUserStore } from "@/store/userData";
-// 
+ 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -43,92 +43,33 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
 
 
-    const RefrehQrCode = async () => {
-        if (!user?.id || user.connected) return;
+  const RefrehQrCode = async () => {
+    if (!user?.id || user.connected) return;
 
-        setInitialQrLoading(true);
+    setInitialQrLoading(true);
 
-        let es: EventSource | null = null;
+    let es: EventSource | null = null;
 
-        try {
-            es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`
-            );
+    try {
+        es = new EventSource(
+            `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`
+        );
 
-            es.addEventListener("qr", (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    if (data?.qrCode) {
-                        setQrcodeUrl(data.qrCode);
-                        setInitialQrLoading(false);
-                    }
-                } catch (err) {
-                    console.error("Failed to parse QR SSE:", err);
+        es.addEventListener("qr", (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data?.qrCode) {
+                    setQrcodeUrl(data.qrCode);
                     setInitialQrLoading(false);
                 }
-            });
-
-           
-            es.addEventListener("connected", async () => {
-                const res = await getUser();
-                setUser({
-                    id: res.id,
-                    email: res.email,
-                    name: res.name,
-                    profile_pic: res.profile_pic,
-                    connected: res.connected,
-                });
-            });
-
-
-            es.onerror = () => {
-                console.log("SSE error");
-                es?.close();
+            } catch (err) {
+                console.error("Failed to parse QR SSE:", err);
                 setInitialQrLoading(false);
-            };
+            }
+        });
 
-        } catch (error) {
-            console.log(error);
-            setInitialQrLoading(false);
-            toast.error('an error occurred while generating qr code');
-        }
-    };
-
-
-
-
-
-
-    const handleSendCode = async () => {
-        if (!user) return;
-
-        let es: EventSource | null = null;
-
-        try {
-            setLoading(true);
-
-            es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`
-            );
-
-            es.addEventListener("phone", (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-
-                    setCode(data.pairingCode);
-                    setPhoneInStore(phone);
-                    setConnectMethodPhone();
-
-                    setLoading(false);
-                } catch (err) {
-                    console.error("Failed to parse Phone SSE:", err);
-                    toast.error("Failed to parse Phone SSE");
-                    setLoading(false);
-                }
-            });
-
-           
-            es.addEventListener("connected", async () => {
+        es.addEventListener("connected", async () => {
+            try {
                 const res = await getUser();
                 setUser({
                     id: res.id,
@@ -137,22 +78,111 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                     profile_pic: res.profile_pic,
                     connected: res.connected,
                 });
-            });
+            } catch (error) {
+                console.error("Error fetching user after connect:", error);
+                setInitialQrLoading(false);
+            }
+        });
+
+        es.onerror = () => {
+            console.log("SSE error");
+            es?.close();
+            fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, { method: 'HEAD' })
+                .then(res => {
+                    if (res.status === 401) {
+                        console.log("Session expired");
+                        toast.error('Session expired. Please login again.');
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 200);
+                    } else {
+                        toast.error("Failed to generate QR code. Please try again.");
+                    }
+                })
+                .catch(() => {
+                    toast.error("Failed to generate QR code. Please try again.");
+                });
+
+            setInitialQrLoading(false);
+        };
+    } catch (error) {
+        console.log(error);
+        setInitialQrLoading(false);
+        toast.error('An error occurred while generating QR code');
+    }
+};
 
 
-            es.onerror = () => {
-                console.log("SSE error");
-                es?.close();
+
+
+
+
+   const handleSendCode = async () => {
+    if (!user) return;
+
+    let es: EventSource | null = null;
+
+    try {
+        setLoading(true);
+
+        es = new EventSource(
+            `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`
+        );
+
+        es.addEventListener("phone", (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                setCode(data.pairingCode);
+                setPhoneInStore(phone);
+                setConnectMethodPhone();
                 setLoading(false);
-                toast.error("Connection failed. Try again.");
-            };
+            } catch (err) {
+                console.error("Failed to parse Phone SSE:", err);
+                toast.error("Failed to parse Phone SSE");
+                setLoading(false);
+            }
+        });
 
-        } catch (error) {
-            console.log(error);
+        es.addEventListener("connected", async () => {
+            const res = await getUser();
+            setUser({
+                id: res.id,
+                email: res.email,
+                name: res.name,
+                profile_pic: res.profile_pic,
+                connected: res.connected,
+            });
+        });
+
+        es.onerror = () => {
+            console.log("SSE error");
+            es?.close();
+
+            fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`, { method: 'HEAD' })
+                .then(res => {
+                    if (res.status === 401) {
+                        console.log("Session expired");
+                        toast.error('Session expired. Please login again.');
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 200);
+                    } else {
+                        toast.error("Connection failed. Try again.");
+                    }
+                })
+                .catch(() => {
+                    toast.error("Connection failed. Try again.");
+                });
+
             setLoading(false);
-            toast.error("An error occurred while sending the code.");
-        }
-    };
+        };
+
+    } catch (error) {
+        console.log(error);
+        setLoading(false);
+        toast.error("An error occurred while sending the code.");
+    }
+};
 
 
 
@@ -162,7 +192,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
         let es: EventSource | null = null;
 
-        const connectSSE = () => {  
+        const connectSSE = () => {
 
             setInitialQrLoading(true);
 

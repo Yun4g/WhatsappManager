@@ -30,54 +30,72 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
 
 
 
-    const handleSendCode = async () => {
+      const handleSendCode = async () => {
+    if (!user) return;
 
-        if (!user) return;
-        let es: EventSource | null = null;
+    let es: EventSource | null = null;
 
-        try {
-            setLoading(true)
-            es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user?.id}&type=phone&phoneNumber=${phoneInStore}`
-            );
+    try {
+        setLoading(true);
 
-            es.addEventListener("phone", (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    setCode(data.pairingCode);
-                     console.log("debuggong")
-                    setPhoneInStore(phone);
-                } catch (err) {
-                    console.error("Failed to parse QR SSE:", err);
-                }
+        es = new EventSource(
+            `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phoneInStore}`
+        );
+
+        es.addEventListener("phone", (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                setCode(data.pairingCode);
+                console.log("debugging");
+                setPhoneInStore(phone);
+                setLoading(false);
+            } catch (err) {
+                console.error("Failed to parse Phone SSE:", err);
+                toast.error("Failed to parse Phone SSE");
+                setLoading(false);
+            }
+        });
+
+        es.addEventListener("connected", async () => {
+            const res = await getUser();
+            setUser({
+                id: res.id,
+                email: res.email,
+                name: res.name,
+                profile_pic: res.profile_pic,
+                connected: res.connected,
             });
+            setLoading(false);
+        });
 
-            es.addEventListener("connected", async () => {
-                const res = await getUser();
-                setUser({
-                    id: res.id,
-                    email: res.email,
-                    name: res.name,
-                    profile_pic: res.profile_pic,
-                    connected: res.connected,
+        es.onerror = () => {
+            console.log("SSE error");
+            es?.close();
+
+            fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phoneInStore}`, { method: 'HEAD' })
+                .then(res => {
+                    if (res.status === 401) {
+                        console.log("Session expired");
+                        toast.error('Session expired. Please login again.');
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 200);
+                    } else {
+                        toast.error("Connection failed. Try again.");
+                    }
+                })
+                .catch(() => {
+                    toast.error("Connection failed. Try again.");
                 });
-            });
 
-            
-
-
-
-            es.onerror = () => {
-                console.log("SSE error, reconnecting...");
-                es?.close();
-            };
-        } catch (error) {
-            console.log(error);
-            toast.error("An error occurred while sending the code.");
-        } finally {
-            setLoading(false)
-        }
-    };
+            setLoading(false);
+        };
+    } catch (error) {
+        console.log(error);
+        toast.error("An error occurred while sending the code.");
+        setLoading(false);
+    }
+};
 
 
 
