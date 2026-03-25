@@ -39,7 +39,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
             setLoading(true);
 
             es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phoneInStore}`
+                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phoneInStore}`, { withCredentials: true }
             );
 
             es.addEventListener("phone", (event) => {

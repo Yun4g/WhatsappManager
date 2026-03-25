@@ -49,7 +49,7 @@ export default function GroupManager() {
         const connectSSE = () => {
             setLoading(true);
             es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/groups`
+                `https://manajer-22u7.onrender.com/data/whatsapp/groups`, { withCredentials: true }
             );
 
             es.addEventListener("groups_batch", (event) => {
