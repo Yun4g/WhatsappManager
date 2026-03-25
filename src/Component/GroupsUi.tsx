@@ -44,7 +44,7 @@ export default function GroupManager() {
         if (!user?.id) return;
 
         let es: EventSource | null = null;
-        let reconnectTimeout: NodeJS.Timeout | null = null;
+       
 
         const connectSSE = () => {
             setLoading(true);
@@ -83,11 +83,11 @@ export default function GroupManager() {
                                 window.location.href = '/';
                             }, 3000);
                         } else {
-                            reconnectTimeout = setTimeout(connectSSE, 3000);
+                            console.log("")
                         }
                     })
                     .catch(() => {
-                        reconnectTimeout = setTimeout(connectSSE, 3000);
+                       
                     });
 
                 setLoading(false);
@@ -98,7 +98,7 @@ export default function GroupManager() {
 
         return () => {
             if (es) es.close();
-            if (reconnectTimeout) clearTimeout(reconnectTimeout);
+   
         };
     }, []);
 

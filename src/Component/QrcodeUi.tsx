@@ -194,8 +194,8 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
         if (!user?.id || user.connected) return;
 
         let es: EventSource | null = null;
-        let reconnectTimeout: NodeJS.Timeout | null = null;
-        let isMounted = true;
+ 
+  
 
         const connectSSE = () => {
             setInitialQrLoading(true);
@@ -205,7 +205,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             );
 
             es.addEventListener("qr", (event) => {
-                if (!isMounted) return;
+           
                 try {
                     const data = JSON.parse(event.data);
                     if (data?.qrCode) {
@@ -219,7 +219,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             });
 
             es.addEventListener("connected", async () => {
-                if (!isMounted) return;
+                
                 try {
                     const res = await getUser();
                     setUser({
@@ -239,7 +239,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             });
 
             es.onerror = () => {
-                if (!isMounted) return;
+                
                 console.log("SSE error");
                 es?.close();
 
@@ -256,17 +256,12 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                                 window.location.href = '/';
                             }, 3000);
                         } else {
-
-                            if (isMounted) {
-                                reconnectTimeout = setTimeout(connectSSE, 3000);
-                            }
+                               console.log("hello")
+                         
                         }
                     })
                     .catch(() => {
-
-                        if (isMounted) {
-                            reconnectTimeout = setTimeout(connectSSE, 3000);
-                        }
+                        console.log("hello")
                     });
 
                 setInitialQrLoading(false);
@@ -276,9 +271,9 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
         connectSSE();
 
         return () => {
-            isMounted = false;
+          
             if (es) es.close();
-            if (reconnectTimeout) clearTimeout(reconnectTimeout);
+           
         };
     }, []);
 
