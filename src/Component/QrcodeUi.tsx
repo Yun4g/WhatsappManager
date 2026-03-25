@@ -1,6 +1,6 @@
 
 
-import { getUser } from "@/api/user";
+
 import { useDashboardStore } from "@/store/dashboardStore";
 import { useUserStore } from "@/store/userData";
 // 
@@ -61,6 +61,17 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 }
             });
 
+             es.addEventListener("connected", async (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data) {
+                      window.location.reload();
+                    }
+                } catch (err) {
+                    console.error("Failed to parse QR SSE:", err);
+                }
+            });
+
 
 
             es.onerror = () => {
@@ -110,7 +121,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 try {
                     const data = JSON.parse(event.data);
                     if (data) {
-                        await getUser();
+                      window.location.reload();
                     }
                 } catch (err) {
                     console.error("Failed to parse QR SSE:", err);
@@ -161,7 +172,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 try {
                     const data = JSON.parse(event.data);
                     if (data) {
-                        await getUser();
+                        window.location.reload();
                     }
                 } catch (err) {
                     console.error("Failed to parse QR SSE:", err);

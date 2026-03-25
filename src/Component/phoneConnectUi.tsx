@@ -1,8 +1,6 @@
 
-import { getUser } from "@/api/user";
 import { useDashboardStore } from "@/store/dashboardStore";
 import { useUserStore } from "@/store/userData";
-// import { getUser } from "@/api/user";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -57,7 +55,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                             try {
                                 const data = JSON.parse(event.data);
                                 if (data) {
-                                    await getUser();
+                                    window.location.reload();
                                 }
                             } catch (err) {
                                 console.error("Failed to parse QR SSE:", err);
