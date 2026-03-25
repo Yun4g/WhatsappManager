@@ -1,4 +1,4 @@
-// import { ConnectToWhatsappQrCode } from "@/api/dashboard";
+
 import { getUser } from "@/api/user";
 import GroupManager from "@/Component/GroupsUi";
 import NoGroupsCard from "@/Component/NoGroupUi";
@@ -24,14 +24,6 @@ function Dashboard() {
 
     const [connectMethod, setConnectMethod] = useState<'qr' | 'phone'>('qr');
      console.log(connectMethod, 'connectMethod');
-
-
-
-
-
-  
-
-
 
 
 
