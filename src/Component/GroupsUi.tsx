@@ -78,7 +78,7 @@ export default function GroupManager() {
                         toast.error('Session expired. Please login again.');
                         setTimeout(() => {
                             window.location.href = '/';
-                        }, 200);
+                        }, 3000);
                     } else {
                         reconnectTimeout = setTimeout(connectSSE, 3000);
                     }

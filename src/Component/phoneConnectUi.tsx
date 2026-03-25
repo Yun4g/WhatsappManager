@@ -79,7 +79,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                         toast.error('Session expired. Please login again.');
                         setTimeout(() => {
                             window.location.href = '/';
-                        }, 200);
+                        }, 3000);
                     } else {
                         toast.error("Connection failed. Try again.");
                     }
