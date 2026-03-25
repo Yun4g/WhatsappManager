@@ -41,53 +41,47 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
 
 
-    const RefrehQrCode = async () => {
-        if (!user?.id || user.connected) return;
+   const RefrehQrCode = async () => {
+    if (!user?.id || user.connected) return;
 
-        let es: EventSource | null = null;
-        try {
-            es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`
-            );
+    setInitialQrLoading(true); 
 
-            es.addEventListener("qr", (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    if (data?.qrCode) {
-                        setQrcodeUrl(data.qrCode);
-                    }
-                } catch (err) {
-                    console.error("Failed to parse QR SSE:", err);
+    let es: EventSource | null = null;
+
+    try {
+        es = new EventSource(
+            `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`
+        );
+
+        es.addEventListener("qr", (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data?.qrCode) {
+                    setQrcodeUrl(data.qrCode);
+                    setInitialQrLoading(false); 
                 }
-            });
+            } catch (err) {
+                console.error("Failed to parse QR SSE:", err);
+                setInitialQrLoading(false);
+            }
+        });
 
-             es.addEventListener("connected", async (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    if (data) {
-                      window.location.reload();
-                    }
-                } catch (err) {
-                    console.error("Failed to parse QR SSE:", err);
-                }
-            });
+        es.addEventListener("connected", () => {
+            window.location.reload();
+        });
 
+        es.onerror = () => {
+            console.log("SSE error");
+            es?.close();
+            setInitialQrLoading(false);
+        };
 
-
-            es.onerror = () => {
-                console.log("SSE error, reconnecting...");
-                es?.close();
-            };
-
-        } catch (error) {
-            console.log(error);
-            setInitialQrLoading(false)
-            toast.error('an error occured while generating qr code')
-        } finally {
-            setInitialQrLoading(false)
-        }
-
-    };
+    } catch (error) {
+        console.log(error);
+        setInitialQrLoading(false);
+        toast.error('an error occurred while generating qr code');
+    }
+};
 
 
 
@@ -107,6 +101,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
             es.addEventListener("phone", (event) => {
                 try {
+                     setLoading(true)
                     const data = JSON.parse(event.data);
                     setCode(data.pairingCode);
                     setPhoneInStore(phone);
@@ -114,6 +109,9 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                     setConnectMethodPhone();
                 } catch (err) {
                     console.error("Failed to parse QR SSE:", err);
+                    toast.error("Failed to parse Phone SSE")
+                } finally {
+                     setLoading(false)
                 }
             });
 
@@ -144,57 +142,48 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
 
 
-    useEffect(() => {
-        if (!user?.id || user.connected) return;
+   useEffect(() => {
+    if (!user?.id || user.connected) return;
 
-        let es: EventSource | null = null;
+    let es: EventSource | null = null;
 
+    const connectSSE = () => {
+        setInitialQrLoading(true);
 
+        es = new EventSource(
+            `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`
+        );
 
-        const connectSSE = () => {
-            es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`
-            );
-
-            es.addEventListener("qr", (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    if (data?.qrCode) {
-                        setQrcodeUrl(data.qrCode);
-
-                    }
-                } catch (err) {
-                    console.error("Failed to parse QR SSE:", err);
+        es.addEventListener("qr", (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data?.qrCode) {
+                    setQrcodeUrl(data.qrCode);
+                    setInitialQrLoading(false); 
                 }
-            });
+            } catch (err) {
+                console.error("Failed to parse QR SSE:", err);
+                setInitialQrLoading(false);
+            }
+        });
 
-            es.addEventListener("connected", async (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    if (data) {
-                        window.location.reload();
-                    }
-                } catch (err) {
-                    console.error("Failed to parse QR SSE:", err);
-                }
-            });
+        es.addEventListener("connected", () => {
+            window.location.reload();
+        });
 
-
-            es.onerror = () => {
-                console.log("SSE error, reconnecting...");
-                es?.close();
-                setTimeout(connectSSE, 3000);
-            };
-        };
-
-
-        connectSSE();
-
-        
-        return () => {
+        es.onerror = () => {
+            console.log("SSE error, reconnecting...");
             es?.close();
+            setTimeout(connectSSE, 3000);
         };
-    }, []);
+    };
+
+    connectSSE();
+
+    return () => {
+        es?.close();
+    };
+}, []);
 
 
     return (
@@ -229,7 +218,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                             ) : (
                                 <section className="h-[130px] w-[130px] rounded-xl bg-white p-1  overflow-hidden">
                                     <img
-                                        src={qrCodeUrl || "/qrCode.png"}
+                                        src={qrCodeUrl}
                                         className="h-full w-full"
                                         alt="QR Code"
                                     />

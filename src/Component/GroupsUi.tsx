@@ -62,7 +62,7 @@ export default function GroupManager() {
             <div className="w-full  ">
                 <div className="p-4">
                     <h2 className="text-lg font-semibold">Select Groups</h2>
-                    <p className="text-sm text-gray-500 mb-4">
+                    <p className="text-sm text-gray-500 mb-2">
                         Find and select groups to manage
                     </p>
                 </div>
@@ -71,14 +71,14 @@ export default function GroupManager() {
 
                 {
                     loading ? (
-                        <div className="space-y-4 p-4">
+                        <div className="space-y-4 px-4">
 
                             <div className="h-10 w-full bg-gray-200 rounded-full animate-pulse" />
 
 
                             {[...Array(5)].map((_, i) => (
                                 <div key={i} className="flex items-center justify-between animate-pulse">
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center ">
                                         <div className="w-10 h-10 rounded-full bg-gray-200" />
                                         <div className="space-y-2">
                                             <div className="h-3 w-32 bg-gray-200 rounded" />
@@ -93,10 +93,10 @@ export default function GroupManager() {
                         </div>
                     ) : (
                         <section>
-                            <div className="p-4">
+                            <div className="px-4">
                                 <input
                                     placeholder="Search for group"
-                                    className="w-full bg-gray-100 rounded-full px-4 py-3 text-sm mb-4 outline-none"
+                                    className="w-full bg-gray-100 rounded-full px-[24px] py-3 text-sm mb-4 outline-none"
                                 />
                                 <div className="space-y-4">
                                     {paginatedGroups.map((group) => (

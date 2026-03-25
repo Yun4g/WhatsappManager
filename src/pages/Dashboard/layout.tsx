@@ -180,10 +180,7 @@ function Layout() {
                 <section className="md:flex md:items-start gap-6 px-3 md:px-0">
 
 
-                    <aside className="
-                   fixed bottom-0 left-0  bg-white border-t z-50 flex py-2 justify-around
-           
-                   md:sticky md:top-[140px] md:w-[220px] md:flex-col md:justify-start
+                    <aside className=" fixed bottom-0 left-0  bg-white border-t z-50 flex py-2 justify-around md:sticky md:top-[140px] md:w-[220px] md:flex-col md:justify-start
                    md:bg-transparent md:border-none md:z-auto w-full lg:w-[224px]
                  ">
 
