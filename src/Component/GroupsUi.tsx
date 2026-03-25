@@ -1,4 +1,4 @@
-import { GetGroups } from "@/api/Groups";
+import { useUserStore } from "@/store/userData";
 import { useEffect, useState } from "react";
 
 interface Group {
@@ -16,9 +16,10 @@ export default function GroupManager() {
     const [selected, setSelected] = useState<number[]>([]);
     const [open, setOpen] = useState(false);
     const [groups, setGroups] = useState<Group[]>([]);
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false);
+    const user = useUserStore(state => state.user)
     console.log(groups)
-    const getGroup = GetGroups
+   
 
     const toggleGroup = (id: number) => {
         setSelected((prev) =>
@@ -37,23 +38,45 @@ export default function GroupManager() {
 
     const selectedGroups = groups.filter((g) => selected.includes(g.id));
 
-    useEffect(() => {
-        const fetchData = async () => {
+useEffect(() => {
+    if (!user?.id || user.connected) return;
+
+    let es: EventSource | null = null;
+    let reconnectTimeout: NodeJS.Timeout;
+
+    const connectSSE = () => {
+        setLoading(true);
+        es = new EventSource(
+            `https://manajer-22u7.onrender.com/data/whatsapp/groups`
+        );
+
+        es.addEventListener("groups_batch", (event) => {
             try {
-                setLoading(true);
-                const res = await getGroup();
-                console.log(res, 'group response');
-                setGroups(Array.isArray(res?.groups) ? res.groups : []);
-            } catch (error) {
-                console.log(error);
+                const data = JSON.parse(event.data);
+                if (data.groups) {
+                    setGroups(data.groups);
+                }
                 setLoading(false);
-            } finally {
+            } catch (err) {
+                console.error("Failed to parse groups SSE:", err);
                 setLoading(false);
             }
-        };
+        });
 
-        fetchData();
-    }, [getGroup]);
+        es.onerror = () => {
+            console.log("SSE error, reconnecting...");
+            es?.close();
+            reconnectTimeout = setTimeout(connectSSE, 3000);
+        };
+    };
+
+    connectSSE();
+
+    return () => {
+        if (es) es.close();
+        clearTimeout(reconnectTimeout);
+    };
+}, []); 
 
 
 
@@ -110,7 +133,7 @@ export default function GroupManager() {
                                                 <div className="w-10 h-10 flex-shrink-0">
                                                     {group.profilePicture ? (
                                                         <img
-                                                            src={group.profilePicture}
+                                                            src={group.profilePicture }
                                                             alt={group.name}
                                                             className="w-full h-full rounded-full object-cover"
                                                         />
@@ -120,6 +143,7 @@ export default function GroupManager() {
                                                         </div>
                                                     )}
                                                 </div>
+                                                      
 
                                                 <div className="min-w-0 mt-1">
                                                     <p className="text-sm font-medium text-[#181925] truncate">
