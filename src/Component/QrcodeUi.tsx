@@ -190,6 +190,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
         connectSSE();
 
+        
         return () => {
             es?.close();
         };
