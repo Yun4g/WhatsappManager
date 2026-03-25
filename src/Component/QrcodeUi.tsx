@@ -162,7 +162,8 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
         let es: EventSource | null = null;
 
-        const connectSSE = () => {
+        const connectSSE = () => {  
+
             setInitialQrLoading(true);
 
             es = new EventSource(
@@ -240,7 +241,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                             ) : (
 
                                 <div className="relative h-[200px] w-[200px] rounded-2xl   overflow-hidden">
-                                    <img src={qrCodeUrl} className="h-full w-full object-contain" alt="QR Code" />
+                                    <img src={qrCodeUrl} className={` ${user?.connected ? 'hidden' : 'block'} h-full w-full object-contain" alt="QR Code`} />
 
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="bg-white rounded-full p-1 shadow-md">
@@ -252,7 +253,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
                             )
                         }
-                        
+
                         <p className="text-[#999999] text-[12px] mt-[5px] font-bold">
                             Sync WhatsApp to App
                         </p>
