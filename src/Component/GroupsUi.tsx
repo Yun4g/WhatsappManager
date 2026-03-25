@@ -20,6 +20,7 @@ export default function GroupManager() {
     const [groups, setGroups] = useState<Group[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const user = useUserStore(state => state.user)
+    const [searchTerm, setSearchTerm] = useState("");
     console.log(groups)
 
 
@@ -31,14 +32,22 @@ export default function GroupManager() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
-    const totalPages = Math.ceil(groups.length / itemsPerPage);
+    const filteredGroups = groups.filter((group) =>
+        (group.name || "").toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-    const paginatedGroups = groups.slice(
+    const totalPages = Math.ceil(filteredGroups.length / itemsPerPage);
+
+    const paginatedGroups = filteredGroups.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
 
     const selectedGroups = groups.filter((g) => selected.includes(g.id));
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     useEffect(() => {
         if (!user?.id) return;
@@ -144,6 +153,8 @@ export default function GroupManager() {
                                 <input
                                     placeholder="Search for group"
                                     className="w-full bg-gray-100 rounded-full px-[24px] py-3 text-sm mb-4 outline-none"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
                                 />
                                 <div className="space-y-4">
                                     {paginatedGroups.map((group) => (
