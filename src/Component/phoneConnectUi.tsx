@@ -174,14 +174,14 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                             {code?.split('').map((char: string, index: number) => (
                                 <div
                                     key={index}
-                                    className="w-[40px] h-[48px]  flex items-center justify-center bg-white rounded-xl border border-gray-200 text-lg md:text-xl font-semibold text-gray-800"
+                                    className="w-[43px] h-[64px] text-[24px]  flex items-center justify-center bg-white rounded-xl border border-gray-200 text-lg md:text-xl font-semibold text-gray-800"
                                 >
                                     {char}
                                 </div>
                             ))}
                         </div>
 
-                        <p className="text-xs md:text-sm text-gray-500 text-center max-w-md leading-relaxed">
+                        <p className="text-xs  text-[#999999] text-center max-w-md font-medium leading-relaxed">
                             Open WhatsApp on your phone. Go to linked devices. Tap link
                             with “Phone Number”. Enter the code above to connect
                         </p>
