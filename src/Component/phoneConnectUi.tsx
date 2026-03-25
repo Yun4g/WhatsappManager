@@ -30,72 +30,75 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
 
 
 
-      const handleSendCode = async () => {
-    if (!user) return;
+    const handleSendCode = async () => {
+        if (!user) return;
 
-    let es: EventSource | null = null;
+        let es: EventSource | null = null;
 
-    try {
-        setLoading(true);
+        try {
+            setLoading(true);
 
-        es = new EventSource(
-            `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phoneInStore}`
-        );
+            es = new EventSource(
+                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phoneInStore}`
+            );
 
-        es.addEventListener("phone", (event) => {
-            try {
-                const data = JSON.parse(event.data);
-                setCode(data.pairingCode);
-                console.log("debugging");
-                setPhoneInStore(phone);
-                setLoading(false);
-            } catch (err) {
-                console.error("Failed to parse Phone SSE:", err);
-                toast.error("Failed to parse Phone SSE");
-                setLoading(false);
-            }
-        });
-
-        es.addEventListener("connected", async () => {
-            const res = await getUser();
-            setUser({
-                id: res.id,
-                email: res.email,
-                name: res.name,
-                profile_pic: res.profile_pic,
-                connected: res.connected,
+            es.addEventListener("phone", (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    setCode(data.pairingCode);
+                    console.log("debugging");
+                    setPhoneInStore(phone);
+                    setLoading(false);
+                } catch (err) {
+                    console.error("Failed to parse Phone SSE:", err);
+                    toast.error("Failed to parse Phone SSE");
+                    setLoading(false);
+                }
             });
-            setLoading(false);
-        });
 
-        es.onerror = () => {
-            console.log("SSE error");
-            es?.close();
-
-            fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phoneInStore}`, { method: 'HEAD' })
-                .then(res => {
-                    if (res.status === 401) {
-                        console.log("Session expired");
-                        toast.error('Session expired. Please login again.');
-                        setTimeout(() => {
-                            window.location.href = '/';
-                        }, 3000);
-                    } else {
-                        toast.error("Connection failed. Try again.");
-                    }
-                })
-                .catch(() => {
-                    toast.error("Connection failed. Try again.");
+            es.addEventListener("connected", async () => {
+                const res = await getUser();
+                setUser({
+                    id: res.id,
+                    email: res.email,
+                    name: res.name,
+                    profile_pic: res.profile_pic,
+                    connected: res.connected,
                 });
+                setLoading(false);
+            });
 
+            es.onerror = () => {
+                console.log("SSE error");
+                es?.close();
+
+                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phoneInStore}`, {
+                    method: 'HEAD',
+                    credentials: 'include'
+                })
+                    .then(res => {
+                        if (res.status === 401) {
+                            console.log("Session expired");
+                            toast.error('Session expired. Please login again.');
+                            setTimeout(() => {
+                                window.location.href = '/';
+                            }, 3000);
+                        } else {
+                            toast.error("Connection failed. Try again.");
+                        }
+                    })
+                    .catch(() => {
+                        toast.error("Connection failed. Try again.");
+                    });
+
+                setLoading(false);
+            };
+        } catch (error) {
+            console.log(error);
+            toast.error("An error occurred while sending the code.");
             setLoading(false);
-        };
-    } catch (error) {
-        console.log(error);
-        toast.error("An error occurred while sending the code.");
-        setLoading(false);
-    }
-};
+        }
+    };
 
 
 
@@ -231,49 +234,49 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                     <div className="flex items-center justify-between mt-6">
                         <div className="flex flex-wrap items-center gap-[6px] text-[#999999] font-bold">
 
-                        {user?.connected ? (
-                            <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g filter="url(#filter0_d_503_261)">
-                                    <circle cx="10" cy="8" r="6" fill="#1FC16B" />
-                                    <circle cx="10" cy="8" r="5" stroke="white" stroke-width="2" />
-                                </g>
-                                <defs>
-                                    <filter id="filter0_d_503_261" x="0" y="0" width="20" height="20" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="2" />
-                                        <feGaussianBlur stdDeviation="2" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0.105882 0 0 0 0 0.109804 0 0 0 0 0.113725 0 0 0 0.04 0" />
-                                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_503_261" />
-                                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_503_261" result="shape" />
-                                    </filter>
-                                </defs>
-                            </svg>
+                            {user?.connected ? (
+                                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g filter="url(#filter0_d_503_261)">
+                                        <circle cx="10" cy="8" r="6" fill="#1FC16B" />
+                                        <circle cx="10" cy="8" r="5" stroke="white" stroke-width="2" />
+                                    </g>
+                                    <defs>
+                                        <filter id="filter0_d_503_261" x="0" y="0" width="20" height="20" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                            <feOffset dy="2" />
+                                            <feGaussianBlur stdDeviation="2" />
+                                            <feColorMatrix type="matrix" values="0 0 0 0 0.105882 0 0 0 0 0.109804 0 0 0 0 0.113725 0 0 0 0.04 0" />
+                                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_503_261" />
+                                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_503_261" result="shape" />
+                                        </filter>
+                                    </defs>
+                                </svg>
 
 
-                        ) : (
-                            <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g filter="url(#filter0_d_404_14)">
-                                    <circle cx="10" cy="8" r="6" fill="#FB3748" />
-                                    <circle cx="10" cy="8" r="5" stroke="white" stroke-width="2" />
-                                </g>
-                                <defs>
-                                    <filter id="filter0_d_404_14" x="0" y="0" width="20" height="20" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="2" />
-                                        <feGaussianBlur stdDeviation="2" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0.105882 0 0 0 0 0.109804 0 0 0 0 0.113725 0 0 0 0.04 0" />
-                                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_404_14" />
-                                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_404_14" result="shape" />
-                                    </filter>
-                                </defs>
-                            </svg>
+                            ) : (
+                                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g filter="url(#filter0_d_404_14)">
+                                        <circle cx="10" cy="8" r="6" fill="#FB3748" />
+                                        <circle cx="10" cy="8" r="5" stroke="white" stroke-width="2" />
+                                    </g>
+                                    <defs>
+                                        <filter id="filter0_d_404_14" x="0" y="0" width="20" height="20" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                            <feOffset dy="2" />
+                                            <feGaussianBlur stdDeviation="2" />
+                                            <feColorMatrix type="matrix" values="0 0 0 0 0.105882 0 0 0 0 0.109804 0 0 0 0 0.113725 0 0 0 0.04 0" />
+                                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_404_14" />
+                                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_404_14" result="shape" />
+                                        </filter>
+                                    </defs>
+                                </svg>
 
 
-                        )}
-                        {user?.connected? 'Connected' : 'Inactive'}
-                    </div>
+                            )}
+                            {user?.connected ? 'Connected' : 'Inactive'}
+                        </div>
 
                         <button
                             onClick={handleSendCode}

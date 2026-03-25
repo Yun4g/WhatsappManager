@@ -41,63 +41,66 @@ export default function GroupManager() {
     const selectedGroups = groups.filter((g) => selected.includes(g.id));
 
     useEffect(() => {
-    if (!user?.id) return;
+        if (!user?.id) return;
 
-    let es: EventSource | null = null;
-    let reconnectTimeout: NodeJS.Timeout | null = null;
+        let es: EventSource | null = null;
+        let reconnectTimeout: NodeJS.Timeout | null = null;
 
-    const connectSSE = () => {
-        setLoading(true);
-        es = new EventSource(
-            `https://manajer-22u7.onrender.com/data/whatsapp/groups`
-        );
+        const connectSSE = () => {
+            setLoading(true);
+            es = new EventSource(
+                `https://manajer-22u7.onrender.com/data/whatsapp/groups`
+            );
 
-        es.addEventListener("groups_batch", (event) => {
-            try {
-                const data = JSON.parse(event.data);
-                if (data.groups) {
-                    setGroups(data.groups);
-                }
-                setLoading(false);
-            } catch (err) {
-                console.error("Failed to parse groups SSE:", err);
-                setLoading(false);
-            }
-        });
-
-        es.onerror = (event) => {
-            console.log("SSE error", event);
-
-            if (es) es.close();
-
-        
-            fetch(`https://manajer-22u7.onrender.com/data/whatsapp/groups`, { method: 'HEAD' })
-                .then(res => {
-                    if (res.status === 401) {
-                        console.log("Session expired");
-                        toast.error('Session expired. Please login again.');
-                        setTimeout(() => {
-                            window.location.href = '/';
-                        }, 3000);
-                    } else {
-                        reconnectTimeout = setTimeout(connectSSE, 3000);
+            es.addEventListener("groups_batch", (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.groups) {
+                        setGroups(data.groups);
                     }
-                })
-                .catch(() => {
-                    reconnectTimeout = setTimeout(connectSSE, 3000);
-                });
+                    setLoading(false);
+                } catch (err) {
+                    console.error("Failed to parse groups SSE:", err);
+                    setLoading(false);
+                }
+            });
 
-            setLoading(false);
+            es.onerror = (event) => {
+                console.log("SSE error", event);
+
+                if (es) es.close();
+
+
+                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/groups`, {
+                    method: 'HEAD',
+                    credentials: 'include'
+                },)
+                    .then(res => {
+                        if (res.status === 401) {
+                            console.log("Session expired");
+                            toast.error('Session expired. Please login again.');
+                            setTimeout(() => {
+                                window.location.href = '/';
+                            }, 3000);
+                        } else {
+                            reconnectTimeout = setTimeout(connectSSE, 3000);
+                        }
+                    })
+                    .catch(() => {
+                        reconnectTimeout = setTimeout(connectSSE, 3000);
+                    });
+
+                setLoading(false);
+            };
         };
-    };
 
-    connectSSE();
+        connectSSE();
 
-    return () => {
-        if (es) es.close();
-        if (reconnectTimeout) clearTimeout(reconnectTimeout);
-    };
-}, []);
+        return () => {
+            if (es) es.close();
+            if (reconnectTimeout) clearTimeout(reconnectTimeout);
+        };
+    }, []);
 
 
 

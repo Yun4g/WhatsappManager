@@ -84,7 +84,10 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             es.onerror = () => {
                 console.log("SSE error");
                 es?.close();
-                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, { method: 'HEAD' })
+                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, {
+                    method: 'HEAD',
+                    credentials: 'include'
+                })
                     .then(res => {
                         if (res.status === 401) {
                             console.log("Session expired");
@@ -155,7 +158,10 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 console.log("SSE error");
                 es?.close();
 
-                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`, { method: 'HEAD' })
+                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`, {
+                    method: 'HEAD',
+                    credentials: 'include'
+                })
                     .then(res => {
                         if (res.status === 401) {
                             console.log("Session expired");
@@ -189,7 +195,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
         let es: EventSource | null = null;
         let reconnectTimeout: NodeJS.Timeout | null = null;
-        let isMounted = true; 
+        let isMounted = true;
 
         const connectSSE = () => {
             setInitialQrLoading(true);
@@ -223,11 +229,11 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                         profile_pic: res.profile_pic,
                         connected: res.connected,
                     });
-                   
+
                     es?.close();
                     setInitialQrLoading(false);
                 } catch (error) {
-                 console.log(error)
+                    console.log(error)
                     setInitialQrLoading(false);
                 }
             });
@@ -237,8 +243,11 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 console.log("SSE error");
                 es?.close();
 
-            
-                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, { method: 'HEAD' })
+
+                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, {
+                    method: 'HEAD',
+                    credentials: 'include'
+                })
                     .then(res => {
                         if (res.status === 401) {
                             console.log("Session expired");
@@ -247,14 +256,14 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                                 window.location.href = '/';
                             }, 3000);
                         } else {
-                      
+
                             if (isMounted) {
                                 reconnectTimeout = setTimeout(connectSSE, 3000);
                             }
                         }
                     })
                     .catch(() => {
-                      
+
                         if (isMounted) {
                             reconnectTimeout = setTimeout(connectSSE, 3000);
                         }
