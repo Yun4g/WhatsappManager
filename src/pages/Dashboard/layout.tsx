@@ -18,7 +18,7 @@ function Layout() {
  
     const user = useUserStore(state => state.user);
       console.log(user, 'userDate for get user')
-      
+
    const NavItem: Nav[] = [
     {
         icon: (
@@ -157,7 +157,7 @@ function Layout() {
                        flex justify-between items-center py-4 px-4 lg:px-0 md:py-6
                        bg-white/10 backdrop-blur-lg">
 
-                    <div className="flex items-center gap-3 md:gap-6">
+                    <div className="flex items-center gap-2 ">
                         <span>
                             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M3.19971 3.19971H15.9997C23.069 3.19971 28.7997 8.93046 28.7997 15.9997H15.9997C8.93046 15.9997 3.19971 10.269 3.19971 3.19971Z" fill="#181925" />
@@ -214,7 +214,7 @@ function Layout() {
                     </aside>
 
 
-                    <div className="flex flex-col max-w-lg mx-auto w-full  md:mt-[45px]  md:px-4 md:p-0 ">
+                    <div className="flex flex-col max-w-lg mx-auto w-full  md:mt-[45px]   md:p-0 ">
                         <Outlet />
                     </div>
 
