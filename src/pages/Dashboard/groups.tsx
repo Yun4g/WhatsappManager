@@ -112,7 +112,7 @@ export default function Groups() {
                             filteredGroups.map((group, index) => (
                                 <div
                                     key={group.id}
-                                    className={` flex flex-col px-4  ${index !== 0 ? 'border-t border-[#F0F0F0] py-4' : ''} sm:items-center sm:justify-between gap-4`}
+                                    className={` flex flex-col px-4  ${index !== 0 ? 'border-t border-[#F0F0F0] py-4' : 'pb-4'} sm:items-center sm:justify-between gap-4`}
                                 >
 
 
