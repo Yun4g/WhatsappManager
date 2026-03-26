@@ -54,7 +54,7 @@ export default function Groups() {
                     setGroups(res.groups);
                 }
             } catch (error) {
-                console.log(error)
+                console.log(error);
             } finally {
                 if (isMounted) setLoading(false);
             }
@@ -81,7 +81,7 @@ export default function Groups() {
 
                 <div className="bg-white rounded-2xl ">
 
-                    <section className="px-4 md:pt-6 ">
+                    <section className="px-4 pt-3 md:pt-6 ">
                         <input
                             type="text"
                             placeholder="Search for group"

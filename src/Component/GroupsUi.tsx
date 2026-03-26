@@ -1,5 +1,6 @@
 import { SelectGroups } from "@/api/Groups";
 import { useUserStore } from "@/store/userData";
+import { AxiosError } from "axios";
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -49,6 +50,7 @@ export default function GroupManager() {
 
     const selectedGroups = groups.filter((g) => selected.includes(g.id));
 
+
     // useEffect(() => {
     //     setCurrentPage(1);
     // }, [searchTerm]);
@@ -57,7 +59,7 @@ export default function GroupManager() {
         if (!user?.id) return;
 
         let es: EventSource | null = null;
-       
+
 
         const connectSSE = () => {
             setLoading(true);
@@ -101,7 +103,7 @@ export default function GroupManager() {
                         }
                     })
                     .catch(() => {
-                       
+
                     });
 
                 setLoading(false);
@@ -112,7 +114,7 @@ export default function GroupManager() {
 
         return () => {
             if (es) es.close();
-   
+
         };
     }, [user?.id]);
 
@@ -121,24 +123,29 @@ export default function GroupManager() {
 
 
     const handleSelectGroup = async () => {
-    setConfirmLoading(true);
-    try {
-    
-         await SelectGroups(selectedGroups);
-        toast.success("Groups saved successfully!");
-        setOpen(false);
-
-         setTimeout(() => {
-             navigate('/Groups')
-         }, 1500);
-        
-    } catch (error) {
-        toast.error("Failed to save groups. Please try again.");
-        console.error(error);
-    } finally {
-        setConfirmLoading(false);
-    }
-};
+        setConfirmLoading(true);
+        try {
+            await SelectGroups(selectedGroups);
+            toast.success("Groups saved successfully!");
+            setOpen(false);
+            setTimeout(() => {
+                navigate("/Groups");
+            }, 1500);
+        } catch (error: unknown) {
+            console.error(error);
+            let message = "Failed to save groups. Please try again.";
+            if (error && typeof error === "object" && "response" in error) {
+                const axiosError = error as AxiosError;
+                if (axiosError.response?.data && typeof axiosError.response.data === "object") {
+                    const data = axiosError.response.data as { message?: string };
+                    if (data.message) message = data.message;
+                }
+            }
+            toast.error(message);
+        } finally {
+            setConfirmLoading(false);
+        }
+    };
 
 
     return (
@@ -284,9 +291,9 @@ export default function GroupManager() {
                                 </div>
 
                                 <button
-                                    disabled={groups.length === 0}
+                                    disabled={groups.length === 0 || selected.length === 0}
                                     onClick={() => setOpen(true)}
-                                    className="bg-[#111827] text-white px-5 py-2 mt-2 mx-auto md:mt-0 md:mx-0 rounded-full text-sm font-bold"
+                                    className={` ${groups.length === 0 || selected.length === 0 ? 'cursor-not-allowed' : 'cursor-pointer'} bg-[#111827] text-white px-5 py-2 mt-2 mx-auto md:mt-0 md:mx-0 rounded-full text-sm font-bold`}
                                 >
                                     Manage groups
                                 </button>
@@ -305,7 +312,8 @@ export default function GroupManager() {
 
                                         <p className="text-base text-[#71717A] mt-6 pt-4 border-t border-dashed">
                                             Once you confirm these groups,{" "}
-                                            <b>you cannot change them</b> - even if you log out.
+                                            <span className="text-[#181925] font-bold">you cannot change them</span>
+                                            {""}- even if you log out.
                                         </p>
 
                                         <div className="mt-4 space-y-3">
@@ -344,13 +352,16 @@ export default function GroupManager() {
 
                                         <div className="flex justify-between mt-6">
                                             <button
-                                                onClick={() => setOpen(false)}
+                                                onClick={() => {
+                                                    setSelected([]);      
+                                                    setOpen(false);       
+                                                }}
                                                 className="px-4 py-2 rounded-full border"
                                             >
                                                 Cancel
                                             </button>
 
-                                             <button
+                                            <button
                                                 onClick={handleSelectGroup}
                                                 disabled={confirmLoading}
                                                 className="px-4 py-2 rounded-full bg-black text-white disabled:opacity-50"
