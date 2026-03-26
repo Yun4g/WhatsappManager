@@ -1,5 +1,6 @@
 
-import { useState } from "react";
+import { SavedGroups } from "@/api/Groups";
+import { useEffect, useState } from "react";
 
 type Group = {
     id: number;
@@ -38,10 +39,35 @@ const groupsData: Group[] = [
 
 export default function Groups() {
     const [search, setSearch] = useState("");
+    const [groups, setGroups] = useState<Group[]>([]);
+    console.log(groups, 'groups view')
 
     const filteredGroups = groupsData.filter((group) =>
         group.name.toLowerCase().includes(search.toLowerCase())
     );
+
+
+
+    useEffect(() => {
+        let isMounted = true;
+        const fetchGroups = async () => {
+            try {
+                const groups = await SavedGroups();
+                if (isMounted) {
+                    setGroups(groups);
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        };
+        fetchGroups();
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+
+
 
     return (
         <div className="min-h-screen">

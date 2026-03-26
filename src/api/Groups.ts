@@ -28,3 +28,18 @@ export const SelectGroups = async (group: Group[]) => {
      }
 }
 
+export const SavedGroups = async () => {
+     try {
+         const res = await axios.get('https://manajer-22u7.onrender.com/data/whatsapp/saved-groups'
+            ,{
+             withCredentials: true,
+         });
+         return res.data;
+     } catch (error) {
+        console.log(error);
+     }
+}
+
+
+
+
