@@ -40,7 +40,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
 
 
-    const RefrehQrCode = async () => {
+    const RefreshQrCode = async () => {
         if (!user?.id || user.connected) return;
 
         setInitialQrLoading(true);
@@ -98,8 +98,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                         } else {
                             toast.error("Failed to generate QR code. Please try again.");
                         }
-                    })
-                    .catch(() => {
+                    }).catch(() => {
                         toast.error("Failed to generate QR code. Please try again.");
                     });
 
@@ -275,7 +274,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             if (es) es.close();
            
         };
-    }, []);
+    }, [user?.id, user?.connected]);
 
 
     return (
@@ -396,7 +395,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                         {isConnected ? 'Connected' : 'Inactive'}
                     </div>
                     <div className={`  ${user?.connected ? 'hidden' : 'block'}  py-[12px] cursor-pointer px-[14px] bg-[#F9F9F9] rounded-full flex items-center gap-[5px] text-[#999999] text-[12px] font-bold`}>
-                        <button onClick={RefrehQrCode}>
+                        <button onClick={RefreshQrCode}>
                             Refresh QR Code
                         </button>
 

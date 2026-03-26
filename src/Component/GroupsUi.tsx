@@ -45,9 +45,9 @@ export default function GroupManager() {
 
     const selectedGroups = groups.filter((g) => selected.includes(g.id));
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchTerm]);
+    // useEffect(() => {
+    //     setCurrentPage(1);
+    // }, [searchTerm]);
 
     useEffect(() => {
         if (!user?.id) return;
@@ -57,6 +57,7 @@ export default function GroupManager() {
 
         const connectSSE = () => {
             setLoading(true);
+            setGroups([]);
             es = new EventSource(
                 `https://manajer-22u7.onrender.com/data/whatsapp/groups`, { withCredentials: true }
             );
@@ -65,7 +66,7 @@ export default function GroupManager() {
                 try {
                     const data = JSON.parse(event.data);
                     if (data.groups) {
-                        setGroups(data.groups);
+                        setGroups((prev) => [...prev, ...data.groups]);
                     }
                     setLoading(false);
                 } catch (err) {
@@ -109,7 +110,7 @@ export default function GroupManager() {
             if (es) es.close();
    
         };
-    }, []);
+    }, [user?.id]);
 
 
 
@@ -127,7 +128,7 @@ export default function GroupManager() {
 
                 {
                     loading ? (
-                        <div className="space-y-4 px-4">
+                        <div className="space-y-4 p-4">
 
                             <div className="h-10 w-full bg-gray-200 rounded-full animate-pulse" />
 
@@ -173,7 +174,7 @@ export default function GroupManager() {
                                                             className="w-full h-full rounded-full object-cover"
                                                         />
                                                     ) : (
-                                                        <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center text-xs font-semibold text-gray-700 uppercase">
+                                                        <div className="w-full h-full rounded-full bg-[#08516e] flex items-center justify-center text-xs font-semibold text-gray-700 uppercase">
                                                             {group.name?.slice(0, 2)}
                                                         </div>
                                                     )}
