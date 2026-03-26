@@ -70,7 +70,7 @@ export default function Groups() {
             try {
                 const groups = await SavedGroups();
                 if (isMounted) {
-                    setGroups(groups);
+                    setGroups(groups.groups);
                 }
             } catch (error) {
                 console.log(error)

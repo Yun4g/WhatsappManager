@@ -18,6 +18,7 @@ function Layout() {
  
     const user = useUserStore(state => state.user);
       console.log(user, 'userDate for get user')
+      
    const NavItem: Nav[] = [
     {
         icon: (
