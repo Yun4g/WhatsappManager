@@ -7,7 +7,7 @@ import PhonePairingUi from "@/Component/phoneConnectUi";
 import QrcodeUi from "@/Component/QrcodeUi";
 
 import { useUserStore } from "@/store/userData";
-import {useState } from "react";
+import {  useState } from "react";
 import { useCallback } from "react";
 
 
@@ -15,6 +15,7 @@ import { useCallback } from "react";
 function Dashboard() {
     const user = useUserStore((state) => state.user);
     const setUser = useUserStore((state) => state.setUserData);
+   
     const getUserData = useCallback(async () => {
         const userData = await getUser();
         if (userData) {
@@ -25,6 +26,8 @@ function Dashboard() {
     const [connectMethod, setConnectMethod] = useState<'qr' | 'phone'>('qr');
      console.log(connectMethod, 'connectMethod');
 
+      const activeMethod = user?.connected ? 'qr' : connectMethod;
+
 
 
     return (
@@ -32,7 +35,7 @@ function Dashboard() {
 
             <section>
                 {
-                    connectMethod === 'qr' ? (
+                    activeMethod === 'qr' ? (
                         <>
                             <h1 className="text-[#181925] text-2xl font-bold">
                                 Overview
@@ -47,7 +50,7 @@ function Dashboard() {
                             />
                         </>
                     ) : (
-
+                        
                         <PhonePairingUi
                             setConnectMethodPhone={() => setConnectMethod('qr')}
                         />
