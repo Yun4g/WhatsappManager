@@ -129,7 +129,7 @@ export default function GroupManager() {
         setOpen(false);
 
          setTimeout(() => {
-             navigate('/groups')
+             navigate('/dashboard/Groups')
          }, 1500);
         
     } catch (error) {
