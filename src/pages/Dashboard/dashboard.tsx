@@ -1,5 +1,5 @@
 
-import { getUser } from "@/api/user";
+// import { getUser } from "@/api/user";
 import GroupManager from "@/Component/GroupsUi";
 import NoGroupsCard from "@/Component/NoGroupUi";
 
@@ -8,20 +8,20 @@ import QrcodeUi from "@/Component/QrcodeUi";
 
 import { useUserStore } from "@/store/userData";
 import {  useState } from "react";
-import { useCallback } from "react";
+
 
 
 
 function Dashboard() {
     const user = useUserStore((state) => state.user);
-    const setUser = useUserStore((state) => state.setUserData);
+    // const setUser = useUserStore((state) => state.setUserData);
    
-    const getUserData = useCallback(async () => {
-        const userData = await getUser();
-        if (userData) {
-            setUser(userData);
-        }
-    }, [setUser]);
+    // const getUserData = useCallback(async () => {
+    //     const userData = await getUser();
+    //     if (userData) {
+    //         setUser(userData);
+    //     }
+    // }, [setUser]);
 
     const [connectMethod, setConnectMethod] = useState<'qr' | 'phone'>('qr');
      console.log(connectMethod, 'connectMethod');
@@ -45,7 +45,7 @@ function Dashboard() {
 
                             <QrcodeUi
                                 isConnected={user?.connected ?? false}
-                                getUserData={getUserData}
+                                
                                 setConnectMethodPhone={() => setConnectMethod('phone')}
                             />
                         </>

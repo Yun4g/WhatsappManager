@@ -19,41 +19,21 @@ interface Group {
     updated_at: string;
 }
 
-// const groupsData: Group[] = [
-//     {
-//         id: 1,
-//         name: "Adullam Group",
-//         description:
-//             "The description of your group will be displayed here for you to see as well as any other emoji",
-//         createdAt: "May 12, 2019",
-//         avatar: "https://i.pravatar.cc/100?img=11",
-//     },
-//     {
-//         id: 2,
-//         name: "CloudFlare Jobs",
-//         description:
-//             "The description of your group will be displayed here for you to see as well as any other emoji",
-//         createdAt: "May 12, 2019",
-//         avatar: "https://i.pravatar.cc/100?img=12",
-//     },
-//     {
-//         id: 3,
-//         name: "Dev Con",
-//         description:
-//             "The description of your group will be displayed here for you to see as well as any other emoji",
-//         createdAt: "May 12, 2019",
-//         avatar: "https://i.pravatar.cc/100?img=13",
-//     },
-// ];
 
 export default function Groups() {
     const [search, setSearch] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
     const [groups, setGroups] = useState<Group[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     console.log(groups, 'groups view')
 
     const filteredGroups = groups.filter((group) =>
         group.name.toLowerCase().includes(search.toLowerCase())
     );
+
+    const itemsPerPage = 5;
+    const totalPages = Math.ceil(filteredGroups.length / itemsPerPage);
+    const paginatedGroups = filteredGroups.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
 
     function ConvertToReadAbleDate(createdDate: string) {
@@ -67,13 +47,16 @@ export default function Groups() {
     useEffect(() => {
         let isMounted = true;
         const fetchGroups = async () => {
+            setLoading(true);
             try {
-                const groups = await SavedGroups();
+                const res = await SavedGroups();
                 if (isMounted) {
-                    setGroups(groups.groups);
+                    setGroups(res.groups);
                 }
             } catch (error) {
                 console.log(error)
+            } finally {
+                if (isMounted) setLoading(false);
             }
         };
         fetchGroups();
@@ -81,6 +64,10 @@ export default function Groups() {
             isMounted = false;
         };
     }, []);
+
+
+
+
 
 
 
@@ -99,17 +86,41 @@ export default function Groups() {
                             type="text"
                             placeholder="Search for group"
                             value={search}
-                            onChange={(e) => setSearch(e.target.value)}
+                            onChange={(e) => {
+                                setSearch(e.target.value);
+                                setCurrentPage(1);
+                            }}
                             className="w-full bg-gray-100 rounded-full px-4 py-3 text-[#999999] text-base font-meduim outline-none mb-6"
                         />
                     </section>
 
 
                     <div className="divide-y">
-                        {filteredGroups.length === 0 ? (
-                            <div className="text-center py-8 text-gray-500">No groups found</div>
+                        {loading ? (
+                            <div className="space-y-4 p-4">
+                                {[...Array(5)].map((_, i) => (
+                                    <div key={i} className={`flex flex-col animate-pulse ${i !== 0 ? 'border-t border-[#F0F0F0] pt-4' : ''} gap-4`}>
+                                        <div className="flex w-full gap-[14px]">
+                                            <div className="w-12 h-12 rounded-full bg-gray-200 flex-shrink-0" />
+                                            <div className="flex-1 space-y-3 py-1">
+                                                <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                                                <div className="h-3 bg-gray-100 rounded w-3/4"></div>
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-between items-center mt-2">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-4 h-4 rounded-full bg-gray-200" />
+                                                <div className="h-3 bg-gray-200 rounded w-32"></div>
+                                            </div>
+                                            <div className="h-9 bg-gray-200 rounded-full w-24"></div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : filteredGroups.length === 0 ? (
+                            <div className="text-center py-8 text-gray-500">No groups found.</div>
                         ) : (
-                            filteredGroups.map((group, index) => (
+                            paginatedGroups.map((group, index) => (
                                 <div
                                     key={group.id}
                                     className={` flex flex-col px-4  ${index !== 0 ? 'border-t border-[#F0F0F0] py-4' : 'pb-4'} sm:items-center sm:justify-between gap-4`}
@@ -173,35 +184,60 @@ export default function Groups() {
                 </div>
 
 
-                <div className="flex items-center justify-start gap-2 mt-[16px]">
-                    <button className="text-gray-400">
+                {!loading && totalPages > 0 && (
+                    <div className="flex items-center justify-start gap-2 mt-[16px]">
+                    <button
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className={`text-gray-400 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M15.204 15.9991L18.9165 19.7116L17.856 20.7721L13.083 15.9991L17.856 11.2261L18.9165 12.2866L15.204 15.9991Z" fill="#999999" />
                         </svg>
-
                     </button>
 
-                    {[1, 2, 3, 4, 5].map((n) => (
-                        <button
-                            key={n}
-                            className={`w-8 h-8 rounded-lg text-sm ${n === 1
-                                ? "bg-gray-200 text-gray-800"
-                                : "text-gray-400"
-                                }`}
-                        >
-                            {n}
-                        </button>
-                    ))}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => {
 
-                    <span className="text-gray-400 px-1">...</span>
+                        if (
+                            pageNumber === 1 ||
+                            pageNumber === totalPages ||
+                            (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
+                        ) {
+                            return (
+                                <button
+                                    key={pageNumber}
+                                    onClick={() => setCurrentPage(pageNumber)}
+                                    className={`w-8 h-8 rounded-lg text-sm ${pageNumber === currentPage
+                                            ? "bg-gray-200 text-gray-800"
+                                            : "text-gray-400"
+                                        }`}
+                                >
+                                    {pageNumber}
+                                </button>
+                            );
+                        } else if (
+                            (pageNumber === currentPage - 2 && currentPage > 3) ||
+                            (pageNumber === currentPage + 2 && currentPage < totalPages - 2)
+                        ) {
 
-                    <button className="text-gray-400">
+                            if (pageNumber === 1 || pageNumber === totalPages) return null;
+                            return <span key={pageNumber} className="text-gray-400 px-1">...</span>;
+                        }
+                        return null;
+                    })}
+
+                    <button
+                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages || totalPages === 0}
+                        className={`text-gray-400 ${currentPage === totalPages || totalPages === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M16.7955 15.9991L13.083 12.2866L14.1435 11.2261L18.9165 15.9991L14.1435 20.7721L13.083 19.7116L16.7955 15.9991Z" fill="#999999" />
                         </svg>
 
                     </button>
                 </div>
+                )}
             </div>
         </div>
     );

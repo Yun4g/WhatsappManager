@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 interface PropsType {
     isConnected: boolean,
     setConnectMethodPhone: () => void,
-    getUserData: () => void,
+   
 }
 
 

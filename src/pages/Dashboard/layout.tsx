@@ -4,6 +4,7 @@ import { useUserStore } from "@/store/userData";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 import { Outlet, useLocation } from "react-router-dom";
 
 interface Nav {
@@ -206,9 +207,10 @@ function Layout() {
                                     }`}
                             >
                                 {item.icon}
-                                <a href={item.path} className="text-[10px] md:text-sm ">
+                    
+                                <Link to={item.path}   className="text-[10px] md:text-sm ">
                                     {item.label}
-                                </a>
+                                    </Link>
                             </div>
                         ))}
                     </aside>
