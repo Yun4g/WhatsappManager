@@ -2,50 +2,66 @@
 import { SavedGroups } from "@/api/Groups";
 import { useEffect, useState } from "react";
 
-type Group = {
-    id: number;
-    name: string;
-    description: string;
-    createdAt: string;
-    avatar: string;
-};
 
-const groupsData: Group[] = [
-    {
-        id: 1,
-        name: "Adullam Group",
-        description:
-            "The description of your group will be displayed here for you to see as well as any other emoji",
-        createdAt: "May 12, 2019",
-        avatar: "https://i.pravatar.cc/100?img=11",
-    },
-    {
-        id: 2,
-        name: "CloudFlare Jobs",
-        description:
-            "The description of your group will be displayed here for you to see as well as any other emoji",
-        createdAt: "May 12, 2019",
-        avatar: "https://i.pravatar.cc/100?img=12",
-    },
-    {
-        id: 3,
-        name: "Dev Con",
-        description:
-            "The description of your group will be displayed here for you to see as well as any other emoji",
-        createdAt: "May 12, 2019",
-        avatar: "https://i.pravatar.cc/100?img=13",
-    },
-];
+
+interface Group {
+    id: number;
+    user_id: number;
+    group_wa_id: string;
+    name: string;
+    description: string | null;
+    profile_picture: string | null;
+    profile_picture_fetched_at: string;
+    is_community: boolean;
+    member_count: number;
+    messaging_enabled: boolean;
+    created_at: string;
+    updated_at: string;
+}
+
+// const groupsData: Group[] = [
+//     {
+//         id: 1,
+//         name: "Adullam Group",
+//         description:
+//             "The description of your group will be displayed here for you to see as well as any other emoji",
+//         createdAt: "May 12, 2019",
+//         avatar: "https://i.pravatar.cc/100?img=11",
+//     },
+//     {
+//         id: 2,
+//         name: "CloudFlare Jobs",
+//         description:
+//             "The description of your group will be displayed here for you to see as well as any other emoji",
+//         createdAt: "May 12, 2019",
+//         avatar: "https://i.pravatar.cc/100?img=12",
+//     },
+//     {
+//         id: 3,
+//         name: "Dev Con",
+//         description:
+//             "The description of your group will be displayed here for you to see as well as any other emoji",
+//         createdAt: "May 12, 2019",
+//         avatar: "https://i.pravatar.cc/100?img=13",
+//     },
+// ];
 
 export default function Groups() {
     const [search, setSearch] = useState("");
     const [groups, setGroups] = useState<Group[]>([]);
     console.log(groups, 'groups view')
 
-    const filteredGroups = groupsData.filter((group) =>
+    const filteredGroups = groups.filter((group) =>
         group.name.toLowerCase().includes(search.toLowerCase())
     );
 
+
+    function ConvertToReadAbleDate(createdDate: string) {
+        const date = new Date(createdDate);
+        const formatted = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        return formatted;
+    }
 
 
     useEffect(() => {
@@ -100,10 +116,15 @@ export default function Groups() {
 
 
                                 <div className="flex gap-6">
-                                    <img
-                                        src={group.avatar}
-                                        className="w-12 h-12 rounded-full object-cover"
-                                    />
+                                    {
+                                        group.profile_picture && (
+                                            <img
+                                                src={group.profile_picture}
+                                                className="w-12 h-12 rounded-full object-cover"
+                                            />
+                                        )
+                                    }
+
 
                                     <div >
                                         <h2 className="text-lg font-bold text-[#171717]">
@@ -124,7 +145,7 @@ export default function Groups() {
                                             </svg>
 
                                         </span>
-                                        <span>Group created on {group.createdAt}</span>
+                                        <span>Group created on {ConvertToReadAbleDate(group.created_at)}</span>
                                     </div>
 
                                     <div className="flex justify-end">
