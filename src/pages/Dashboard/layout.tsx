@@ -15,8 +15,9 @@ interface Nav {
 function Layout() {
     const location = useLocation();
     const setUser = useUserStore(state => state.setUserData)
-
-    const user = useUserStore(state => state.user)
+ 
+    const user = useUserStore(state => state.user);
+      console.log(user, 'userDate for get user')
     const NavItem: Nav[] = [
         {
             icon: (
@@ -51,7 +52,7 @@ function Layout() {
 
             ),
             label: "Groups",
-            path: "/dashboard/Groups",
+            path: "/Groups",
         },
         {
             icon: (
@@ -75,15 +76,18 @@ function Layout() {
                 </svg>
             ),
             label: "Pricing",
-            path: "/dashboard/Pricing",
+            path: "/Pricing",
         },
     ];
     const [loading, setLoading] = useState<boolean>(false)
 
 
-
    const fetchUser = async () => {
-    console.log("fetchUser called");
+    if ( user?.name || user  ) {
+        console.log(user, 'user Data')
+        return;
+    }
+    
     try {
         setLoading(true);
         const res = await getUser();
@@ -120,7 +124,7 @@ function Layout() {
 
     useEffect(() => {
         fetchUser()
-    }, [])
+    }, []);
 
 
 

@@ -22,7 +22,7 @@ function App() {
 
         <Route element={<Layout/>}>
          <Route path='/dashboard' element={<Dashboard/>}/>
-          <Route path='/dashboard/Groups' element={<Groups/>}/>
+          <Route path='/Groups' element={<Groups/>}/>
         </Route>
        
       
