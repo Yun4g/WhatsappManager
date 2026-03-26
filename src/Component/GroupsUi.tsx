@@ -174,7 +174,7 @@ export default function GroupManager() {
                                                             className="w-full h-full rounded-full object-cover"
                                                         />
                                                     ) : (
-                                                        <div className="w-full h-full rounded-full bg-[#08516e] flex items-center justify-center text-xs font-semibold text-gray-700 uppercase">
+                                                        <div className="w-full h-full rounded-full bg-[#becace] flex items-center justify-center text-xs font-semibold text-gray-700 uppercase">
                                                             {group.name?.slice(0, 2)}
                                                         </div>
                                                     )}
