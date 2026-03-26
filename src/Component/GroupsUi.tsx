@@ -1,9 +1,11 @@
+import { SelectGroups } from "@/api/Groups";
 import { useUserStore } from "@/store/userData";
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-interface Group {
+export interface Group {
     id: number,
     name: string,
     description: string,
@@ -21,7 +23,9 @@ export default function GroupManager() {
     const [loading, setLoading] = useState<boolean>(false);
     const user = useUserStore(state => state.user)
     const [searchTerm, setSearchTerm] = useState("");
-    console.log(groups)
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    console.log(groups);
+    const navigate = useNavigate();
 
 
     const toggleGroup = (id: number) => {
@@ -112,6 +116,29 @@ export default function GroupManager() {
         };
     }, [user?.id]);
 
+
+
+
+
+    const handleSelectGroup = async () => {
+    setConfirmLoading(true);
+    try {
+    
+         await SelectGroups(selectedGroups);
+        toast.success("Groups saved successfully!");
+        setOpen(false);
+
+         setTimeout(() => {
+             navigate('/groups')
+         }, 1500);
+        
+    } catch (error) {
+        toast.error("Failed to save groups. Please try again.");
+        console.error(error);
+    } finally {
+        setConfirmLoading(false);
+    }
+};
 
 
     return (
@@ -323,8 +350,12 @@ export default function GroupManager() {
                                                 Cancel
                                             </button>
 
-                                            <button className="px-4 py-2 rounded-full bg-black text-white">
-                                                Yes, I want these groups
+                                             <button
+                                                onClick={handleSelectGroup}
+                                                disabled={confirmLoading}
+                                                className="px-4 py-2 rounded-full bg-black text-white disabled:opacity-50"
+                                            >
+                                                {confirmLoading ? "Saving..." : "Yes, I want these groups"}
                                             </button>
                                         </div>
                                     </div>

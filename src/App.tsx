@@ -5,6 +5,7 @@ import Auth from './pages/auth/auth';
 import Dashboard from './pages/Dashboard/dashboard.tsx';
 import Layout from './pages/Dashboard/layout.tsx';
 import { Toaster } from "react-hot-toast";
+import Groups from './pages/Dashboard/groups.tsx';
 
 
 
@@ -21,6 +22,7 @@ function App() {
 
         <Route element={<Layout/>}>
          <Route path='/dashboard' element={<Dashboard/>}/>
+          <Route path='/groups' element={<Groups/>}/>
         </Route>
        
       
