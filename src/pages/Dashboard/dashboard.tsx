@@ -14,6 +14,7 @@ import {  useState } from "react";
 
 function Dashboard() {
     const user = useUserStore((state) => state.user);
+    console.log(user, 'user in dashboard');
     // const setUser = useUserStore((state) => state.setUserData);
    
     // const getUserData = useCallback(async () => {

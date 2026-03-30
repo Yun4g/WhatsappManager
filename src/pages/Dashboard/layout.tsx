@@ -16,112 +16,118 @@ interface Nav {
 function Layout() {
     const location = useLocation();
     const setUser = useUserStore(state => state.setUserData)
- 
-    const user = useUserStore(state => state.user);
-      console.log(user, 'userDate for get user')
 
-   const NavItem: Nav[] = [
-    {
-        icon: (
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M4.2935 1.3335H11.7002C14.0735 1.3335 14.6668 1.92683 14.6668 4.2935V8.5135C14.6668 10.8868 14.0735 11.4735 11.7068 11.4735H4.2935C1.92683 11.4802 1.3335 10.8868 1.3335 8.52016V4.2935C1.3335 1.92683 1.92683 1.3335 4.2935 1.3335Z"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                />
-                <path d="M8 11.48V14.6666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M1.3335 8.6665H14.6668" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M5 14.6665H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-        ),
-        label: "Home",
-        path: "/dashboard",
-    },
-    {
-        icon: (
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.8799 6.66651H3.12652C2.13985 6.66651 1.33984 5.85985 1.33984 4.87985V3.12652C1.33984 2.13985 2.14652 1.33984 3.12652 1.33984H12.8799C13.8665 1.33984 14.6665 2.14652 14.6665 3.12652V4.87985C14.6665 5.85985 13.8599 6.66651 12.8799 6.66651Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M12.8799 14.6665H3.12652C2.13985 14.6665 1.33984 13.8599 1.33984 12.8799V11.1265C1.33984 10.1398 2.14652 9.33984 3.12652 9.33984H12.8799C13.8665 9.33984 14.6665 10.1465 14.6665 11.1265V12.8799C14.6665 13.8599 13.8599 14.6665 12.8799 14.6665Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M4 3.3335V4.66683" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M6.66699 3.3335V4.66683" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M4 11.3335V12.6668" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M6.66699 11.3335V12.6668" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M9.33301 4H11.9997" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M9.33301 12H11.9997" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-        ),
-        label: "Groups",
-        path: "/Groups",
-    },
-    {
-        icon: (
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M12.6665 5.3335C13.7711 5.3335 14.6665 4.43807 14.6665 3.3335C14.6665 2.22893 13.7711 1.3335 12.6665 1.3335C11.5619 1.3335 10.6665 2.22893 10.6665 3.3335C10.6665 4.43807 11.5619 5.3335 12.6665 5.3335Z"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                />
-                <path d="M4.6665 8.6665H7.99984" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M4.6665 11.3335H10.6665" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path
-                    d="M9.3335 1.3335H6.00016C2.66683 1.3335 1.3335 2.66683 1.3335 6.00016V10.0002C1.3335 13.3335 2.66683 14.6668 6.00016 14.6668H10.0002C13.3335 14.6668 14.6668 13.3335 14.6668 10.0002V6.66683"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                />
-            </svg>
-        ),
-        label: "Pricing",
-        path: "/Pricing",
-    },
-];
+    const user = useUserStore(state => state.user);
+    console.log(user, 'userDate for get user')
+
+    const NavItem: Nav[] = [
+        {
+            icon: (
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M4.2935 1.3335H11.7002C14.0735 1.3335 14.6668 1.92683 14.6668 4.2935V8.5135C14.6668 10.8868 14.0735 11.4735 11.7068 11.4735H4.2935C1.92683 11.4802 1.3335 10.8868 1.3335 8.52016V4.2935C1.3335 1.92683 1.92683 1.3335 4.2935 1.3335Z"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    />
+                    <path d="M8 11.48V14.6666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M1.3335 8.6665H14.6668" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M5 14.6665H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+            ),
+            label: "Home",
+            path: "/dashboard",
+        },
+        {
+            icon: (
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.8799 6.66651H3.12652C2.13985 6.66651 1.33984 5.85985 1.33984 4.87985V3.12652C1.33984 2.13985 2.14652 1.33984 3.12652 1.33984H12.8799C13.8665 1.33984 14.6665 2.14652 14.6665 3.12652V4.87985C14.6665 5.85985 13.8599 6.66651 12.8799 6.66651Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M12.8799 14.6665H3.12652C2.13985 14.6665 1.33984 13.8599 1.33984 12.8799V11.1265C1.33984 10.1398 2.14652 9.33984 3.12652 9.33984H12.8799C13.8665 9.33984 14.6665 10.1465 14.6665 11.1265V12.8799C14.6665 13.8599 13.8599 14.6665 12.8799 14.6665Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M4 3.3335V4.66683" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M6.66699 3.3335V4.66683" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M4 11.3335V12.6668" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M6.66699 11.3335V12.6668" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M9.33301 4H11.9997" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M9.33301 12H11.9997" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+            ),
+            label: "Groups",
+            path: "/Groups",
+        },
+        {
+            icon: (
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12.6665 5.3335C13.7711 5.3335 14.6665 4.43807 14.6665 3.3335C14.6665 2.22893 13.7711 1.3335 12.6665 1.3335C11.5619 1.3335 10.6665 2.22893 10.6665 3.3335C10.6665 4.43807 11.5619 5.3335 12.6665 5.3335Z"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    />
+                    <path d="M4.6665 8.6665H7.99984" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M4.6665 11.3335H10.6665" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                        d="M9.3335 1.3335H6.00016C2.66683 1.3335 1.3335 2.66683 1.3335 6.00016V10.0002C1.3335 13.3335 2.66683 14.6668 6.00016 14.6668H10.0002C13.3335 14.6668 14.6668 13.3335 14.6668 10.0002V6.66683"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    />
+                </svg>
+            ),
+            label: "Pricing",
+            path: "/Pricing",
+        },
+    ];
     const [loading, setLoading] = useState<boolean>(false)
 
 
-   const fetchUser = async () => {
-    if ( user?.name || user  ) {
-        console.log(user, 'user Data')
-        return;
-    }
-    
-    try {
-        setLoading(true);
-        const res = await getUser();
-
-        if (!res) {
-            console.log("User data is undefined");
+    const fetchUser = async () => {
+        if (user?.name || user) {
+            console.log(user, 'user Data')
             return;
         }
-        setUser({
-            id: res.id,
-            email: res.email,
-            name: res.name,
-            profile_pic: res.profile_pic,
-            connected: res.connected,
-        });
-    } catch (error) {
-        if (error instanceof AxiosError) {
-        if (error.response?.status === 401) {
-            console.log("Session expired");
-            toast.error('Session expired. Please login again.');
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 200);
-            return;
-        }
-    }
 
-        console.log(error);
-        toast.error("Error Getting user data");
-    } finally {
-        setLoading(false);
-    }
-};
+        try {
+            setLoading(true);
+            const res = await getUser();
+
+            if (!res) {
+                console.log("User data is undefined");
+                return;
+            }
+            const userData = res.user;
+            setUser({
+                id: userData.id,
+                email: userData.email,
+                name: userData.name,
+                profile_pic: userData.profile_pic,
+                connected: userData.connected,
+                wa_number: userData.wa_number,
+                wa_profile_name: userData.wa_profile_name,
+                stored_groups: userData.stored_groups
+            });
+
+
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                if (error.response?.status === 401) {
+                    console.log("Session expired");
+                    toast.error('Session expired. Please login again.');
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 200);
+                    return;
+                }
+            }
+
+            console.log(error);
+            toast.error("Error Getting user data");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         fetchUser()
@@ -167,7 +173,7 @@ function Layout() {
                         </span>
                         <div>
                             <p className="text-[12px] font-bold">{user?.name}</p>
-                            <p className="text-[10px] text-gray-400">{user?.email}</p>
+                            <p className="text-[10px] text-gray-400">{user?.wa_number || user?.email || 'No contact info available' }</p>
                         </div>
                         <button>
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -207,10 +213,10 @@ function Layout() {
                                     }`}
                             >
                                 {item.icon}
-                    
-                                <Link to={item.path}   className="text-[10px] md:text-sm ">
+
+                                <Link to={item.path} className="text-[10px] md:text-sm ">
                                     {item.label}
-                                    </Link>
+                                </Link>
                             </div>
                         ))}
                     </aside>

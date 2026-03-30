@@ -7,6 +7,9 @@ interface UserDataType {
   name: string,
   profile_pic: string,
   connected: boolean
+  stored_groups: boolean,
+  wa_number: string | null,
+  wa_profile_name: string | null
   
 }
 interface DashboardStore {
@@ -27,3 +30,4 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
   setUserData: (userData: UserDataType[]) => set({ userData }),
 
 }));
+
