@@ -74,7 +74,24 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                         name: res.name,
                         profile_pic: res.profile_pic,
                         connected: res.connected,
+                        stored_groups: res.stored_groups,
+                        wa_number: res.wa_number,
+                        wa_profile_name: res.wa_profile_name
                     });
+
+
+                    /* 
+                    {
+    "id": 2,
+    "email": "delightvincent487@gmail.com",
+    "name": "Delight Vincent",
+    "profile_pic": "https://lh3.googleusercontent.com/a/ACg8ocLWoSi4-4tg4_MalJ-dy1j020WwK7uODaHO0JdlSFwfa02G6A=s96-c",
+    "connected": false,
+    "stored_groups": false,
+    "wa_number": "2348060329362",
+    "wa_profile_name": null
+}
+                    */
                 } catch (error) {
                     console.error("Error fetching user after connect:", error);
                     setInitialQrLoading(false);
@@ -145,11 +162,14 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             es.addEventListener("connected", async () => {
                 const res = await getUser();
                 setUser({
-                    id: res.id,
-                    email: res.email,
-                    name: res.name,
-                    profile_pic: res.profile_pic,
-                    connected: res.connected,
+                     id: res.id,
+                        email: res.email,
+                        name: res.name,
+                        profile_pic: res.profile_pic,
+                        connected: res.connected,
+                        stored_groups: res.stored_groups,
+                        wa_number: res.wa_number,
+                        wa_profile_name: res.wa_profile_name
                 });
             });
 
@@ -222,11 +242,14 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 try {
                     const res = await getUser();
                     setUser({
-                        id: res.id,
+                         id: res.id,
                         email: res.email,
                         name: res.name,
                         profile_pic: res.profile_pic,
                         connected: res.connected,
+                        stored_groups: res.stored_groups,
+                        wa_number: res.wa_number,
+                        wa_profile_name: res.wa_profile_name
                     });
 
                     es?.close();

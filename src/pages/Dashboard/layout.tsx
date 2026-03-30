@@ -97,16 +97,16 @@ function Layout() {
                 console.log("User data is undefined");
                 return;
             }
-            const userData = res.user;
+
             setUser({
-                id: userData.id,
-                email: userData.email,
-                name: userData.name,
-                profile_pic: userData.profile_pic,
-                connected: userData.connected,
-                wa_number: userData.wa_number,
-                wa_profile_name: userData.wa_profile_name,
-                stored_groups: userData.stored_groups
+                id: res.id,
+                email: res.email,
+                name: res.name,
+                profile_pic: res.profile_pic,
+                connected: res.connected,
+                stored_groups: res.stored_groups,
+                wa_number: res.wa_number,
+                wa_profile_name: res.wa_profile_name
             });
 
 
@@ -173,7 +173,7 @@ function Layout() {
                         </span>
                         <div>
                             <p className="text-[12px] font-bold">{user?.name}</p>
-                            <p className="text-[10px] text-gray-400">{user?.wa_number || user?.email || 'No contact info available' }</p>
+                            <p className="text-[10px] text-gray-400">{user?.wa_number || user?.email || 'No contact info available'}</p>
                         </div>
                         <button>
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
