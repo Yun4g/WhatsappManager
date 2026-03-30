@@ -109,6 +109,17 @@ function Layout() {
                 wa_profile_name: res.user.wa_profile_name
             });
 
+            //            user: {
+            //     "id": 2,
+            //     "email": "delightvincent487@gmail.com",
+            //     "name": "Delight Vincent",
+            //     "profile_pic": "https://lh3.googleusercontent.com/a/ACg8ocLWoSi4-4tg4_MalJ-dy1j020WwK7uODaHO0JdlSFwfa02G6A=s96-c",
+            //     "connected": false,
+            //     "stored_groups": false,
+            //     "wa_number": null,
+            //     "wa_profile_name": null
+            // }
+
 
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -173,7 +184,13 @@ function Layout() {
                         </span>
                         <div>
                             <p className="text-[12px] font-bold">{user?.name}</p>
-                            <p className="text-[10px] text-gray-400">{'+' + user?.wa_number || user?.email || 'No contact info available'}</p>
+                            <p className="text-[10px] text-gray-400">
+                                {
+                                    user?.wa_number
+                                        ? `+${user.wa_number}`
+                                        : user?.email || "No contact info available"
+                                }
+                            </p>
                         </div>
                         <button>
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
