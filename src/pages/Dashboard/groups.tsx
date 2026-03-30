@@ -25,7 +25,8 @@ export default function Groups() {
     const [currentPage, setCurrentPage] = useState(1);
     const [groups, setGroups] = useState<Group[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    console.log(groups, 'groups view')
+    console.log(groups, 'groups view');
+    // const navigate = useNavigate();
 
     const filteredGroups = groups.filter((group) =>
         group.name.toLowerCase().includes(search.toLowerCase())

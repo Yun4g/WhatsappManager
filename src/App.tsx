@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard/dashboard.tsx';
 import Layout from './pages/Dashboard/layout.tsx';
 import { Toaster } from "react-hot-toast";
 import Groups from './pages/Dashboard/groups.tsx';
+import GroupDetails from './pages/Dashboard/groupDetail.tsx';
 
 
 
@@ -23,6 +24,7 @@ function App() {
         <Route element={<Layout/>}>
          <Route path='/dashboard' element={<Dashboard/>}/>
           <Route path='/Groups' element={<Groups/>}/>
+           <Route path='/Groups/:id' element={<GroupDetails/>}/>
         </Route>
        
       
