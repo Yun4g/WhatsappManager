@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 interface PropsType {
     isConnected: boolean,
     setConnectMethodPhone: () => void,
-   
+
 }
 
 
@@ -69,29 +69,16 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 try {
                     const res = await getUser();
                     setUser({
-                        id: res.id,
-                        email: res.email,
-                        name: res.name,
-                        profile_pic: res.profile_pic,
-                        connected: res.connected,
-                        stored_groups: res.stored_groups,
-                        wa_number: res.wa_number,
-                        wa_profile_name: res.wa_profile_name
+                        id: res.user.id,
+                        email: res.user.email,
+                        name: res.user.name,
+                        profile_pic: res.user.profile_pic,
+                        connected: res.user.connected,
+                        stored_groups: res.user.stored_groups,
+                        wa_number: res.user.wa_number,
+                        wa_profile_name: res.user.wa_profile_name
                     });
 
-
-                    /* 
-                    {
-    "id": 2,
-    "email": "delightvincent487@gmail.com",
-    "name": "Delight Vincent",
-    "profile_pic": "https://lh3.googleusercontent.com/a/ACg8ocLWoSi4-4tg4_MalJ-dy1j020WwK7uODaHO0JdlSFwfa02G6A=s96-c",
-    "connected": false,
-    "stored_groups": false,
-    "wa_number": "2348060329362",
-    "wa_profile_name": null
-}
-                    */
                 } catch (error) {
                     console.error("Error fetching user after connect:", error);
                     setInitialQrLoading(false);
@@ -162,15 +149,15 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             es.addEventListener("connected", async () => {
                 const res = await getUser();
                 setUser({
-                     id: res.id,
-                        email: res.email,
-                        name: res.name,
-                        profile_pic: res.profile_pic,
-                        connected: res.connected,
-                        stored_groups: res.stored_groups,
-                        wa_number: res.wa_number,
-                        wa_profile_name: res.wa_profile_name
-                });
+                id: res.user.id,
+                email: res.user.email,
+                name: res.user.name,
+                profile_pic: res.user.profile_pic,
+                connected: res.user.connected,
+                stored_groups: res.user.stored_groups,
+                wa_number: res.user.wa_number,
+                wa_profile_name: res.user.wa_profile_name
+            });
             });
 
             es.onerror = () => {
@@ -213,8 +200,8 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
         if (!user?.id || user.connected) return;
 
         let es: EventSource | null = null;
- 
-  
+
+
 
         const connectSSE = () => {
             setInitialQrLoading(true);
@@ -224,7 +211,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             );
 
             es.addEventListener("qr", (event) => {
-           
+
                 try {
                     const data = JSON.parse(event.data);
                     if (data?.qrCode) {
@@ -238,11 +225,11 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             });
 
             es.addEventListener("connected", async () => {
-                
+
                 try {
                     const res = await getUser();
                     setUser({
-                         id: res.id,
+                        id: res.id,
                         email: res.email,
                         name: res.name,
                         profile_pic: res.profile_pic,
@@ -261,7 +248,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             });
 
             es.onerror = () => {
-                
+
                 console.log("SSE error");
                 es?.close();
 
@@ -278,8 +265,8 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                                 window.location.href = '/';
                             }, 3000);
                         } else {
-                               console.log("hello")
-                         
+                            console.log("hello")
+
                         }
                     })
                     .catch(() => {
@@ -293,9 +280,9 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
         connectSSE();
 
         return () => {
-          
+
             if (es) es.close();
-           
+
         };
     }, [user?.id, user?.connected]);
 

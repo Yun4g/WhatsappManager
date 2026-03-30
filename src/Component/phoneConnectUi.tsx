@@ -59,14 +59,14 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
             es.addEventListener("connected", async () => {
                 const res = await getUser();
                 setUser({
-                    id: res.id,
-                    email: res.email,
-                    name: res.name,
-                    profile_pic: res.profile_pic,
-                    connected: res.connected,
-                    stored_groups: res.stored_groups,
-                    wa_number: res.wa_number,
-                    wa_profile_name: res.wa_profile_name
+                    id: res.user.id,
+                    email: res.user.email,
+                    name: res.user.name,
+                    profile_pic: res.user.profile_pic,
+                    connected: res.user.connected,
+                    stored_groups: res.user.stored_groups,
+                    wa_number: res.user.wa_number,
+                    wa_profile_name: res.user.wa_profile_name
                 });
                 setLoading(false);
             });
