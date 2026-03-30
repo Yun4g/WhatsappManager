@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import {
     Trash2,
-   
+
 } from "lucide-react";
 import { GetGroupById } from "@/api/Groups";
 import { useNavigate } from "react-router-dom";
@@ -121,10 +121,111 @@ const GroupDetailsSkeleton: React.FC = () => {
 const GroupDetails: React.FC = () => {
     const groupId = window.location.pathname.split("/Groups/")[1];
     console.log(groupId, 'groupId in group details');
+
+    interface ScheduledMessage {
+        title: string;
+        status: "Pending" | "Sent";
+        type: string;
+        date: string;
+    }
+
+    interface GroupAutomation {
+        icon: React.ReactNode;
+        title: string;
+        description: string;
+        enabled: boolean;
+    }
+
+    const mockData = {
+        groupMembers: 237,
+        messages: "1.6k messages",
+        automationUsage: 10,
+        scheduledMessages: [
+            {
+                title: "Logistics Meeting",
+                status: "Pending",
+                type: "Direct Message",
+                date: "May 12, 2025| 8:00PM",
+            },
+            {
+                title: "Interviews",
+                status: "Pending",
+                type: "Group Message",
+                date: "May 15, 2025| 9:00AM",
+            },
+            {
+                title: "Daily Boost",
+                status: "Sent",
+                type: "Group Message",
+                date: "May 18, 2025| 10:00AM",
+            },
+            {
+                title: "Daily Boost",
+                status: "Pending",
+                type: "Group Message",
+                date: "May 18, 2025| 10:00AM",
+            },
+            {
+                title: "Daily Boost",
+                status: "Pendingt",
+                type: "Group Message",
+                date: "May 18, 2025| 10:00AM",
+            },
+        ] as ScheduledMessage[],
+        groupAutomations: [
+            {
+                icon: (
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#F5F5F5" />
+                        <path d="M30 14.0001V16.4201C30 18.0001 29 19.0001 27.42 19.0001H24V12.0101C24 10.9001 24.91 9.99008 26.02 10.0001C27.11 10.0101 28.11 10.4501 28.83 11.1701C29.55 11.9001 30 12.9001 30 14.0001Z" fill="#999999" />
+                        <path opacity="0.4" d="M10 15V29C10 29.83 10.94 30.3 11.6 29.8L13.31 28.52C13.71 28.22 14.27 28.26 14.63 28.62L16.29 30.29C16.68 30.68 17.32 30.68 17.71 30.29L19.39 28.61C19.74 28.26 20.3 28.22 20.69 28.52L22.4 29.8C23.06 30.29 24 29.82 24 29V12C24 10.9 24.9 10 26 10H15H14C11 10 10 11.79 10 14V15Z" fill="#999999" />
+                        <path d="M20 20.2598H17C16.59 20.2598 16.25 20.5998 16.25 21.0098C16.25 21.4198 16.59 21.7598 17 21.7598H20C20.41 21.7598 20.75 21.4198 20.75 21.0098C20.75 20.5998 20.41 20.2598 20 20.2598Z" fill="#999999" />
+                        <path d="M17 17.7598H20C20.41 17.7598 20.75 17.4198 20.75 17.0098C20.75 16.5998 20.41 16.2598 20 16.2598H17C16.59 16.2598 16.25 16.5998 16.25 17.0098C16.25 17.4198 16.59 17.7598 17 17.7598Z" fill="#999999" />
+                        <path d="M13.9697 16.0098C13.4097 16.0098 12.9697 16.4598 12.9697 17.0098C12.9697 17.5598 13.4197 18.0098 13.9697 18.0098C14.5197 18.0098 14.9697 17.5598 14.9697 17.0098C14.9697 16.4598 14.5197 16.0098 13.9697 16.0098Z" fill="#999999" />
+                        <path d="M13.9697 20.0098C13.4097 20.0098 12.9697 20.4598 12.9697 21.0098C12.9697 21.5598 13.4197 22.0098 13.9697 22.0098C14.5197 22.0098 14.9697 21.5598 14.9697 21.0098C14.9697 20.4598 14.5197 20.0098 13.9697 20.0098Z" fill="#999999" />
+                    </svg>
+                ),
+                title: "When a new user joins",
+                description: "Send a welcome DM",
+                enabled: true,
+            },
+            {
+                icon: (
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#F5F5F5" />
+                        <path d="M30 14.0001V16.4201C30 18.0001 29 19.0001 27.42 19.0001H24V12.0101C24 10.9001 24.91 9.99008 26.02 10.0001C27.11 10.0101 28.11 10.4501 28.83 11.1701C29.55 11.9001 30 12.9001 30 14.0001Z" fill="#999999" />
+                        <path opacity="0.4" d="M10 15V29C10 29.83 10.94 30.3 11.6 29.8L13.31 28.52C13.71 28.22 14.27 28.26 14.63 28.62L16.29 30.29C16.68 30.68 17.32 30.68 17.71 30.29L19.39 28.61C19.74 28.26 20.3 28.22 20.69 28.52L22.4 29.8C23.06 30.29 24 29.82 24 29V12C24 10.9 24.9 10 26 10H15H14C11 10 10 11.79 10 14V15Z" fill="#999999" />
+                        <path d="M20 20.2598H17C16.59 20.2598 16.25 20.5998 16.25 21.0098C16.25 21.4198 16.59 21.7598 17 21.7598H20C20.41 21.7598 20.75 21.4198 20.75 21.0098C20.75 20.5998 20.41 20.2598 20 20.2598Z" fill="#999999" />
+                        <path d="M17 17.7598H20C20.41 17.7598 20.75 17.4198 20.75 17.0098C20.75 16.5998 20.41 16.2598 20 16.2598H17C16.59 16.2598 16.25 16.5998 16.25 17.0098C16.25 17.4198 16.59 17.7598 17 17.7598Z" fill="#999999" />
+                        <path d="M13.9697 16.0098C13.4097 16.0098 12.9697 16.4598 12.9697 17.0098C12.9697 17.5598 13.4197 18.0098 13.9697 18.0098C14.5197 18.0098 14.9697 17.5598 14.9697 17.0098C14.9697 16.4598 14.5197 16.0098 13.9697 16.0098Z" fill="#999999" />
+                        <path d="M13.9697 20.0098C13.4097 20.0098 12.9697 20.4598 12.9697 21.0098C12.9697 21.5598 13.4197 22.0098 13.9697 22.0098C14.5197 22.0098 14.9697 21.5598 14.9697 21.0098C14.9697 20.4598 14.5197 20.0098 13.9697 20.0098Z" fill="#999999" />
+                    </svg>
+                ),
+                title: "Inactive > 15 days",
+                description: "Send a follow-up DM",
+                enabled: false,
+            },
+        ],
+    };
+
     const [groupData, setGroupData] = React.useState(null);
     const [loading, setLoading] = React.useState<boolean>(true);
+    const [currentPage, setCurrentPage] = React.useState<number>(1);
+    const [groupAutomations, setGroupAutomations] = React.useState<GroupAutomation[]>(mockData.groupAutomations);
+    const scheduledMessages: ScheduledMessage[] = mockData.scheduledMessages;
     const navigate = useNavigate();
-    console.log(groupData, 'groupData in group details');
+    console.log(groupData, 'group data in group details');
+    const itemsPerPage = 4;
+    const totalPages = Math.max(1, Math.ceil(scheduledMessages.length / itemsPerPage));
+    const currentPageItems = scheduledMessages.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+    const toggleAutomation = (index: number) => {
+        setGroupAutomations((prev) =>
+            prev.map((item, i) =>
+                i === index ? { ...item, enabled: !item.enabled } : item
+            )
+        );
+    };
 
     useEffect(() => {
         let isMounted = true;
@@ -185,9 +286,9 @@ const GroupDetails: React.FC = () => {
                     <div>
                         <p className="text-[#999999] text-sm font-medium">Group Members</p>
                         <div className="flex items-center gap-2">
-                            <h2 className="text-2xl text-[#181925] font-bold">237</h2>
+                            <h2 className="text-2xl text-[#181925] font-bold">{mockData.groupMembers}</h2>
                             <span className="text-xs bg-[#F5F5F5] px-2 py-1 text-[#181925] font-bold rounded-full">
-                                1.6k messages
+                                {mockData.messages}
                             </span>
                         </div>
                     </div>
@@ -196,9 +297,9 @@ const GroupDetails: React.FC = () => {
 
                         <div>
                             <p className="text-[#999999] text-sm font-medium">Automation Usage</p>
-                            <h3 className="text-xl text-[#171717] font-bold ">10</h3>
+                            <h3 className="text-xl text-[#171717] font-bold ">{mockData.automationUsage}</h3>
                             <p className="text-xs text-gray-400 mt-7 flex items-center gap-1">
-                                4/10 used
+                                4/{mockData.automationUsage} used
                                 <span>
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6.9421 11.9798L13.5054 5.4165L14.5837 6.49476L8.02035 13.0581H13.8051V14.5832H5.41699V6.19507H6.9421V11.979V11.9798Z" fill="#FB3748" />
@@ -239,75 +340,35 @@ const GroupDetails: React.FC = () => {
                     </div>
 
 
-                    <div className="flex items-center justify-between  p-4  mt-4">
-                        <div className="flex items-center gap-3">
-                            <div>
-                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#F5F5F5" />
-                                    <path d="M30 14.0001V16.4201C30 18.0001 29 19.0001 27.42 19.0001H24V12.0101C24 10.9001 24.91 9.99008 26.02 10.0001C27.11 10.0101 28.11 10.4501 28.83 11.1701C29.55 11.9001 30 12.9001 30 14.0001Z" fill="#999999" />
-                                    <path opacity="0.4" d="M10 15V29C10 29.83 10.94 30.3 11.6 29.8L13.31 28.52C13.71 28.22 14.27 28.26 14.63 28.62L16.29 30.29C16.68 30.68 17.32 30.68 17.71 30.29L19.39 28.61C19.74 28.26 20.3 28.22 20.69 28.52L22.4 29.8C23.06 30.29 24 29.82 24 29V12C24 10.9 24.9 10 26 10H15H14C11 10 10 11.79 10 14V15Z" fill="#999999" />
-                                    <path d="M20 20.2598H17C16.59 20.2598 16.25 20.5998 16.25 21.0098C16.25 21.4198 16.59 21.7598 17 21.7598H20C20.41 21.7598 20.75 21.4198 20.75 21.0098C20.75 20.5998 20.41 20.2598 20 20.2598Z" fill="#999999" />
-                                    <path d="M17 17.7598H20C20.41 17.7598 20.75 17.4198 20.75 17.0098C20.75 16.5998 20.41 16.2598 20 16.2598H17C16.59 16.2598 16.25 16.5998 16.25 17.0098C16.25 17.4198 16.59 17.7598 17 17.7598Z" fill="#999999" />
-                                    <path d="M13.9697 16.0098C13.4097 16.0098 12.9697 16.4598 12.9697 17.0098C12.9697 17.5598 13.4197 18.0098 13.9697 18.0098C14.5197 18.0098 14.9697 17.5598 14.9697 17.0098C14.9697 16.4598 14.5197 16.0098 13.9697 16.0098Z" fill="#999999" />
-                                    <path d="M13.9697 20.0098C13.4097 20.0098 12.9697 20.4598 12.9697 21.0098C12.9697 21.5598 13.4197 22.0098 13.9697 22.0098C14.5197 22.0098 14.9697 21.5598 14.9697 21.0098C14.9697 20.4598 14.5197 20.0098 13.9697 20.0098Z" fill="#999999" />
-                                </svg>
-
+                    {groupAutomations.map((automation, index) => (
+                        <div key={index} className="flex items-center justify-between p-4 mt-3">
+                            <div className="flex items-center gap-3">
+                                <div>
+                                    {automation.icon}
+                                </div>
+                                <div>
+                                    <p className="text-sm text-[#181925] font-bold">
+                                        {automation.title}
+                                    </p>
+                                    <p className="text-xs text-[#5C5C5C] font-medium">
+                                        {automation.description}
+                                    </p>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-sm text-[#181925] font-bold ">
-                                    When a new user joins
-                                </p>
-                                <p className="text-xs text-[#5C5C5C] font-medium ">
-                                    Send a welcome DM
-                                </p>
-                            </div>
-                        </div>
 
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-6 bg-black rounded-full flex items-center p-1">
-                                <div className="w-4 h-4 bg-white rounded-full ml-auto" />
-                            </div>
-                            <Trash2 size={16} className="text-gray-400" />
-                        </div>
-                    </div>
-
-                    <div className="flex items-center justify-between mt-3 p-4 ">
-                        <div className="flex items-center gap-3">
-                            <div >
-                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#F5F5F5" />
-                                    <path d="M30 14.0001V16.4201C30 18.0001 29 19.0001 27.42 19.0001H24V12.0101C24 10.9001 24.91 9.99008 26.02 10.0001C27.11 10.0101 28.11 10.4501 28.83 11.1701C29.55 11.9001 30 12.9001 30 14.0001Z" fill="#999999" />
-                                    <path opacity="0.4" d="M10 15V29C10 29.83 10.94 30.3 11.6 29.8L13.31 28.52C13.71 28.22 14.27 28.26 14.63 28.62L16.29 30.29C16.68 30.68 17.32 30.68 17.71 30.29L19.39 28.61C19.74 28.26 20.3 28.22 20.69 28.52L22.4 29.8C23.06 30.29 24 29.82 24 29V12C24 10.9 24.9 10 26 10H15H14C11 10 10 11.79 10 14V15Z" fill="#999999" />
-                                    <path d="M20 20.2598H17C16.59 20.2598 16.25 20.5998 16.25 21.0098C16.25 21.4198 16.59 21.7598 17 21.7598H20C20.41 21.7598 20.75 21.4198 20.75 21.0098C20.75 20.5998 20.41 20.2598 20 20.2598Z" fill="#999999" />
-                                    <path d="M17 17.7598H20C20.41 17.7598 20.75 17.4198 20.75 17.0098C20.75 16.5998 20.41 16.2598 20 16.2598H17C16.59 16.2598 16.25 16.5998 16.25 17.0098C16.25 17.4198 16.59 17.7598 17 17.7598Z" fill="#999999" />
-                                    <path d="M13.9697 16.0098C13.4097 16.0098 12.9697 16.4598 12.9697 17.0098C12.9697 17.5598 13.4197 18.0098 13.9697 18.0098C14.5197 18.0098 14.9697 17.5598 14.9697 17.0098C14.9697 16.4598 14.5197 16.0098 13.9697 16.0098Z" fill="#999999" />
-                                    <path d="M13.9697 20.0098C13.4097 20.0098 12.9697 20.4598 12.9697 21.0098C12.9697 21.5598 13.4197 22.0098 13.9697 22.0098C14.5197 22.0098 14.9697 21.5598 14.9697 21.0098C14.9697 20.4598 14.5197 20.0098 13.9697 20.0098Z" fill="#999999" />
-                                </svg>
-
-
-                            </div>
-                            <div>
-                                <p className=" text-[#181925] font-bold">Inactive &gt; 15 days</p>
-                                <p className="text-xs text-[#5C5C5C] font-medium">
-                                    Send a follow-up DM
-                                </p>
+                            <div className="flex items-center gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => toggleAutomation(index)}
+                                    aria-label={`Toggle ${automation.title}`}
+                                    className={`w-10 h-6 rounded-full flex items-center p-1 transition ${automation.enabled ? 'bg-black' : 'bg-gray-300'}`}
+                                >
+                                    <div className={`w-4 h-4 bg-white rounded-full transition ${automation.enabled ? 'ml-auto' : ''}`} />
+                                </button>
+                                <Trash2 size={16} className="text-gray-400" />
                             </div>
                         </div>
-
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-6 bg-gray-300 rounded-full p-1">
-                                <div className="w-4 h-4 bg-white rounded-full" />
-                            </div>
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.5 4.98356C14.725 4.70856 11.9333 4.56689 9.15 4.56689C7.5 4.56689 5.85 4.65023 4.2 4.81689L2.5 4.98356" stroke="#A4A4A4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M7.08301 4.1415L7.26634 3.04984C7.39967 2.25817 7.49967 1.6665 8.90801 1.6665H11.0913C12.4997 1.6665 12.608 2.2915 12.733 3.05817L12.9163 4.1415" stroke="#A4A4A4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M15.7087 7.6167L15.167 16.0084C15.0753 17.3167 15.0003 18.3334 12.6753 18.3334H7.32533C5.00033 18.3334 4.92533 17.3167 4.83366 16.0084L4.29199 7.6167" stroke="#A4A4A4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M8.6084 13.75H11.3834" stroke="#A4A4A4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M7.91699 10.4165H12.0837" stroke="#A4A4A4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-
-                        </div>
-                    </div>
+                    ))}
 
                     <div className="flex justify-between items-center px-4 py-2 border-t">
                         <p className="text-xs flex items-center gap-1 text-[#999999] font-medium">
@@ -332,36 +393,16 @@ const GroupDetails: React.FC = () => {
                 </div>
 
 
-                <div className="rounded-2xl bg-white px-5 py-4 space-y-4">
-                    <div>
+                <div className="rounded-2xl bg-white space-y-4  mb-4  ">
+                    <div className="px-5 py-4 ">
                         <h2 className="font-bold  text-base">Scheduled Messages</h2>
                         <p className="text-sm text-[#999999] font-medium">Automate settings</p>
                     </div>
 
-                    {[
-                        {
-                            title: "Logistics Meeting",
-                            status: "Pending",
-                            type: "Direct Message",
-                            date: "May 12, 2025| 8:00PM",
-                        },
-                        {
-                            title: "Interviews",
-                            status: "Pending",
-                            type: "Group Message",
-                            date: "May 15, 2025| 9:00AM",
-                        },
-                        {
-                            title: "Daily Boost",
-                            status: "Sent",
-                            type: "Group Message",
-                            date: "May 18, 2025| 10:00AM",
-
-                        },
-                    ].map((item, i) => (
+                    {currentPageItems.map((item, i) => (
                         <div
                             key={i}
-                            className="flex items-center justify-between"
+                            className="flex items-center justify-between px-5  "
                         >
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
@@ -409,10 +450,10 @@ const GroupDetails: React.FC = () => {
 
                             <div className="flex items-center gap-2  text-xs">
                                 <div className="flex flex-col items-end gap-1">
-                                     <span className=" text-sm text-[#181925] font-medium">{item.type}</span>
+                                    <span className=" text-sm text-[#181925] font-medium">{item.type}</span>
                                     <span className=" text-[#999999] text-xs font-medium">{item.date}</span>
                                 </div>
-                               
+
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12.1253 18.0582C15.7003 17.1165 18.3337 13.8665 18.3337 9.99984C18.3337 5.39984 14.6337 1.6665 10.0003 1.6665C4.44199 1.6665 1.66699 6.29984 1.66699 6.29984M1.66699 6.29984V2.49984M1.66699 6.29984H3.34199H5.36699" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                     <path d="M1.66699 10C1.66699 14.6 5.40033 18.3333 10.0003 18.3333" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3" />
@@ -422,23 +463,61 @@ const GroupDetails: React.FC = () => {
                         </div>
                     ))}
 
-                    <div className="flex items-center justify-between pt-3">
-                        <div className="flex gap-2">
-                            {[1, 2, 3].map((n) => (
-                                <button
-                                    key={n}
-                                    className={`w-8 h-8 rounded-md ${n === 2
-                                        ? "bg-gray-200"
-                                        : "bg-white border"
-                                        }`}
-                                >
-                                    {n}
-                                </button>
-                            ))}
+                  
+                    <div className="flex flex-wrap md:flex-nowrap items-center justify-between mt-6 border-t p-[15px]">
+                        <div className="flex items-center gap-2">
+                            <button
+                                disabled={currentPage === 1}
+                                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                                className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 disabled:opacity-40"
+                            >
+                                ‹
+                            </button>
+
+                            {[...Array(totalPages)].map((_, i) => {
+                                const page = i + 1;
+                                if (page > 5) return null;
+
+                                return (
+                                    <button
+                                        key={page}
+                                        onClick={() => setCurrentPage(page)}
+                                        className={`w-8 h-8 p-[4px] rounded-lg text-sm flex text-[#999999] items-center justify-center transition ${currentPage === page
+                                            ? "bg-[#F9F9F9] font-semibold"
+                                            : "border"
+                                            }`}
+                                    >
+                                        {page}
+                                    </button>
+                                );
+                            })}
+
+                            {totalPages > 5 && (
+                                <span className="px-2 text-gray-400">...</span>
+                            )}
+
+                            <button
+                                disabled={currentPage === totalPages}
+                                onClick={() =>
+                                    setCurrentPage((p) => Math.min(p + 1, totalPages))
+                                }
+                                className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 disabled:opacity-40"
+                            >
+                                ›
+                            </button>
+
                         </div>
 
-                        <button className="px-3 py-2 rounded-full border text-sm">
-                            + New Message
+                 
+
+                        <button className="px-2 py-4 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
+                            <span>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.25 9.25V4.75H10.75V9.25H15.25V10.75H10.75V15.25H9.25V10.75H4.75V9.25H9.25Z" fill="#181925" />
+                                </svg>
+
+                            </span>
+                            New Message
                         </button>
                     </div>
                 </div>
