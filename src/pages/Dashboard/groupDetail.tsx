@@ -182,7 +182,7 @@ const GroupDetails: React.FC = () => {
                 </div>
 
             <div className="w-full  bg-white rounded-2xl shadow-sm p-4 space-y-4">
-                <div className="bg-[#fafafa] rounded-2xl p-4 space-y-4">
+                <div className="rounded-2xl p-4 space-y-4">
                     <div>
                         <p className="text-gray-400 text-sm">Group Members</p>
                         <div className="flex items-center gap-2">
@@ -198,7 +198,7 @@ const GroupDetails: React.FC = () => {
                         <div>
                             <p className="text-gray-400 text-sm">Automation Usage</p>
                             <h3 className="text-xl font-semibold">10</h3>
-                            <p className="text-xs text-gray-400 mt-1">4/10 used ❌</p>
+                            <p className="text-xs text-gray-400 mt-1">4/10 used </p>
                             <div className="w-full h-2 bg-gray-200 rounded-full mt-2">
                                 <div className="w-[40%] h-full bg-orange-500 rounded-full" />
                             </div>
@@ -217,7 +217,7 @@ const GroupDetails: React.FC = () => {
                 </div>
 
 
-                <div className="bg-[#fafafa] rounded-2xl p-4 space-y-4">
+                <div className="rounded-2xl p-4 space-y-4">
                     <div>
                         <h2 className="font-semibold">Group Automation</h2>
                         <p className="text-sm text-gray-400">Automate settings</p>
@@ -279,7 +279,7 @@ const GroupDetails: React.FC = () => {
                 </div>
 
 
-                <div className="bg-[#fafafa] rounded-2xl p-4 space-y-4">
+                <div className="rounded-2xl p-4 space-y-4">
                     <div>
                         <h2 className="font-semibold">Scheduled Messages</h2>
                         <p className="text-sm text-gray-400">Automate settings</p>
@@ -351,6 +351,8 @@ const GroupDetails: React.FC = () => {
                         </button>
                     </div>
                 </div>
+
+                
             </div>
         </div>
     );
