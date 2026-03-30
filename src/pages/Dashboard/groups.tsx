@@ -1,6 +1,7 @@
 
 import { SavedGroups } from "@/api/Groups";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -26,7 +27,7 @@ export default function Groups() {
     const [groups, setGroups] = useState<Group[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     console.log(groups, 'groups view');
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const filteredGroups = groups.filter((group) =>
         group.name.toLowerCase().includes(search.toLowerCase())
@@ -167,7 +168,9 @@ export default function Groups() {
                                         </div>
 
                                         <div className="flex justify-end">
-                                            <button className="px-[10px] py-3 rounded-full font-bold text-[#181925] text-xs border transition">
+                                            <button 
+                                            onClick={() => navigate(`/Groups/${group.group_wa_id}`)}
+                                            className="px-[10px] py-3 rounded-full font-bold text-[#181925] text-xs border transition">
                                                 View Group
                                             </button>
                                         </div>

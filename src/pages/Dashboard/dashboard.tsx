@@ -29,7 +29,7 @@ function Dashboard() {
 
       const activeMethod = user?.connected ? 'qr' : connectMethod;
 
-
+ console.log(user, 'user data');
 
     return (
         <section className="" >

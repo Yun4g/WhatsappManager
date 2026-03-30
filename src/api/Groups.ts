@@ -36,6 +36,25 @@ export const SavedGroups = async () => {
      }
 }
 
+// /data/whatsapp/groups/:groupId
+
+export const GetGroupById = async (groupId: number) => {
+     try {
+         const res = await axios.get(`https://manajer-22u7.onrender.com/data/whatsapp/groups/${groupId}`, {
+             withCredentials: true,
+         });
+         return res.data;
+     } catch (error) {
+        console.log(error);
+     }
+}
+
+
+
+
+
+
+
 
 
 
