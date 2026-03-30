@@ -156,7 +156,7 @@ export default function Groups() {
                                         </div>
                                     </div>
 
-                                    <section className="flex justify-between w-full  mt-[24px]">
+                                    <section className="flex justify-between w-full  mt-[22px]">
                                         <div className="flex items-center gap-2 mt-2 text-xs text-[#999999] font-medium">
                                             <span>
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

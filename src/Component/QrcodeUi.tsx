@@ -194,7 +194,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
     };
 
 
-
+    console.log(user?.connected, 'user connecre22')
 
     useEffect(() => {
         if (!user?.id || user.connected) return;
@@ -214,6 +214,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
                 try {
                     const data = JSON.parse(event.data);
+                    console.log(data, 'qr code data')
                     if (data?.qrCode) {
                         setQrcodeUrl(data.qrCode);
                         setInitialQrLoading(false);
