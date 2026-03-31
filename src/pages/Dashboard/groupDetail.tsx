@@ -429,7 +429,7 @@ const GroupDetails: React.FC = () => {
                     {currentPageItems.map((item, i) => (
                         <div
                             key={i}
-                            className="flex flex-col md:flex-row items-start md:items-center justify-between px-5 gap-3"
+                            className="flex flex-row items-start md:items-center justify-between px-5 gap-3"
                         >
                             <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full md:w-auto">
                                 <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
@@ -534,10 +534,7 @@ const GroupDetails: React.FC = () => {
                             </button>
 
                         </div>
-
-
-
-                        <button className="px-2 py-4 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
+                        <button className="px-2 py-4 my-10  md:my-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
                             <span>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.25 9.25V4.75H10.75V9.25H15.25V10.75H10.75V15.25H9.25V10.75H4.75V9.25H9.25Z" fill="#181925" />
@@ -545,6 +542,7 @@ const GroupDetails: React.FC = () => {
 
                             </span>
                             New Message
+                            
                         </button>
                     </div>
                 </div>
