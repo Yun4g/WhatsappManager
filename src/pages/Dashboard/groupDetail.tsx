@@ -8,7 +8,20 @@ import { useNavigate } from "react-router-dom";
 
 
 
-
+type WhatsAppGroup = {
+    id: number;
+    user_id: number;
+    group_wa_id: string;
+    name: string;
+    description: string;
+    profile_picture: string;
+    profile_picture_fetched_at: string;
+    is_community: boolean;
+    member_count: number;
+    messaging_enabled: boolean;
+    created_at: string;
+    updated_at: string;
+};
 
 const GroupDetailsSkeleton: React.FC = () => {
     return (
@@ -34,7 +47,7 @@ const GroupDetailsSkeleton: React.FC = () => {
                         <div className="h-5 w-16 bg-gray-200 rounded-full" />
                     </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4 border-t pt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t pt-4">
                     <div>
                         <div className="h-4 w-28 bg-gray-200 rounded mb-2" />
                         <div className="h-6 w-16 bg-gray-200 rounded mb-1" />
@@ -208,7 +221,7 @@ const GroupDetails: React.FC = () => {
         ],
     };
 
-    const [groupData, setGroupData] = React.useState(null);
+    const [groupData, setGroupData] = React.useState<WhatsAppGroup | null>(null);
     const [loading, setLoading] = React.useState<boolean>(true);
     const [currentPage, setCurrentPage] = React.useState<number>(1);
     const [groupAutomations, setGroupAutomations] = React.useState<GroupAutomation[]>(mockData.groupAutomations);
@@ -229,12 +242,14 @@ const GroupDetails: React.FC = () => {
 
     useEffect(() => {
         let isMounted = true;
+
         const fetchGroups = async () => {
             setLoading(true);
             try {
-                const res = await GetGroupById(parseInt(groupId));
+                const res = await GetGroupById(groupId);
+
                 if (isMounted) {
-                    setGroupData(res);
+                    setGroupData(res.group[0] || null);
                 }
             } catch (error) {
                 console.log(error);
@@ -242,7 +257,9 @@ const GroupDetails: React.FC = () => {
                 if (isMounted) setLoading(false);
             }
         };
+
         fetchGroups();
+
         return () => {
             isMounted = false;
         };
@@ -255,14 +272,24 @@ const GroupDetails: React.FC = () => {
 
     return (
         <div>
-            <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                    <div className="w-[38px] h-[38px] rounded-full bg-gradient-to-tr from-purple-400 to-orange-300" >
-                        <img src="" alt="" />
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
+                <div className="flex items-center gap-3 w-full md:w-auto">
+                    <div className="w-[38px] h-[38px] rounded-full overflow-hidden" >
+                        {groupData?.profile_picture ? (
+                            <img src={groupData?.profile_picture} className="h-full w-full" alt="Group picture" />
+                        ) : (
+                            <div className="h-full w-full bg-gradient-to-tr from-purple-400 to-orange-300">
+
+                            </div>
+                        )
+                        
+                        }
+
+                      
                     </div>
 
                     <div>
-                        <h1 className="font-bold text-[24px] text-[#171717]">Adullam Group</h1>
+                        <h1 className="font-bold text-xl md:text-[24px] text-[#171717] break-words">{groupData?.name}</h1>
                         <p className="text-xs font-medium text-[#999999]">
                             View and manage group
                         </p>
@@ -286,14 +313,14 @@ const GroupDetails: React.FC = () => {
                     <div>
                         <p className="text-[#999999] text-sm font-medium">Group Members</p>
                         <div className="flex items-center gap-2">
-                            <h2 className="text-2xl text-[#181925] font-bold">{mockData.groupMembers}</h2>
+                            <h2 className="text-2xl text-[#181925] font-bold">{groupData?.member_count}</h2>
                             <span className="text-xs bg-[#F5F5F5] px-2 py-1 text-[#181925] font-bold rounded-full">
                                 {mockData.messages}
                             </span>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 border-t mt-[21px]  pt-[21px]">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t mt-[21px] pt-[21px]">
 
                         <div>
                             <p className="text-[#999999] text-sm font-medium">Automation Usage</p>
@@ -370,7 +397,7 @@ const GroupDetails: React.FC = () => {
                         </div>
                     ))}
 
-                    <div className="flex justify-between items-center px-4 py-2 border-t">
+                    <div className="flex flex-wrap justify-between items-center px-4 py-2 border-t">
                         <p className="text-xs flex items-center gap-1 text-[#999999] font-medium">
                             <span>
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -380,7 +407,7 @@ const GroupDetails: React.FC = () => {
                             </span>
                             Add, deactivate or delete automation
                         </p>
-                        <button className="px-2 py-4 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
+                        <button className="px-2 py-4 mt-4 md:mt-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
                             <span>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.25 9.25V4.75H10.75V9.25H15.25V10.75H10.75V15.25H9.25V10.75H4.75V9.25H9.25Z" fill="#181925" />
@@ -402,9 +429,9 @@ const GroupDetails: React.FC = () => {
                     {currentPageItems.map((item, i) => (
                         <div
                             key={i}
-                            className="flex items-center justify-between px-5  "
+                            className="flex flex-col md:flex-row items-start md:items-center justify-between px-5 gap-3"
                         >
-                            <div className="flex items-center gap-3">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full md:w-auto">
                                 <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
                                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#F5F5F5" />
@@ -448,8 +475,8 @@ const GroupDetails: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-2  text-xs">
-                                <div className="flex flex-col items-end gap-1">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-xs w-full md:w-auto justify-between">
+                                <div className="flex flex-col items-start sm:items-end gap-1">
                                     <span className=" text-sm text-[#181925] font-medium">{item.type}</span>
                                     <span className=" text-[#999999] text-xs font-medium">{item.date}</span>
                                 </div>
@@ -463,7 +490,7 @@ const GroupDetails: React.FC = () => {
                         </div>
                     ))}
 
-                  
+
                     <div className="flex flex-wrap md:flex-nowrap items-center justify-between mt-6 border-t p-[15px]">
                         <div className="flex items-center gap-2">
                             <button
@@ -508,7 +535,7 @@ const GroupDetails: React.FC = () => {
 
                         </div>
 
-                 
+
 
                         <button className="px-2 py-4 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
                             <span>
