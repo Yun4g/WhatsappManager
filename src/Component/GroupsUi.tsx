@@ -37,9 +37,12 @@ export default function GroupManager() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
-    const filteredGroups = groups.filter((group) =>
-        (group.name || "").toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredGroups = groups
+        .filter((group) =>
+            (group.name || "").toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+
 
     const totalPages = Math.ceil(filteredGroups.length / itemsPerPage);
 
@@ -51,9 +54,9 @@ export default function GroupManager() {
     const selectedGroups = groups.filter((g) => selected.includes(g.id));
 
 
-    // useEffect(() => {
-    //     setCurrentPage(1);
-    // }, [searchTerm]);
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     useEffect(() => {
         if (!user?.id) return;

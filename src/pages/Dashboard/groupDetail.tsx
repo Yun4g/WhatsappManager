@@ -223,6 +223,11 @@ const GroupDetails: React.FC = () => {
 
     const [groupData, setGroupData] = React.useState<WhatsAppGroup | null>(null);
     const [loading, setLoading] = React.useState<boolean>(true);
+    // const [open, setOpen] = React.useState<boolean>(false);
+
+
+
+
     const [currentPage, setCurrentPage] = React.useState<number>(1);
     const [groupAutomations, setGroupAutomations] = React.useState<GroupAutomation[]>(mockData.groupAutomations);
     const scheduledMessages: ScheduledMessage[] = mockData.scheduledMessages;
@@ -239,6 +244,8 @@ const GroupDetails: React.FC = () => {
             )
         );
     };
+
+
 
     useEffect(() => {
         let isMounted = true;
@@ -407,7 +414,9 @@ const GroupDetails: React.FC = () => {
                             </span>
                             Add, deactivate or delete automation
                         </p>
-                        <button className="px-2 py-4 mt-4 md:mt-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
+                        <button 
+                        
+                        className="px-2 py-4 mt-4 md:mt-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
                             <span>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.25 9.25V4.75H10.75V9.25H15.25V10.75H10.75V15.25H9.25V10.75H4.75V9.25H9.25Z" fill="#181925" />
