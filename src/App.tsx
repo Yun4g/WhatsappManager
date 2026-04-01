@@ -7,6 +7,7 @@ import Layout from './pages/Dashboard/layout.tsx';
 import { Toaster } from "react-hot-toast";
 import Groups from './pages/Dashboard/groups.tsx';
 import GroupDetails from './pages/Dashboard/groupDetail.tsx';
+import PricingPage from './pages/Dashboard/pricing.tsx';
 
 
 
@@ -25,6 +26,7 @@ function App() {
          <Route path='/dashboard' element={<Dashboard/>}/>
           <Route path='/Groups' element={<Groups/>}/>
            <Route path='/Groups/:id' element={<GroupDetails/>}/>
+           <Route path='/Pricing' element={<PricingPage/>}/>
         </Route>
        
       
