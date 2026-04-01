@@ -93,7 +93,7 @@ export default function PricingPage() {
                                             <span>Pricing renews automatically unless cancelled.</span>
                                         </div>
 
-                                        <button className="w-full sm:w-auto rounded-full bg-[#181925]  text-white  p-[14px] text-[12px] font-semibold shadow-sm hover:opacity-95 transition">
+                                        <button className="w-full sm:w-auto rounded-full bg-[#181925]  text-white  px-[14px] py-[13px] text-[12px] font-semibold shadow-sm hover:opacity-95 transition">
                                             {plan.cta}
                                         </button>
                                     </>
