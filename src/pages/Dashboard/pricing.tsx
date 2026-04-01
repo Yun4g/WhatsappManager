@@ -42,7 +42,7 @@ export default function PricingPage() {
                     </p>
                 </div>
 
-                <div className="space-y-6 mb-3">
+                <div className="space-y-6 mb-7">
                     {plans.map((plan) => (
                         <div
                             key={plan.name}
