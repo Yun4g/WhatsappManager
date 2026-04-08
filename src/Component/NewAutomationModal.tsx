@@ -13,11 +13,12 @@ interface SelectProps {
     onValueChange: (v: string) => void;
     options: SelectOption[];
     placeholder?: string;
+    isLoading?: boolean;
 }
 
-function Select({ value, onValueChange, options, placeholder }: SelectProps) {
+function Select({ value, onValueChange, options, placeholder, isLoading }: SelectProps) {
     return (
-        <SelectPrimitive.Root value={value} onValueChange={onValueChange}>
+        <SelectPrimitive.Root value={value} onValueChange={onValueChange} disabled={isLoading}>
             <SelectPrimitive.Trigger
                 className="
           flex items-center justify-between w-full
@@ -29,9 +30,16 @@ function Select({ value, onValueChange, options, placeholder }: SelectProps) {
         "
             >
                 <SelectPrimitive.Value placeholder={placeholder}>
-                    {value
+                    {isLoading ? (
+                        <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                            <span className="text-gray-400">Loading...</span>
+                        </div>
+                    ) : (
+                        value
                         ? options.find((o) => o.value === value)?.label
-                        : placeholder}
+                        : placeholder
+                    )}
                 </SelectPrimitive.Value>
                 <SelectPrimitive.Icon asChild>
                     <svg
@@ -49,6 +57,7 @@ function Select({ value, onValueChange, options, placeholder }: SelectProps) {
                     </svg>
                 </SelectPrimitive.Icon>
             </SelectPrimitive.Trigger>
+            
 
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content
@@ -136,11 +145,11 @@ interface AutomationFormData {
     message: string;
 }
 
- interface Trigger {
+interface Trigger {
     id: string;
     key: string;
     label: string;
- }
+}
 export function NewGroupsAutomationModal({
     setTrigger,
     onClose,
@@ -154,6 +163,7 @@ export function NewGroupsAutomationModal({
     });
     const [automationTriggers, setAutomationTriggers] = useState<Trigger[]>([]);
     const [automationCategories, setAutomationCategories] = useState<Trigger[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const setField =
         (field: keyof AutomationFormData) =>
@@ -164,10 +174,10 @@ export function NewGroupsAutomationModal({
         if (onSubmit) onSubmit(form);
     };
 
-    
-    useEffect(()=> {
+
+    useEffect(() => {
         setTrigger(form.trigger)
-    },[form.trigger])
+    }, [form.trigger])
 
 
 
@@ -176,15 +186,18 @@ export function NewGroupsAutomationModal({
         const fetchTriggers = async () => {
 
             try {
-                const res = await GetTriggersAndCategory();
-                console.log("triggers and category", res);
+                setIsLoading(true)
                 if (isMounted) {
-                    // setGroupData(res.group[0] || null);
+                    const res = await GetTriggersAndCategory();
+                    console.log("triggers and category", res);
+
                     setAutomationTriggers(res.data.trigger || []);
                     setAutomationCategories(res.data.category || []);
                 }
             } catch (error) {
                 console.log(error);
+            } finally {
+                setIsLoading(false)
             }
         };
 
@@ -286,6 +299,7 @@ export function NewGroupsAutomationModal({
                                 onValueChange={setField("trigger")}
                                 options={automationTriggers.map((t) => ({ value: t.key, label: t.label }))}
                                 placeholder="When a new user joins"
+                                isLoading={isLoading}
                             />
                         </div>
                     </div>
@@ -303,6 +317,7 @@ export function NewGroupsAutomationModal({
                                 onValueChange={setField("category")}
                                 options={automationCategories.map((c) => ({ value: c.key, label: c.label }))}
                                 placeholder="Send welcome DM"
+                                isLoading={isLoading}
                             />
                         </div>
                     </div>

@@ -436,9 +436,9 @@ const GroupDetails: React.FC = () => {
                                     type="button"
                                     onClick={() => toggleAutomation(index)}
                                     aria-label={`Toggle ${automation.title}`}
-                                    className={`w-10 h-6 rounded-full flex items-center p-1 transition ${automation.enabled ? 'bg-black' : 'bg-gray-300'}`}
+                                    className={`w-10 h-6 rounded-full flex items-center p-1 transition-all duration-duration-500 ${automation.enabled ? 'bg-black' : 'bg-gray-300'}`}
                                 >
-                                    <div className={`w-4 h-4 bg-white rounded-full transition ${automation.enabled ? 'ml-auto' : ''}`} />
+                                    <div className={`w-4 h-4 bg-white rounded-full transition-all duration-500 ${automation.enabled ? 'ml-auto' : ''}`} />
                                 </button>
                                 <Trash2 size={16} className="text-gray-400" />
                             </div>
