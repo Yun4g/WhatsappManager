@@ -117,25 +117,14 @@ function Divider({ dashed = false }: { dashed?: boolean }) {
 }
 
 
-const TRIGGER_OPTIONS: SelectOption[] = [
-    { value: "new_user_joins", label: "When a new user joins" },
-    { value: "message_sent", label: "When a message is sent" },
-    { value: "user_leaves", label: "When a user leaves" },
-    { value: "keyword_detected", label: "When a keyword is detected" },
-    { value: "scheduled", label: "On a schedule" },
-];
 
-const CATEGORY_OPTIONS: SelectOption[] = [
-    { value: "send_welcome_dm", label: "Send welcome DM" },
-    { value: "send_announcement", label: "Send announcement" },
-    { value: "assign_role", label: "Assign a role" },
-    { value: "kick_member", label: "Kick member" },
-    { value: "log_event", label: "Log event" },
-];
+
+
 
 
 
 interface NewAutomationModalProps {
+    setTrigger: (data: string) => void
     onClose?: () => void;
     onSubmit?: (data: AutomationFormData) => void;
 }
@@ -147,7 +136,13 @@ interface AutomationFormData {
     message: string;
 }
 
+ interface Trigger {
+    id: string;
+    key: string;
+    label: string;
+ }
 export function NewGroupsAutomationModal({
+    setTrigger,
     onClose,
     onSubmit,
 }: NewAutomationModalProps) {
@@ -157,8 +152,8 @@ export function NewGroupsAutomationModal({
         category: "",
         message: "",
     });
-    // const [automationTriggers, setAutomationTriggers] = useState([]);
-    // const [automationCategory, setAutomationCategory] = useState([]);
+    const [automationTriggers, setAutomationTriggers] = useState<Trigger[]>([]);
+    const [automationCategories, setAutomationCategories] = useState<Trigger[]>([]);
 
     const setField =
         (field: keyof AutomationFormData) =>
@@ -169,7 +164,10 @@ export function NewGroupsAutomationModal({
         if (onSubmit) onSubmit(form);
     };
 
-
+    
+    useEffect(()=> {
+        setTrigger(form.trigger)
+    },[form.trigger])
 
 
 
@@ -182,6 +180,8 @@ export function NewGroupsAutomationModal({
                 console.log("triggers and category", res);
                 if (isMounted) {
                     // setGroupData(res.group[0] || null);
+                    setAutomationTriggers(res.data.trigger || []);
+                    setAutomationCategories(res.data.category || []);
                 }
             } catch (error) {
                 console.log(error);
@@ -284,7 +284,7 @@ export function NewGroupsAutomationModal({
                             <Select
                                 value={form.trigger}
                                 onValueChange={setField("trigger")}
-                                options={TRIGGER_OPTIONS}
+                                options={automationTriggers.map((t) => ({ value: t.key, label: t.label }))}
                                 placeholder="When a new user joins"
                             />
                         </div>
@@ -301,7 +301,7 @@ export function NewGroupsAutomationModal({
                             <Select
                                 value={form.category}
                                 onValueChange={setField("category")}
-                                options={CATEGORY_OPTIONS}
+                                options={automationCategories.map((c) => ({ value: c.key, label: c.label }))}
                                 placeholder="Send welcome DM"
                             />
                         </div>

@@ -113,3 +113,14 @@
 .hide-scrollbar::-webkit-scrollbar {
   display: none; 
 }
+
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+}
+
+
+input[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}

@@ -7,6 +7,7 @@ import {
 import { GetGroupById, } from "@/api/Groups";
 import { useNavigate } from "react-router-dom";
 import { NewGroupsAutomationModal } from "@/Component/NewAutomationModal";
+import ScheduledMessage from "@/Component/scheduleMessage";
 
 
 
@@ -164,10 +165,12 @@ const GroupDetails: React.FC = () => {
     const groupId = window.location.pathname.split("/Groups/")[1];
     console.log(groupId, 'groupId in group details');
     const [open, setOpen] = React.useState<boolean>(false);
+    const [scheduleMessage, setScheduleMessage] = React.useState<boolean>(false);
     const [submitted, setSubmitted] = useState<AutomationFormData | null>(null);
-    const [showSuccessModal, setShowSuccessModal] = React.useState<boolean>(true)
+    const [showSuccessModal, setShowSuccessModal] = React.useState<boolean>(false)
     const [groupData, setGroupData] = React.useState<WhatsAppGroup | null>(null);
     const [loading, setLoading] = React.useState<boolean>(true);
+    const [trigger, setTrigger] = React.useState<string>("")
 
     const mockData = {
         groupMembers: 237,
@@ -581,7 +584,9 @@ const GroupDetails: React.FC = () => {
                             </button>
 
                         </div>
-                        <button className="px-3 py-3 my-10  md:my-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
+                        <button
+                        onClick={() => setScheduleMessage(true)}
+                        className="px-3 py-3 my-10  md:my-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
                             <span>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.25 9.25V4.75H10.75V9.25H15.25V10.75H10.75V15.25H9.25V10.75H4.75V9.25H9.25Z" fill="#181925" />
@@ -613,7 +618,7 @@ const GroupDetails: React.FC = () => {
 
                             <button
                                 onClick={() => setShowSuccessModal(false)}
-                                className="absolute top-5 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 transition"
+                                className="absolute top-1 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 transition"
                             >
                                 <X className="w-4 h-4 text-gray-600" />
                             </button>
@@ -624,18 +629,31 @@ const GroupDetails: React.FC = () => {
                                 </h2>
 
                                 <p className="text-[#6B7280] text-[14px] md:text-[15px] leading-relaxed max-w-[520px]">
-                                    You have successfully added an automation for when a new user joins your group
+                                    You have successfully added an automation for {trigger}
                                 </p>
                             </div>
                         </div>
                     </section>
                     <NewGroupsAutomationModal
                         onClose={() => setOpen(false)}
+                        setTrigger={(data)=> setTrigger(data)}
                         onSubmit={(data) => handleAutomationSubmit(data)}
                     />
                 </section>
 
             )}
+
+
+            {
+                scheduleMessage && (
+                     <section className="fixed inset-0 z-50 flex flex-col items-center  overflow-y-scroll
+                       justify-center bg-black/30 px-4">
+                          <ScheduledMessage
+                            onClose={() => setScheduleMessage(false)}
+                          />
+                     </section>
+                )
+            }
         </div>
     );
 };

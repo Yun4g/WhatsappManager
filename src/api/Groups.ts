@@ -52,7 +52,7 @@ export const GetGroupById = async (groupId: string) => {
 
 export const GetTriggersAndCategory = async () => {
      try {
-         const res = await axios.get(`https://manajer-22u7.onrender.com/data/whatsapp/triggers`, {
+         const res = await axios.get(`https://manajer-22u7.onrender.com/automation/triggers`, {
              withCredentials: true,
          });
          return res.data;
