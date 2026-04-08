@@ -50,6 +50,18 @@ export const GetGroupById = async (groupId: string) => {
 }
 
 
+export const GetTriggersAndCategory = async () => {
+     try {
+         const res = await axios.get(`https://manajer-22u7.onrender.com/data/whatsapp/triggers`, {
+             withCredentials: true,
+         });
+         return res.data;
+     } catch (error) {
+        console.log(error);
+     }
+}
+
+
 
 
 

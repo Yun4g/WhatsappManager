@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Trash2,
+    X,
 
 } from "lucide-react";
-import { GetGroupById } from "@/api/Groups";
+import { GetGroupById, } from "@/api/Groups";
 import { useNavigate } from "react-router-dom";
+import { NewGroupsAutomationModal } from "@/Component/NewAutomationModal";
 
 
 
@@ -22,6 +24,33 @@ type WhatsAppGroup = {
     created_at: string;
     updated_at: string;
 };
+
+
+
+interface ScheduledMessage {
+    title: string;
+    status: "Pending" | "Sent";
+    type: string;
+    date: string;
+}
+
+interface GroupAutomation {
+    icon: React.ReactNode;
+    title: string;
+    description: string;
+    enabled: boolean;
+}
+
+
+
+interface AutomationFormData {
+    name: string;
+    trigger: string;
+    category: string;
+    message: string;
+}
+
+
 
 const GroupDetailsSkeleton: React.FC = () => {
     return (
@@ -134,20 +163,11 @@ const GroupDetailsSkeleton: React.FC = () => {
 const GroupDetails: React.FC = () => {
     const groupId = window.location.pathname.split("/Groups/")[1];
     console.log(groupId, 'groupId in group details');
-
-    interface ScheduledMessage {
-        title: string;
-        status: "Pending" | "Sent";
-        type: string;
-        date: string;
-    }
-
-    interface GroupAutomation {
-        icon: React.ReactNode;
-        title: string;
-        description: string;
-        enabled: boolean;
-    }
+    const [open, setOpen] = React.useState<boolean>(false);
+    const [submitted, setSubmitted] = useState<AutomationFormData | null>(null);
+    const [showSuccessModal, setShowSuccessModal] = React.useState<boolean>(true)
+    const [groupData, setGroupData] = React.useState<WhatsAppGroup | null>(null);
+    const [loading, setLoading] = React.useState<boolean>(true);
 
     const mockData = {
         groupMembers: 237,
@@ -221,9 +241,7 @@ const GroupDetails: React.FC = () => {
         ],
     };
 
-    const [groupData, setGroupData] = React.useState<WhatsAppGroup | null>(null);
-    const [loading, setLoading] = React.useState<boolean>(true);
-    // const [open, setOpen] = React.useState<boolean>(false);
+
 
 
 
@@ -246,25 +264,25 @@ const GroupDetails: React.FC = () => {
     };
 
 
+    let isMounted = true;
+
+    const fetchGroups = async () => {
+        setLoading(true);
+        try {
+            const res = await GetGroupById(groupId);
+
+            if (isMounted) {
+                setGroupData(res.group[0] || null);
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            if (isMounted) setLoading(false);
+        }
+    };
+
 
     useEffect(() => {
-        let isMounted = true;
-
-        const fetchGroups = async () => {
-            setLoading(true);
-            try {
-                const res = await GetGroupById(groupId);
-
-                if (isMounted) {
-                    setGroupData(res.group[0] || null);
-                }
-            } catch (error) {
-                console.log(error);
-            } finally {
-                if (isMounted) setLoading(false);
-            }
-        };
-
         fetchGroups();
 
         return () => {
@@ -273,9 +291,29 @@ const GroupDetails: React.FC = () => {
     }, []);
 
 
+
+
+
+
+    const handleAutomationSubmit = (data: AutomationFormData) => {
+        if (!submitted) {
+            return;
+        }
+        setSubmitted(data);
+
+        setShowSuccessModal(true);
+
+
+    }
+
+
+
+
     if (loading) {
         return <GroupDetailsSkeleton />;
     }
+
+
 
     return (
         <div className=" mb-[100px]">
@@ -289,10 +327,10 @@ const GroupDetails: React.FC = () => {
 
                             </div>
                         )
-                        
+
                         }
 
-                      
+
                     </div>
 
                     <div>
@@ -414,9 +452,9 @@ const GroupDetails: React.FC = () => {
                             </span>
                             Add, deactivate or delete automation
                         </p>
-                        <button 
-                        
-                        className="px-2 py-4 mt-4 md:mt-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
+                        <button
+                            onClick={() => setOpen(true)}
+                            className="px-3 py-3 mt-4 md:mt-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
                             <span>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.25 9.25V4.75H10.75V9.25H15.25V10.75H10.75V15.25H9.25V10.75H4.75V9.25H9.25Z" fill="#181925" />
@@ -543,7 +581,7 @@ const GroupDetails: React.FC = () => {
                             </button>
 
                         </div>
-                        <button className="px-2 py-4 my-10  md:my-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
+                        <button className="px-3 py-3 my-10  md:my-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
                             <span>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.25 9.25V4.75H10.75V9.25H15.25V10.75H10.75V15.25H9.25V10.75H4.75V9.25H9.25Z" fill="#181925" />
@@ -551,13 +589,53 @@ const GroupDetails: React.FC = () => {
 
                             </span>
                             New Message
-                            
+
                         </button>
                     </div>
                 </div>
 
 
             </div>
+
+
+            {open && (
+                <section className="fixed inset-0 z-50 flex flex-col items-center   justify-center bg-black/30 px-4">
+                    <section className={`
+                          ${showSuccessModal ? "translate-y-0 opacity-100" : "-translate-y-72 opacity-0"
+                        }
+                           absolute top-0 transition-all duration-300 transform 
+                        `}
+                    >
+
+                        <div className={`
+                        w-full max-w-[500px]  bg-white rounded-b-[28px] px-6 md:px-10 py-3 md:py-6  relative `}>
+
+
+                            <button
+                                onClick={() => setShowSuccessModal(false)}
+                                className="absolute top-5 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 transition"
+                            >
+                                <X className="w-4 h-4 text-gray-600" />
+                            </button>
+
+                            <div>
+                                <h2 className="text-[#16A34A] text-[20px] md:text-[22px] font-semibold mb-2">
+                                    Automation added
+                                </h2>
+
+                                <p className="text-[#6B7280] text-[14px] md:text-[15px] leading-relaxed max-w-[520px]">
+                                    You have successfully added an automation for when a new user joins your group
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                    <NewGroupsAutomationModal
+                        onClose={() => setOpen(false)}
+                        onSubmit={(data) => handleAutomationSubmit(data)}
+                    />
+                </section>
+
+            )}
         </div>
     );
 };
