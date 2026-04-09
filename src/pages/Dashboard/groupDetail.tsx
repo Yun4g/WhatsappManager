@@ -267,7 +267,12 @@ const GroupDetails: React.FC = () => {
     };
 
 
-    let isMounted = true;
+    
+
+
+    useEffect(() => {
+
+        let isMounted = true;
 
     const fetchGroups = async () => {
         setLoading(true);
@@ -283,9 +288,6 @@ const GroupDetails: React.FC = () => {
             if (isMounted) setLoading(false);
         }
     };
-
-
-    useEffect(() => {
         fetchGroups();
 
         return () => {
