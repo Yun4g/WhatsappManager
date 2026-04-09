@@ -37,8 +37,8 @@ function Select({ value, onValueChange, options, placeholder, isLoading }: Selec
                         </div>
                     ) : (
                         value
-                        ? options.find((o) => o.value === value)?.label
-                        : placeholder
+                            ? options.find((o) => o.value === value)?.label
+                            : placeholder
                     )}
                 </SelectPrimitive.Value>
                 <SelectPrimitive.Icon asChild>
@@ -57,7 +57,7 @@ function Select({ value, onValueChange, options, placeholder, isLoading }: Selec
                     </svg>
                 </SelectPrimitive.Icon>
             </SelectPrimitive.Trigger>
-            
+
 
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content
@@ -130,15 +130,32 @@ function Divider({ dashed = false }: { dashed?: boolean }) {
 
 
 
-
-
 interface NewAutomationModalProps {
     setTrigger: (data: string) => void
     onClose?: () => void;
     onSubmit?: (data: AutomationFormData) => void;
+    groupData?: {
+        id: number;
+        user_id: number;
+        group_wa_id: string;
+        name: string;
+        description: string;
+        profile_picture: string;
+        profile_picture_fetched_at: string;
+        is_community: boolean;
+        member_count: number;
+        messaging_enabled: boolean;
+        created_at: string;
+        updated_at: string;
+    };
+
+    createLoading: boolean;
+
 }
 
 interface AutomationFormData {
+    userId: string;
+    group_wa_id: string;
     name: string;
     trigger: string;
     category: string;
@@ -151,11 +168,15 @@ interface Trigger {
     label: string;
 }
 export function NewGroupsAutomationModal({
+    createLoading,
     setTrigger,
     onClose,
     onSubmit,
+    groupData
 }: NewAutomationModalProps) {
     const [form, setForm] = useState<AutomationFormData>({
+        userId: groupData?.user_id?.toString() ?? "",
+        group_wa_id: groupData?.group_wa_id ?? "",
         name: "",
         trigger: "",
         category: "",
@@ -176,8 +197,8 @@ export function NewGroupsAutomationModal({
 
 
     useEffect(() => {
-        setTrigger(form.trigger)
-    }, [form.trigger])
+        setTrigger(form.name)
+    }, [form.category])
 
 
 
@@ -209,7 +230,7 @@ export function NewGroupsAutomationModal({
 
     return (
         <div
-            className="auto-modal w-full bg-white rounded-3xl shadow-2xl overflow-hidden"
+            className="auto-modal w-full bg-white  mt-2 rounded-3xl shadow-2xl overflow-hidden"
             style={{ maxWidth: 500 }}
             role="dialog"
             aria-modal="true"
@@ -359,15 +380,23 @@ export function NewGroupsAutomationModal({
             <div className="px-3 md:px-[24px] pb-3 md:pb-6">
                 <button
                     onClick={handleSubmit}
-                    className="
-            w-full py-[20px] rounded-full
-            bg-[#181925] 
-            text-white text-[15px]  font-bold 
-            
-          "
+                    disabled={createLoading}
+                    className={`
+    w-full py-[20px] rounded-full
+    bg-[#181925] 
+    text-white text-[15px] font-bold 
+    flex items-center justify-center gap-2
+    ${createLoading ? "opacity-70 cursor-not-allowed" : ""}
+  `}
                     style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.18)" }}
                 >
-                    Add automation
+                    {createLoading ? (
+                            <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                        <span>
+                            Add automation
+                            </span>
+                    )}
                 </button>
             </div>
         </div>

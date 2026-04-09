@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, } from "react";
 import {
     Trash2,
     X,
 
 } from "lucide-react";
-import { GetGroupById, } from "@/api/Groups";
+import { CreateAutomation, GetGroupById, } from "@/api/Groups";
 import { useNavigate } from "react-router-dom";
 import { NewGroupsAutomationModal } from "@/Component/NewAutomationModal";
 import ScheduledMessage from "@/Component/scheduleMessage";
@@ -44,7 +44,9 @@ interface GroupAutomation {
 
 
 
-interface AutomationFormData {
+export interface AutomationFormData {
+    userId: string;
+    group_wa_id: string;
     name: string;
     trigger: string;
     category: string;
@@ -166,8 +168,9 @@ const GroupDetails: React.FC = () => {
     console.log(groupId, 'groupId in group details');
     const [open, setOpen] = React.useState<boolean>(false);
     const [scheduleMessage, setScheduleMessage] = React.useState<boolean>(false);
-    const [submitted, setSubmitted] = useState<AutomationFormData | null>(null);
+    // const [submitted, setSubmitted] = useState<AutomationFormData | null>(null);
     const [showSuccessModal, setShowSuccessModal] = React.useState<boolean>(false)
+    const [showErrorModal, setShowErrorModal] = React.useState<boolean>(false)
     const [groupData, setGroupData] = React.useState<WhatsAppGroup | null>(null);
     const [loading, setLoading] = React.useState<boolean>(true);
     const [trigger, setTrigger] = React.useState<string>("")
@@ -250,6 +253,7 @@ const GroupDetails: React.FC = () => {
 
 
     const [currentPage, setCurrentPage] = React.useState<number>(1);
+    const [createLoading, setCreateLoading] = React.useState<boolean>(false)
     const [groupAutomations, setGroupAutomations] = React.useState<GroupAutomation[]>(mockData.groupAutomations);
     const scheduledMessages: ScheduledMessage[] = mockData.scheduledMessages;
     const navigate = useNavigate();
@@ -300,17 +304,35 @@ const GroupDetails: React.FC = () => {
 
 
 
-    const handleAutomationSubmit = (data: AutomationFormData) => {
-        if (!submitted) {
-            return;
-        }
-        setSubmitted(data);
+    const handleAutomationSubmit = async(data: AutomationFormData) => {
+        // setSubmitted(data);
+        console.log(data)
+        
 
-        setShowSuccessModal(true);
+        try {
+            setCreateLoading(true)
+           const req = await  CreateAutomation(data)
+
+           if(req?.success){
+            setShowSuccessModal(true);
+            setShowErrorModal(false);
+           } else {
+            setShowErrorModal(true);
+            setShowSuccessModal(false);
+           }
+        } catch (error) {
+            console.log(error)
+            setShowErrorModal(true);
+            setShowSuccessModal(false);
+        } finally{
+            setCreateLoading(false)
+        }
 
 
     }
 
+
+ 
 
 
 
@@ -615,11 +637,14 @@ const GroupDetails: React.FC = () => {
                     >
 
                         <div className={`
-                        w-full max-w-[500px]  bg-white rounded-b-[28px] px-6 md:px-10 py-3 md:py-6  relative `}>
+                        w-full max-w-[500px]  bg-white mb-4 rounded-b-[28px] px-6 md:px-10 py-3 md:py-6  relative `}>
 
 
                             <button
-                                onClick={() => setShowSuccessModal(false)}
+                                onClick={() => {
+                                    setOpen(false)
+                                    setShowSuccessModal(false)
+                                }}
                                 className="absolute top-1 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 transition"
                             >
                                 <X className="w-4 h-4 text-gray-600" />
@@ -636,7 +661,42 @@ const GroupDetails: React.FC = () => {
                             </div>
                         </div>
                     </section>
+
+                    <section className={`
+                          ${showErrorModal ? "translate-y-0 opacity-100" : "-translate-y-72 opacity-0"
+                        }
+                           absolute top-0 transition-all duration-300 transform 
+                        `}
+                    >
+
+                        <div className={`
+                        w-full max-w-[500px]  bg-white mb-4 rounded-b-[28px] px-6 md:px-10 py-3 md:py-6  relative `}>
+
+
+                            <button
+                                onClick={() => {
+                                    setShowErrorModal(false)
+                                }}
+                                className="absolute top-1 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-200 transition"
+                            >
+                                <X className="w-4 h-4 text-gray-600" />
+                            </button>
+
+                            <div>
+                                <h2 className="text-red-500 text-[20px] md:text-[22px] font-semibold mb-2">
+                                    Automation failed
+                                </h2>
+
+                                <p className="text-[#6B7280] text-[14px] md:text-[15px] leading-relaxed max-w-[520px]">
+                                    There was an error while creating your automation. Please check your connection and try again.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
                     <NewGroupsAutomationModal
+                        createLoading={createLoading}
+                        groupData={groupData ?? undefined}
                         onClose={() => setOpen(false)}
                         setTrigger={(data)=> setTrigger(data)}
                         onSubmit={(data) => handleAutomationSubmit(data)}

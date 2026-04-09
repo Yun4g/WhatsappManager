@@ -1,18 +1,19 @@
 import { Group } from "@/Component/GroupsUi";
+import { AutomationFormData } from "@/pages/Dashboard/groupDetail";
 import axios from "axios";
 
 
 
 
 export const GetGroups = async () => {
-     try {
-         const res = await axios.get('https://manajer-22u7.onrender.com/data/whatsapp/groups', {
-             withCredentials: true,
-         });
-         return res.data;
-     } catch (error) {
+    try {
+        const res = await axios.get('https://manajer-22u7.onrender.com/data/whatsapp/groups', {
+            withCredentials: true,
+        });
+        return res.data;
+    } catch (error) {
         console.log(error);
-     }
+    }
 }
 
 export const SelectGroups = async (groups: Group[]) => {
@@ -21,44 +22,65 @@ export const SelectGroups = async (groups: Group[]) => {
         { groups },
         { withCredentials: true }
     );
-    return res.data; 
+    return res.data;
 };
 
 export const SavedGroups = async () => {
-     try {
-         const res = await axios.get('https://manajer-22u7.onrender.com/data/whatsapp/saved-groups'
-            ,{
-             withCredentials: true,
-         });
-         return res.data;
-     } catch (error) {
+    try {
+        const res = await axios.get('https://manajer-22u7.onrender.com/data/whatsapp/saved-groups'
+            , {
+                withCredentials: true,
+            });
+        return res.data;
+    } catch (error) {
         console.log(error);
-     }
+    }
 }
 
 // /data/whatsapp/groups/:groupId
 
 export const GetGroupById = async (groupId: string) => {
-     try {
-         const res = await axios.get(`https://manajer-22u7.onrender.com/data/whatsapp/groups/${groupId}`, {
-             withCredentials: true,
-         });
-         return res.data;
-     } catch (error) {
+    try {
+        const res = await axios.get(`https://manajer-22u7.onrender.com/data/whatsapp/groups/${groupId}`, {
+            withCredentials: true,
+        });
+        return res.data;
+    } catch (error) {
         console.log(error);
-     }
+    }
 }
 
 
 export const GetTriggersAndCategory = async () => {
-     try {
-         const res = await axios.get(`https://manajer-22u7.onrender.com/automation/triggers`, {
-             withCredentials: true,
-         });
-         return res.data;
-     } catch (error) {
+    try {
+        const res = await axios.get(`https://manajer-22u7.onrender.com/automation/triggers`, {
+            withCredentials: true,
+        });
+        return res.data;
+    } catch (error) {
         console.log(error);
-     }
+    }
+}
+
+export const CreateAutomation = async (data: AutomationFormData) => {
+    const payload = {
+        userId: data.userId,
+        group_wa_id: data.group_wa_id,
+        name: data.name,
+        trigger: data.trigger,
+        category: data.category,
+        message: data.message
+    }
+
+
+    try {
+        const res = await axios.post(`https://manajer-22u7.onrender.com/automation/create`,
+            { payload }, { withCredentials: true, }
+        );
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 
