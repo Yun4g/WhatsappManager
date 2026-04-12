@@ -147,7 +147,7 @@ export default function ScheduledMessage({ onClose }: ScheduledMessageProps) {
 
 
         <div
-            className="auto-modal w-full bg-white rounded-3xl shadow-2xl overflow-hidden"
+            className="auto-modal w-full bg-white z-40 h-fit  mt-2 rounded-3xl shadow-2xl   overflow-y-auto hide-scrollbar"
             style={{ maxWidth: 500 }}
             role="dialog"
             aria-modal="true"

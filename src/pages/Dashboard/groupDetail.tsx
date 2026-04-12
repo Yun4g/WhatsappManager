@@ -4,10 +4,11 @@ import {
     X,
 
 } from "lucide-react";
-import { CreateAutomation, GetGroupById, } from "@/api/Groups";
+import { CreateAutomation, GetAllAutomation, GetGroupById, } from "@/api/Groups";
 import { useNavigate } from "react-router-dom";
 import { NewGroupsAutomationModal } from "@/Component/NewAutomationModal";
 import ScheduledMessage from "@/Component/scheduleMessage";
+
 
 
 
@@ -254,6 +255,8 @@ const GroupDetails: React.FC = () => {
 
     const [currentPage, setCurrentPage] = React.useState<number>(1);
     const [createLoading, setCreateLoading] = React.useState<boolean>(false)
+    const [errMsg, setErrMsg] = React.useState<string>("");
+    console.log(errMsg, 'ErrMsg')
     const [groupAutomations, setGroupAutomations] = React.useState<GroupAutomation[]>(mockData.groupAutomations);
     const scheduledMessages: ScheduledMessage[] = mockData.scheduledMessages;
     const navigate = useNavigate();
@@ -271,60 +274,110 @@ const GroupDetails: React.FC = () => {
     };
 
 
-    
+    const fetchGroups = async () => {
+        setLoading(true);
+        try {
+            const res = await GetGroupById(groupId);
+            setGroupData(res.group[0] || null);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
 
     useEffect(() => {
 
         let isMounted = true;
 
-    const fetchGroups = async () => {
-        setLoading(true);
-        try {
-            const res = await GetGroupById(groupId);
+        const fetchGroups = async () => {
+            setLoading(true);
+            try {
+                const res = await GetGroupById(groupId);
 
-            if (isMounted) {
-                setGroupData(res.group[0] || null);
+                if (isMounted) {
+                    setGroupData(res.group[0] || null);
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                if (isMounted) setLoading(false);
             }
-        } catch (error) {
-            console.log(error);
-        } finally {
-            if (isMounted) setLoading(false);
-        }
-    };
+        };
         fetchGroups();
 
         return () => {
             isMounted = false;
         };
-    }, []);
+    }, [groupId]);
+
+
+    useEffect(() => {
+
+        let isMounted = true;
+
+        const fetchAutomation = async () => {
+            setLoading(true);
+            try {
+                const res = await GetAllAutomation(groupId);
+                console.log(res);
+                if (isMounted) {
+                    if (res.success) {
+                        setGroupAutomations(res.automations || res.group || []);
+                    } else if (res.message === "No automations added for this group") {
+                        setGroupAutomations([]);
+                    }
+                }
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    setErrMsg(error.message);
+                    console.log(error, 'Automtion')
+                } else {
+                    setErrMsg("Something went wrong");
+                }
+                console.log(error);
+            } finally {
+                if (isMounted) setLoading(false);
+            }
+        };
+        fetchAutomation();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [groupId]);
 
 
 
 
-
-
-    const handleAutomationSubmit = async(data: AutomationFormData) => {
+    const handleAutomationSubmit = async (data: AutomationFormData) => {
         // setSubmitted(data);
         console.log(data)
-        
+
 
         try {
             setCreateLoading(true)
-           const req = await  CreateAutomation(data)
+            const req = await CreateAutomation(data)
 
-           if(req?.success){
-            setShowSuccessModal(true);
-            setShowErrorModal(false);
-           } else {
-            setShowErrorModal(true);
-            setShowSuccessModal(false);
-           }
-        } catch (error) {
-            console.log(error)
-            setShowErrorModal(true);
-            setShowSuccessModal(false);
-        } finally{
+            if (req?.success) {
+                setShowSuccessModal(true);
+                setShowErrorModal(false);
+            } else {
+                setShowErrorModal(true);
+                setShowSuccessModal(false);
+            }
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setErrMsg(error.message);
+                console.log(error, 'Automtion')
+                setShowErrorModal(true);
+                setShowSuccessModal(false);
+            } else {
+                setErrMsg("Something went wrong");
+            }
+            console.log(error);
+        } finally {
             setCreateLoading(false)
         }
 
@@ -332,7 +385,8 @@ const GroupDetails: React.FC = () => {
     }
 
 
- 
+
+
 
 
 
@@ -438,6 +492,13 @@ const GroupDetails: React.FC = () => {
                         <p className="text-sm text-[#999999] font-medium">Automate settings</p>
                     </div>
 
+                    {groupAutomations.length === 0 && (
+                        <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
+                            <p className="text-sm text-[#999999] font-medium">
+                                No automations added for this group
+                            </p>
+                        </div>
+                    )}
 
                     {groupAutomations.map((automation, index) => (
                         <div key={index} className="flex items-center justify-between p-4 mt-3">
@@ -609,8 +670,8 @@ const GroupDetails: React.FC = () => {
 
                         </div>
                         <button
-                        onClick={() => setScheduleMessage(true)}
-                        className="px-3 py-3 my-10  md:my-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
+                            onClick={() => setScheduleMessage(true)}
+                            className="px-3 py-3 my-10  md:my-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
                             <span>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.25 9.25V4.75H10.75V9.25H15.25V10.75H10.75V15.25H9.25V10.75H4.75V9.25H9.25Z" fill="#181925" />
@@ -628,20 +689,22 @@ const GroupDetails: React.FC = () => {
 
 
             {open && (
-                <section className="fixed inset-0 z-50 flex flex-col items-center   justify-center bg-black/30 px-4">
+                <section className="fixed inset-0 z-50 flex flex-col items-center bg-black/30 px-4 overflow-y-auto pt-32 pb-10">
                     <section className={`
                           ${showSuccessModal ? "translate-y-0 opacity-100" : "-translate-y-72 opacity-0"
                         }
-                           absolute top-0 transition-all duration-300 transform 
+                           absolute top-0 transition-all duration-300 transform  w-full flex justify-center items-center
                         `}
                     >
 
-                        <div className={`
-                        w-full max-w-[500px]  bg-white mb-4 rounded-b-[28px] px-6 md:px-10 py-3 md:py-6  relative `}>
+                        <div className={` w-full lg:w-[500px] z-50  bg-white mb-4 
+                                 rounded-b-[28px] px-6 md:px-10 py-3 md:py-6  relative
+                             `}>
 
 
                             <button
                                 onClick={() => {
+                                    fetchGroups()
                                     setOpen(false)
                                     setShowSuccessModal(false)
                                 }}
@@ -665,19 +728,19 @@ const GroupDetails: React.FC = () => {
                     <section className={`
                           ${showErrorModal ? "translate-y-0 opacity-100" : "-translate-y-72 opacity-0"
                         }
-                           absolute top-0 transition-all duration-300 transform 
+                           absolute top-0 transition-all duration-300 transform  w-full flex justify-center items-center
                         `}
                     >
 
                         <div className={`
-                        w-full max-w-[500px]  bg-white mb-4 rounded-b-[28px] px-6 md:px-10 py-3 md:py-6  relative `}>
+                        w-full lg:w-[500px]  z-50 bg-white mb-4 rounded-b-[28px] shadow-md px-6 md:px-10 py-3 md:py-6  relative `}>
 
 
                             <button
                                 onClick={() => {
                                     setShowErrorModal(false)
                                 }}
-                                className="absolute top-1 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-200 transition"
+                                className="absolute top-1 z-50  right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-200 transition"
                             >
                                 <X className="w-4 h-4 text-gray-600" />
                             </button>
@@ -688,7 +751,7 @@ const GroupDetails: React.FC = () => {
                                 </h2>
 
                                 <p className="text-[#6B7280] text-[14px] md:text-[15px] leading-relaxed max-w-[520px]">
-                                    There was an error while creating your automation. Please check your connection and try again.
+                                    {errMsg}
                                 </p>
                             </div>
                         </div>
@@ -697,8 +760,12 @@ const GroupDetails: React.FC = () => {
                     <NewGroupsAutomationModal
                         createLoading={createLoading}
                         groupData={groupData ?? undefined}
-                        onClose={() => setOpen(false)}
-                        setTrigger={(data)=> setTrigger(data)}
+                        onClose={() => {
+                               setShowSuccessModal(false)
+                                setShowErrorModal(false);
+                                setOpen(false)
+                        }}
+                        setTrigger={(data) => setTrigger(data)}
                         onSubmit={(data) => handleAutomationSubmit(data)}
                     />
                 </section>
@@ -708,12 +775,12 @@ const GroupDetails: React.FC = () => {
 
             {
                 scheduleMessage && (
-                     <section className="fixed inset-0 z-50 flex flex-col items-center  overflow-y-scroll
+                    <section className="fixed inset-0 z-50 flex flex-col items-center  overflow-y-scroll
                        justify-center bg-black/30 px-4">
-                          <ScheduledMessage
+                        <ScheduledMessage
                             onClose={() => setScheduleMessage(false)}
-                          />
-                     </section>
+                        />
+                    </section>
                 )
             }
         </div>

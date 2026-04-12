@@ -155,10 +155,9 @@ function Layout() {
 
     if (loading) {
         return (
-            <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-                <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
-                    <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A3A2A] rounded-full animate-spin" />
-                    <p className="text-sm font-medium text-gray-700">Processing...</p>
+            <div className="fixed inset-0 bg-white/30 flex items-center justify-center z-50">
+                <div>
+                   <img src="/LogoManager.png" className=" animate-ping transition-all duration-500" alt="" />
                 </div>
             </div>
         );

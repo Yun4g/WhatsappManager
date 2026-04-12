@@ -22,7 +22,7 @@ function Select({ value, onValueChange, options, placeholder, isLoading }: Selec
             <SelectPrimitive.Trigger
                 className="
           flex items-center justify-between w-full
-          text-[15px] font-normal text-gray-400
+          text-[15px] font-normal text-gray-800
           focus:outline-none focus:ring-0
           data-[placeholder]:text-gray-400
           bg-transparent cursor-pointer
@@ -230,7 +230,7 @@ export function NewGroupsAutomationModal({
 
     return (
         <div
-            className="auto-modal w-full bg-white  mt-2 rounded-3xl shadow-2xl overflow-hidden"
+            className="auto-modal w-full bg-white z-40  mt-2 rounded-3xl shadow-2xl   overflow-y-auto hide-scrollbar"
             style={{ maxWidth: 500 }}
             role="dialog"
             aria-modal="true"
