@@ -36,12 +36,21 @@ interface ScheduledMessage {
     date: string;
 }
 
+
+
 interface GroupAutomation {
-    icon: React.ReactNode;
-    title: string;
-    description: string;
-    enabled: boolean;
+    user_id: string;
+    group_wa_id: string;
+    name: string;
+    category: string;
+    message: string;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string,
+    trigger: string,
+
 }
+
 
 
 
@@ -212,40 +221,7 @@ const GroupDetails: React.FC = () => {
                 date: "May 18, 2025| 10:00AM",
             },
         ] as ScheduledMessage[],
-        groupAutomations: [
-            {
-                icon: (
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#F5F5F5" />
-                        <path d="M30 14.0001V16.4201C30 18.0001 29 19.0001 27.42 19.0001H24V12.0101C24 10.9001 24.91 9.99008 26.02 10.0001C27.11 10.0101 28.11 10.4501 28.83 11.1701C29.55 11.9001 30 12.9001 30 14.0001Z" fill="#999999" />
-                        <path opacity="0.4" d="M10 15V29C10 29.83 10.94 30.3 11.6 29.8L13.31 28.52C13.71 28.22 14.27 28.26 14.63 28.62L16.29 30.29C16.68 30.68 17.32 30.68 17.71 30.29L19.39 28.61C19.74 28.26 20.3 28.22 20.69 28.52L22.4 29.8C23.06 30.29 24 29.82 24 29V12C24 10.9 24.9 10 26 10H15H14C11 10 10 11.79 10 14V15Z" fill="#999999" />
-                        <path d="M20 20.2598H17C16.59 20.2598 16.25 20.5998 16.25 21.0098C16.25 21.4198 16.59 21.7598 17 21.7598H20C20.41 21.7598 20.75 21.4198 20.75 21.0098C20.75 20.5998 20.41 20.2598 20 20.2598Z" fill="#999999" />
-                        <path d="M17 17.7598H20C20.41 17.7598 20.75 17.4198 20.75 17.0098C20.75 16.5998 20.41 16.2598 20 16.2598H17C16.59 16.2598 16.25 16.5998 16.25 17.0098C16.25 17.4198 16.59 17.7598 17 17.7598Z" fill="#999999" />
-                        <path d="M13.9697 16.0098C13.4097 16.0098 12.9697 16.4598 12.9697 17.0098C12.9697 17.5598 13.4197 18.0098 13.9697 18.0098C14.5197 18.0098 14.9697 17.5598 14.9697 17.0098C14.9697 16.4598 14.5197 16.0098 13.9697 16.0098Z" fill="#999999" />
-                        <path d="M13.9697 20.0098C13.4097 20.0098 12.9697 20.4598 12.9697 21.0098C12.9697 21.5598 13.4197 22.0098 13.9697 22.0098C14.5197 22.0098 14.9697 21.5598 14.9697 21.0098C14.9697 20.4598 14.5197 20.0098 13.9697 20.0098Z" fill="#999999" />
-                    </svg>
-                ),
-                title: "When a new user joins",
-                description: "Send a welcome DM",
-                enabled: true,
-            },
-            {
-                icon: (
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#F5F5F5" />
-                        <path d="M30 14.0001V16.4201C30 18.0001 29 19.0001 27.42 19.0001H24V12.0101C24 10.9001 24.91 9.99008 26.02 10.0001C27.11 10.0101 28.11 10.4501 28.83 11.1701C29.55 11.9001 30 12.9001 30 14.0001Z" fill="#999999" />
-                        <path opacity="0.4" d="M10 15V29C10 29.83 10.94 30.3 11.6 29.8L13.31 28.52C13.71 28.22 14.27 28.26 14.63 28.62L16.29 30.29C16.68 30.68 17.32 30.68 17.71 30.29L19.39 28.61C19.74 28.26 20.3 28.22 20.69 28.52L22.4 29.8C23.06 30.29 24 29.82 24 29V12C24 10.9 24.9 10 26 10H15H14C11 10 10 11.79 10 14V15Z" fill="#999999" />
-                        <path d="M20 20.2598H17C16.59 20.2598 16.25 20.5998 16.25 21.0098C16.25 21.4198 16.59 21.7598 17 21.7598H20C20.41 21.7598 20.75 21.4198 20.75 21.0098C20.75 20.5998 20.41 20.2598 20 20.2598Z" fill="#999999" />
-                        <path d="M17 17.7598H20C20.41 17.7598 20.75 17.4198 20.75 17.0098C20.75 16.5998 20.41 16.2598 20 16.2598H17C16.59 16.2598 16.25 16.5998 16.25 17.0098C16.25 17.4198 16.59 17.7598 17 17.7598Z" fill="#999999" />
-                        <path d="M13.9697 16.0098C13.4097 16.0098 12.9697 16.4598 12.9697 17.0098C12.9697 17.5598 13.4197 18.0098 13.9697 18.0098C14.5197 18.0098 14.9697 17.5598 14.9697 17.0098C14.9697 16.4598 14.5197 16.0098 13.9697 16.0098Z" fill="#999999" />
-                        <path d="M13.9697 20.0098C13.4097 20.0098 12.9697 20.4598 12.9697 21.0098C12.9697 21.5598 13.4197 22.0098 13.9697 22.0098C14.5197 22.0098 14.9697 21.5598 14.9697 21.0098C14.9697 20.4598 14.5197 20.0098 13.9697 20.0098Z" fill="#999999" />
-                    </svg>
-                ),
-                title: "Inactive > 15 days",
-                description: "Send a follow-up DM",
-                enabled: false,
-            },
-        ],
+      
     };
 
 
@@ -258,7 +234,8 @@ const GroupDetails: React.FC = () => {
     const [errMsg, setErrMsg] = React.useState<string>("");
     const [successMsg, setSuccessMsg] = React.useState<string>("");
     console.log(errMsg, 'ErrMsg')
-    const [groupAutomations, setGroupAutomations] = React.useState<GroupAutomation[]>(mockData.groupAutomations);
+    const [groupAutomations, setGroupAutomations] = React.useState<GroupAutomation[]>([]);
+    console.log(groupAutomations, 'group Automation')
     const scheduledMessages: ScheduledMessage[] = mockData.scheduledMessages;
     const navigate = useNavigate();
     console.log(groupData, 'group data in group details');
@@ -277,6 +254,19 @@ const GroupDetails: React.FC = () => {
             setLoading(false);
         }
     }, [groupId]);
+
+    /* 
+         "id": 13,
+            "user_id": 2,
+            "group_wa_id": "120363405526198618@g.us",
+            "name": "when user join",
+            "trigger": "member_joined",
+            "category": "send_group_message",
+            "message": "Hello",
+            "is_active": false,
+            "created_at": "2026-04-11T13:27:45.898Z",
+            "updated_at": "2026-04-11T13:27:45.898Z"
+    */
 
     const fetchAutomation = React.useCallback(async () => {
         setLoading(true);
@@ -302,7 +292,7 @@ const GroupDetails: React.FC = () => {
     const toggleAutomation = (index: number) => {
         setGroupAutomations((prev) =>
             prev.map((item, i) =>
-                i === index ? { ...item, enabled: !item.enabled } : item
+                i === index ? { ...item, is_active: !item.is_active } : item
             )
         );
     };
@@ -319,7 +309,7 @@ const GroupDetails: React.FC = () => {
             if (req?.success) {
                 setSuccessMsg(`Automation "${data.name}" has been successfully created.`);
                 setShowSuccessModal(true);
-        
+
                 setShowErrorModal(false);
             } else {
                 setShowErrorModal(true);
@@ -363,7 +353,7 @@ const GroupDetails: React.FC = () => {
                             <img src={groupData?.profile_picture} className="h-full w-full" alt="Group picture" />
                         ) : (
                             <div className="h-full w-full bg-gradient-to-tr from-purple-400 to-orange-300">
-                                   
+
                             </div>
                         )
 
@@ -458,18 +448,27 @@ const GroupDetails: React.FC = () => {
                         </div>
                     )}
 
+
                     {groupAutomations.map((automation, index) => (
                         <div key={index} className="flex items-center justify-between p-4 mt-3">
                             <div className="flex items-center gap-3">
                                 <div>
-                                    {automation.icon}
+                                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#F5F5F5" />
+                                        <path d="M30 14.0001V16.4201C30 18.0001 29 19.0001 27.42 19.0001H24V12.0101C24 10.9001 24.91 9.99008 26.02 10.0001C27.11 10.0101 28.11 10.4501 28.83 11.1701C29.55 11.9001 30 12.9001 30 14.0001Z" fill="#999999" />
+                                        <path opacity="0.4" d="M10 15V29C10 29.83 10.94 30.3 11.6 29.8L13.31 28.52C13.71 28.22 14.27 28.26 14.63 28.62L16.29 30.29C16.68 30.68 17.32 30.68 17.71 30.29L19.39 28.61C19.74 28.26 20.3 28.22 20.69 28.52L22.4 29.8C23.06 30.29 24 29.82 24 29V12C24 10.9 24.9 10 26 10H15H14C11 10 10 11.79 10 14V15Z" fill="#999999" />
+                                        <path d="M20 20.2598H17C16.59 20.2598 16.25 20.5998 16.25 21.0098C16.25 21.4198 16.59 21.7598 17 21.7598H20C20.41 21.7598 20.75 21.4198 20.75 21.0098C20.75 20.5998 20.41 20.2598 20 20.2598Z" fill="#999999" />
+                                        <path d="M17 17.7598H20C20.41 17.7598 20.75 17.4198 20.75 17.0098C20.75 16.5998 20.41 16.2598 20 16.2598H17C16.59 16.2598 16.25 16.5998 16.25 17.0098C16.25 17.4198 16.59 17.7598 17 17.7598Z" fill="#999999" />
+                                        <path d="M13.9697 16.0098C13.4097 16.0098 12.9697 16.4598 12.9697 17.0098C12.9697 17.5598 13.4197 18.0098 13.9697 18.0098C14.5197 18.0098 14.9697 17.5598 14.9697 17.0098C14.9697 16.4598 14.5197 16.0098 13.9697 16.0098Z" fill="#999999" />
+                                        <path d="M13.9697 20.0098C13.4097 20.0098 12.9697 20.4598 12.9697 21.0098C12.9697 21.5598 13.4197 22.0098 13.9697 22.0098C14.5197 22.0098 14.9697 21.5598 14.9697 21.0098C14.9697 20.4598 14.5197 20.0098 13.9697 20.0098Z" fill="#999999" />
+                                    </svg>
                                 </div>
                                 <div>
                                     <p className="text-sm text-[#181925] font-bold">
-                                        {automation.title}
+                                        {automation.name}
                                     </p>
                                     <p className="text-xs text-[#5C5C5C] font-medium">
-                                        {automation.description}
+                                        {automation.trigger}
                                     </p>
                                 </div>
                             </div>
@@ -478,10 +477,10 @@ const GroupDetails: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={() => toggleAutomation(index)}
-                                    aria-label={`Toggle ${automation.title}`}
-                                    className={`w-10 h-6 rounded-full flex items-center p-1 transition-all duration-duration-500 ${automation.enabled ? 'bg-black' : 'bg-gray-300'}`}
+                                    aria-label={`Toggle ${automation.name}`}
+                                    className={`w-10 h-6 rounded-full flex items-center p-1 transition-all duration-duration-500 ${automation.is_active ? 'bg-black' : 'bg-gray-300'}`}
                                 >
-                                    <div className={`w-4 h-4 bg-white rounded-full transition-all duration-500 ${automation.enabled ? 'ml-auto' : ''}`} />
+                                    <div className={`w-4 h-4 bg-white rounded-full transition-all duration-500 ${automation.is_active ? 'ml-auto' : ''}`} />
                                 </button>
                                 <Trash2 size={16} className="text-gray-400" />
                             </div>
@@ -678,11 +677,11 @@ const GroupDetails: React.FC = () => {
                                 </h2>
 
                                 <p className="text-[#6B7280] text-[14px] md:text-[15px] leading-relaxed max-w-[520px]">
-                                  
-                                  {
-                                     successMsg ? successMsg :  `You have successfully added an automation for ${trigger}`
-                                  }
-                                   
+
+                                    {
+                                        successMsg ? successMsg : `You have successfully added an automation for ${trigger}`
+                                    }
+
                                 </p>
                             </div>
                         </div>
@@ -701,10 +700,10 @@ const GroupDetails: React.FC = () => {
 
                             <button
                                 onClick={() => {
-                           
+
                                     setOpen(false);
                                     fetchAutomation();
-                                 
+
                                     setShowErrorModal(false)
                                 }}
                                 className="absolute top-1 z-50  right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-200 transition"
@@ -718,7 +717,7 @@ const GroupDetails: React.FC = () => {
                                 </h2>
 
                                 <p className="text-[#6B7280] text-[14px] md:text-[15px] leading-relaxed max-w-[520px]">
-                                    {errMsg || 'an error occured'} 
+                                    {errMsg || 'an error occured'}
                                 </p>
                             </div>
                         </div>
@@ -728,11 +727,11 @@ const GroupDetails: React.FC = () => {
                         createLoading={createLoading}
                         groupData={groupData ?? undefined}
                         onClose={() => {
-                               setShowSuccessModal(false)
-                                setShowErrorModal(false);
-                                setOpen(false)
+                            setShowSuccessModal(false)
+                            setShowErrorModal(false);
+                            setOpen(false)
                         }}
-                        
+
                         setTrigger={(data) => setTrigger(data)}
                         onSubmit={(data) => handleAutomationSubmit(data)}
                     />
@@ -746,7 +745,7 @@ const GroupDetails: React.FC = () => {
                     <section className="fixed inset-0 z-50 flex flex-col items-center  overflow-y-scroll
                        justify-center bg-black/30 px-4">
                         <ScheduledMessage
-                        groupData={groupData ?? undefined}
+                            groupData={groupData ?? undefined}
                             onClose={() => setScheduleMessage(false)}
                         />
                     </section>

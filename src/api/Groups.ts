@@ -86,15 +86,14 @@ export const CreateAutomation = async (data: AutomationFormData) => {
 
 
 export const GetAllAutomation = async (group_wa_id: string) => {
-    const payload = {
-        group_wa_id: group_wa_id
-
-    }
 
 
     try {
         const res = await axios.post(`https://manajer-22u7.onrender.com/automation/all`,
-            { payload }, { withCredentials: true, }
+            { 
+                 group_wa_id: group_wa_id
+            }, 
+            { withCredentials: true, }
         );
         return res.data;
     } catch (error) {
