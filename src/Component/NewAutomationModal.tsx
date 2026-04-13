@@ -133,6 +133,7 @@ function Divider({ dashed = false }: { dashed?: boolean }) {
 interface NewAutomationModalProps {
     setTrigger: (data: string) => void
     onClose?: () => void;
+    setSuccess?: (data: string) => void;
     onSubmit?: (data: AutomationFormData) => void;
     groupData?: {
         id: number;
@@ -198,7 +199,7 @@ export function NewGroupsAutomationModal({
 
     useEffect(() => {
         setTrigger(form.name)
-    }, [form.category])
+    }, [form.name])
 
 
 
@@ -211,9 +212,10 @@ export function NewGroupsAutomationModal({
                 if (isMounted) {
                     const res = await GetTriggersAndCategory();
                     console.log("triggers and category", res);
-
+ 
                     setAutomationTriggers(res.data.trigger || []);
                     setAutomationCategories(res.data.category || []);
+               
                 }
             } catch (error) {
                 console.log(error);

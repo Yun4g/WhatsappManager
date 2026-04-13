@@ -88,7 +88,7 @@ export const CreateAutomation = async (data: AutomationFormData) => {
 export const GetAllAutomation = async (group_wa_id: string) => {
     const payload = {
         group_wa_id: group_wa_id
-   
+
     }
 
 
@@ -102,8 +102,8 @@ export const GetAllAutomation = async (group_wa_id: string) => {
     }
 }
 
- interface ScheduleMessageData {
-    userId: string;
+interface ScheduleMessageData {
+    type: string;
     group_wa_id: string;
     message: string;
     phone: string;
@@ -112,31 +112,21 @@ export const GetAllAutomation = async (group_wa_id: string) => {
 
 
 export const ScheduleMessage = async (data: ScheduleMessageData) => {
-    const payload = {
-        type: data.userId,
-        group_wa_id: data.group_wa_id,
-        message: data.message,
-        phone: data.phone,
-        scheduled_at: data.scheduled_at
-    }
-  
-
 
     try {
         const res = await axios.post(`https://manajer-22u7.onrender.com/schedule/message`,
-            { payload }, { withCredentials: true, }
+            {
+                type: data.type,
+                group_wa_id: data.group_wa_id,
+                message: data.message,
+                phone: data.phone,
+                scheduled_at: data.scheduled_at
+            },
+
+            { withCredentials: true, }
         );
         return res.data;
     } catch (error) {
         console.log(error);
     }
 }
-
-
-
-
-
-
-
-
-

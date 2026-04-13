@@ -1,3 +1,5 @@
+
+import { ScheduleMessage } from "@/api/Groups";
 import { useState, useRef, useEffect } from "react";
 
 type Tab = "group" | "direct";
@@ -108,20 +110,35 @@ function TimeDropdown({ value, onChange }: TimeDropdownProps) {
 
 interface ScheduledMessageProps {
     onClose?: () => void;
+    groupData?: {
+        id: number;
+        user_id: number;
+        group_wa_id: string;
+        name: string;
+        description: string;
+        profile_picture: string;
+        profile_picture_fetched_at: string;
+        is_community: boolean;
+        member_count: number;
+        messaging_enabled: boolean;
+        created_at: string;
+        updated_at: string;
+    };
 }
 
-export default function ScheduledMessage({ onClose }: ScheduledMessageProps) {
+export default function ScheduledMessage({ onClose, groupData }: ScheduledMessageProps) {
+
     const [tab, setTab] = useState<Tab>("group");
-    const [phone, setPhone] = useState("");
-    const [message, setMessage] = useState("");
-    const [date, setDate] = useState("");
-    const [time, setTime] = useState("");
+    const [phone, setPhone] = useState<string>("");
+    const [message, setMessage] = useState<string>("");
+    const [date, setDate] = useState<string>("");
+    const [time, setTime] = useState<string>("");
     const [attachedFile, setAttachedFile] = useState<{ name: string; thumb: string } | null>();
     const [showEmoji, setShowEmoji] = useState(false);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const fileRef = useRef<HTMLInputElement>(null);
-     const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -132,13 +149,37 @@ export default function ScheduledMessage({ onClose }: ScheduledMessageProps) {
         reader.readAsDataURL(file);
     };
 
+    // interface ScheduleMessageData {
+    // tab: string;
+    // group_wa_id: string;
+    // message: string;
+    // phone: string;
+    // sche
+
     const handleSchedule = async () => {
         if (!message.trim() || !date || !time) return;
-        setLoading(true);
-        await new Promise((r) => setTimeout(r, 1400));
-        setLoading(false);
-        setSuccess(true);
-        setTimeout(() => setSuccess(false), 2500);
+        const payload = {
+            type: tab as string,
+            group_wa_id: groupData?.group_wa_id ?? "",
+            message: message,
+            phone: phone,
+            scheduled_at: `${date} ${time}`
+        }
+        try {
+            setLoading(true);
+
+            const res = await  ScheduleMessage(payload)
+            if (res?.success) {
+                setSuccess(true);
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false);
+        }
+
+
+
     };
 
     const canSubmit = message.trim() && date && time && (tab === "group" || phone.trim());
@@ -183,8 +224,8 @@ export default function ScheduledMessage({ onClose }: ScheduledMessageProps) {
                     <button
                         onClick={() => setTab("group")}
                         className={`px-2 md:px-5  py-2 rounded-full text-xs md:text-sm font-semibold transition-all duration-200 ${tab === "group"
-                                ? "bg-gray-900 text-white shadow-sm"
-                                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                            ? "bg-gray-900 text-white shadow-sm"
+                            : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                             }`}
                     >
                         Group Message
@@ -192,8 +233,8 @@ export default function ScheduledMessage({ onClose }: ScheduledMessageProps) {
                     <button
                         onClick={() => setTab("direct")}
                         className={` px-2 md:px-5 py-2 rounded-full  text-xs md:text-sm font-semibold transition-all duration-200 ${tab === "direct"
-                                ? "bg-gray-900 text-white shadow-sm"
-                                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                            ? "bg-gray-900 text-white shadow-sm"
+                            : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                             }`}
                     >
                         Direct Message
@@ -268,7 +309,7 @@ export default function ScheduledMessage({ onClose }: ScheduledMessageProps) {
 
 
 
-               
+
                 {attachedFile && (
                     <div className="relative inline-block">
                         <img
@@ -296,16 +337,16 @@ export default function ScheduledMessage({ onClose }: ScheduledMessageProps) {
                         </label>
                         <div className="flex items-center gap-1 ">
                             <input
-                             ref={inputRef}
+                                ref={inputRef}
                                 type="date"
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
                                 className="flex-1 text-sm bg-transparent focus:outline-none text-gray-800 appearance-none min-w-0"
                                 style={{ colorScheme: "light" }}
                             />
-                            <svg 
-                             onClick={() => inputRef.current?.showPicker()}
-                            className="w-4 h-4 cursor-pointer text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg
+                                onClick={() => inputRef.current?.showPicker()}
+                                className="w-4 h-4 cursor-pointer text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                             </svg>
                         </div>
@@ -330,8 +371,8 @@ export default function ScheduledMessage({ onClose }: ScheduledMessageProps) {
                     onClick={handleSchedule}
                     disabled={!canSubmit || loading}
                     className={`w-full py-3.5 rounded-full text-white font-semibold text-sm tracking-wide transition-all duration-200 flex items-center justify-center gap-2 ${canSubmit && !loading
-                            ? "bg-gray-900 hover:bg-gray-800 active:scale-[0.98] shadow-md"
-                            : "bg-gray-300 cursor-not-allowed"
+                        ? "bg-gray-900 hover:bg-gray-800 active:scale-[0.98] shadow-md"
+                        : "bg-gray-300 cursor-not-allowed"
                         }`}
                 >
                     {loading ? (
