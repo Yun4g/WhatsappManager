@@ -128,6 +128,23 @@ export const ScheduleMessage = async (data: ScheduleMessageData) => {
     } catch (error) {
         console.log(error);
     }
+} 
+
+
+export const GetScheduleMessage = async (data: string) => {
+
+    try {
+        const res = await axios.post(`https://manajer-22u7.onrender.com/schedule/all `,
+            {
+                group_wa_id: data,
+            },
+
+            { withCredentials: true, }
+        );
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export const ToggleAutomationButton = async (id: number, isActive: boolean) => {

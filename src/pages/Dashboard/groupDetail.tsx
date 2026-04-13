@@ -4,7 +4,7 @@ import {
     X,
 
 } from "lucide-react";
-import { CreateAutomation, GetAllAutomation, GetGroupById, ToggleAutomationButton, } from "@/api/Groups";
+import { CreateAutomation, GetAllAutomation, GetGroupById, GetScheduleMessage, ToggleAutomationButton, } from "@/api/Groups";
 import { useNavigate } from "react-router-dom";
 import { NewGroupsAutomationModal } from "@/Component/NewAutomationModal";
 import ScheduledMessage from "@/Component/scheduleMessage";
@@ -52,6 +52,27 @@ interface GroupAutomation {
 
 }
 
+
+type MessageStatus = "pending" | "sent" | "failed";
+
+type MessageType = "group" | "direct";
+
+interface WhatsAppMessage {
+  id: number;
+  user_id: number;
+  group_wa_id: string | null;
+  recipient_wa_id: string | null;
+  type: MessageType;
+  message: string;
+  media_url: string | null;
+  scheduled_at: string; 
+  status: MessageStatus;
+  sent_at: string | null; 
+  error: string | null;
+  created_at: string;
+  updated_at: string; 
+  processing_since: string | null;
+}
 
 
 
@@ -186,8 +207,10 @@ const GroupDetails: React.FC = () => {
     const [showErrorModal, setShowErrorModal] = React.useState<boolean>(false)
     const [groupData, setGroupData] = React.useState<WhatsAppGroup | null>(null);
     const [loading, setLoading] = React.useState<boolean>(true);
+    const [automationLoading, setAutomationLoading] = React.useState<boolean>(true);
+    const [notificationTitle, setNotificationTitle] = React.useState<string>("");
     const [trigger, setTrigger] = React.useState<string>("")
-
+    console.log(trigger)
     const mockData = {
         groupMembers: 237,
         messages: "1.6k messages",
@@ -236,7 +259,9 @@ const GroupDetails: React.FC = () => {
     const [createLoading, setCreateLoading] = React.useState<boolean>(false)
     const [errMsg, setErrMsg] = React.useState<string>("");
     const [successMsg, setSuccessMsg] = React.useState<string>("");
-    console.log(errMsg, 'ErrMsg')
+    console.log(errMsg, 'ErrMsg');
+    const [scheduleMsg, setScheduleMsg] = React.useState<WhatsAppMessage[]>([]);
+    console.log(scheduleMsg , 'scheduleMsg')
     const [groupAutomations, setGroupAutomations] = React.useState<GroupAutomation[]>([]);
     console.log(groupAutomations, 'group Automation')
     const scheduledMessages: ScheduledMessage[] = mockData.scheduledMessages;
@@ -298,7 +323,7 @@ const GroupDetails: React.FC = () => {
 
 
     const fetchAutomation = React.useCallback(async () => {
-        setLoading(true);
+        setAutomationLoading(true);
         try {
             const res = await GetAllAutomation(groupId);
             if (res?.success) {
@@ -309,14 +334,35 @@ const GroupDetails: React.FC = () => {
         } catch (error: unknown) {
             console.log(error);
         } finally {
-            setLoading(false);
+            setAutomationLoading(false);
         }
     }, [groupId]);
+
+
+
+    const fetchSchedule= React.useCallback(async () => {
+        setAutomationLoading(true);
+        try {
+            const res = await GetScheduleMessage(groupId);
+            if (res?.success) {
+                console.log(res.messages, 'schdule message')
+                setScheduleMsg(res.messages || []); 
+            } else if (res?.message === "No automations added for this group") {
+                // setGroupAutomations([]);
+            }
+        } catch (error: unknown) {
+            console.log(error);
+        } finally {
+            // setAutomationLoading(false);
+        }
+    }, [groupId]);
+
 
     useEffect(() => {
         fetchGroups();
         fetchAutomation();
-    }, [fetchGroups, fetchAutomation]);
+        fetchSchedule();
+    }, [fetchGroups, fetchAutomation, fetchSchedule]);
 
 
 
@@ -339,11 +385,13 @@ const GroupDetails: React.FC = () => {
             const req = await CreateAutomation(data)
 
             if (req?.success) {
+                setNotificationTitle("Automation added");
                 setSuccessMsg(`Automation "${data.name}" has been successfully created.`);
                 setShowSuccessModal(true);
 
                 setShowErrorModal(false);
             } else {
+                setNotificationTitle("Automation failed");
                 setShowErrorModal(true);
                 setShowSuccessModal(false);
             }
@@ -351,10 +399,12 @@ const GroupDetails: React.FC = () => {
             if (error instanceof Error) {
                 setErrMsg(error.message);
                 console.log(error, 'Automtion')
+                setNotificationTitle("Automation failed");
                 setShowErrorModal(true);
                 setShowSuccessModal(false);
             } else {
                 setErrMsg("Something went wrong");
+                setNotificationTitle("Automation failed");
             }
             console.log(error);
         } finally {
@@ -378,6 +428,67 @@ const GroupDetails: React.FC = () => {
 
     return (
         <div className=" mb-[100px]">
+          
+            <section className={`
+                  ${showSuccessModal ? "translate-y-0 opacity-100" : "-translate-y-72 opacity-0"}
+                   fixed top-0 left-0 right-0 z-[100] transition-all duration-300 transform w-full flex justify-center items-center pointer-events-none
+                `}
+            >
+                <div className="w-full lg:w-[500px] bg-white mb-4 rounded-b-[28px] px-6 md:px-10 py-3 md:py-6 relative shadow-2xl pointer-events-auto">
+                    <button
+                        onClick={() => {
+                            fetchGroups()
+                            setOpen(false);
+                            fetchAutomation();
+                            setShowSuccessModal(false);
+                        }}
+                        className="absolute top-1 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 transition"
+                    >
+                        <X className="w-4 h-4 text-gray-600" />
+                    </button>
+
+                    <div>
+                        <h2 className="text-[#16A34A] text-[20px] md:text-[22px] font-semibold mb-2">
+                            {notificationTitle || "Success"}
+                        </h2>
+
+                        <p className="text-[#6B7280] text-[14px] md:text-[15px] leading-relaxed max-w-[520px]">
+                            {successMsg || `You have successfully completed the action.`}
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+         
+            <section className={`
+                  ${showErrorModal ? "translate-y-0 opacity-100" : "-translate-y-72 opacity-0"}
+                   fixed top-0 left-0 right-0 z-[100] transition-all duration-300 transform w-full flex justify-center items-center pointer-events-none
+                `}
+            >
+                <div className="w-full lg:w-[500px] bg-white mb-4 rounded-b-[28px] shadow-2xl px-6 md:px-10 py-3 md:py-6 relative pointer-events-auto">
+                    <button
+                        onClick={() => {
+                            setOpen(false);
+                            fetchAutomation();
+                            setShowErrorModal(false)
+                        }}
+                        className="absolute top-1 z-50 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-200 transition"
+                    >
+                        <X className="w-4 h-4 text-gray-600" />
+                    </button>
+
+                    <div>
+                        <h2 className="text-red-500 text-[20px] md:text-[22px] font-semibold mb-2">
+                            {notificationTitle || "Action failed"}
+                        </h2>
+
+                        <p className="text-[#6B7280] text-[14px] md:text-[15px] leading-relaxed max-w-[520px]">
+                            {errMsg || 'An error occurred'}
+                        </p>
+                    </div>
+                </div>
+            </section>
+
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
                 <div className="flex items-center gap-3 w-full md:w-auto">
                     <div className="w-[38px] h-[38px] rounded-full overflow-hidden" >
@@ -472,16 +583,32 @@ const GroupDetails: React.FC = () => {
                         <p className="text-sm text-[#999999] font-medium">Automate settings</p>
                     </div>
 
-                    {groupAutomations.length === 0 && (
+                    {automationLoading ? (
+                        <div className="space-y-3 p-4">
+                            {[1, 2].map((i) => (
+                                <div key={i} className="flex items-center justify-between animate-pulse">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-gray-200" />
+                                        <div>
+                                            <div className="h-4 w-32 bg-gray-200 rounded mb-1" />
+                                            <div className="h-3 w-24 bg-gray-200 rounded" />
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-6 bg-gray-200 rounded-full" />
+                                        <div className="w-4 h-4 bg-gray-200 rounded" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : groupAutomations.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
                             <p className="text-sm text-[#999999] font-medium">
                                 No automations added for this group
                             </p>
                         </div>
-                    )}
-
-
-                    {groupAutomations.map((automation, index) => (
+                    ) : (
+                        groupAutomations.map((automation, index) => (
                         <div key={index} className="flex items-center justify-between p-4 mt-3">
                             <div className="flex items-center gap-3">
                                 <div>
@@ -518,7 +645,8 @@ const GroupDetails: React.FC = () => {
                                 <Trash2 size={16} className="text-gray-400" />
                             </div>
                         </div>
-                    ))}
+                        ))
+                    )}
 
                     <div className="flex flex-wrap justify-between items-center px-4 py-2 border-t">
                         <p className="text-xs flex items-center gap-1 text-[#999999] font-medium">
@@ -680,82 +808,6 @@ const GroupDetails: React.FC = () => {
 
             {open && (
                 <section className="fixed inset-0 z-50 flex flex-col items-center bg-black/30 px-4 overflow-y-auto pt-32 pb-10">
-                    <section className={`
-                          ${showSuccessModal ? "translate-y-0 opacity-100" : "-translate-y-72 opacity-0"
-                        }
-                           absolute top-0 transition-all duration-300 transform  w-full flex justify-center items-center
-                        `}
-                    >
-
-                        <div className={` w-full lg:w-[500px] z-50  bg-white mb-4 
-                                 rounded-b-[28px] px-6 md:px-10 py-3 md:py-6  relative
-                             `}>
-
-
-                            <button
-                                onClick={() => {
-                                    fetchGroups()
-                                    setOpen(false);
-                                    fetchAutomation();
-                                    setShowSuccessModal(false);
-                                }}
-                                className="absolute top-1 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 transition"
-                            >
-                                <X className="w-4 h-4 text-gray-600" />
-                            </button>
-
-                            <div>
-                                <h2 className="text-[#16A34A] text-[20px] md:text-[22px] font-semibold mb-2">
-                                    Automation added
-                                </h2>
-
-                                <p className="text-[#6B7280] text-[14px] md:text-[15px] leading-relaxed max-w-[520px]">
-
-                                    {
-                                        successMsg ? successMsg : `You have successfully added an automation for ${trigger}`
-                                    }
-
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section className={`
-                          ${showErrorModal ? "translate-y-0 opacity-100" : "-translate-y-72 opacity-0"
-                        }
-                           absolute top-0 transition-all duration-300 transform  w-full flex justify-center items-center
-                        `}
-                    >
-
-                        <div className={`
-                        w-full lg:w-[500px]  z-50 bg-white mb-4 rounded-b-[28px] shadow-md px-6 md:px-10 py-3 md:py-6  relative `}>
-
-
-                            <button
-                                onClick={() => {
-
-                                    setOpen(false);
-                                    fetchAutomation();
-
-                                    setShowErrorModal(false)
-                                }}
-                                className="absolute top-1 z-50  right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-200 transition"
-                            >
-                                <X className="w-4 h-4 text-gray-600" />
-                            </button>
-
-                            <div>
-                                <h2 className="text-red-500 text-[20px] md:text-[22px] font-semibold mb-2">
-                                    Automation failed
-                                </h2>
-
-                                <p className="text-[#6B7280] text-[14px] md:text-[15px] leading-relaxed max-w-[520px]">
-                                    {errMsg || 'an error occured'}
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-
                     <NewGroupsAutomationModal
                         createLoading={createLoading}
                         groupData={groupData ?? undefined}
@@ -780,6 +832,16 @@ const GroupDetails: React.FC = () => {
                         <ScheduledMessage
                             groupData={groupData ?? undefined}
                             onClose={() => setScheduleMessage(false)}
+                            setSuccessMsg={(msg) => {
+                                setNotificationTitle("Message Scheduled");
+                                setSuccessMsg(msg);
+                                setShowSuccessModal(true);
+                            }}
+                            setErrorMsg={(msg) => {
+                                setNotificationTitle("Scheduling Failed");
+                                setErrMsg(msg);
+                                setShowErrorModal(true);
+                            }}
                         />
                     </section>
                 )

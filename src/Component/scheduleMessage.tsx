@@ -124,9 +124,11 @@ interface ScheduledMessageProps {
         created_at: string;
         updated_at: string;
     };
+    setSuccessMsg: (data: string) => void;
+    setErrorMsg?: (data: string) => void;
 }
 
-export default function ScheduledMessage({ onClose, groupData }: ScheduledMessageProps) {
+export default function ScheduledMessage({ onClose, groupData, setSuccessMsg, setErrorMsg }: ScheduledMessageProps) {
 
     const [tab, setTab] = useState<Tab>("group");
     const [phone, setPhone] = useState<string>("");
@@ -171,9 +173,14 @@ export default function ScheduledMessage({ onClose, groupData }: ScheduledMessag
             const res = await  ScheduleMessage(payload)
             if (res?.success) {
                 setSuccess(true);
+                setTimeout(() => {
+                    if (onClose) onClose();
+                    setSuccessMsg(res?.message);
+                }, 1000);
             }
         } catch (error) {
             console.log(error)
+            if (setErrorMsg) setErrorMsg("An error occurred while scheduling your message.");
         } finally {
             setLoading(false);
         }
