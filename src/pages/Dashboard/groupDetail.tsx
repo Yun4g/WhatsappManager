@@ -4,7 +4,7 @@ import {
     X,
 
 } from "lucide-react";
-import { CreateAutomation, GetAllAutomation, GetGroupById, } from "@/api/Groups";
+import { CreateAutomation, GetAllAutomation, GetGroupById, ToggleAutomationButton, } from "@/api/Groups";
 import { useNavigate } from "react-router-dom";
 import { NewGroupsAutomationModal } from "@/Component/NewAutomationModal";
 import ScheduledMessage from "@/Component/scheduleMessage";
@@ -39,6 +39,7 @@ interface ScheduledMessage {
 
 
 interface GroupAutomation {
+    id: number
     user_id: string;
     group_wa_id: string;
     name: string;
@@ -178,7 +179,9 @@ const GroupDetails: React.FC = () => {
     console.log(groupId, 'groupId in group details');
     const [open, setOpen] = React.useState<boolean>(false);
     const [scheduleMessage, setScheduleMessage] = React.useState<boolean>(false);
-    // const [submitted, setSubmitted] = useState<AutomationFormData | null>(null);
+    const [toggleBtnLoading, setToggleBtnLoading] = React.useState<boolean>(false)
+
+
     const [showSuccessModal, setShowSuccessModal] = React.useState<boolean>(false)
     const [showErrorModal, setShowErrorModal] = React.useState<boolean>(false)
     const [groupData, setGroupData] = React.useState<WhatsAppGroup | null>(null);
@@ -221,7 +224,7 @@ const GroupDetails: React.FC = () => {
                 date: "May 18, 2025| 10:00AM",
             },
         ] as ScheduledMessage[],
-      
+
     };
 
 
@@ -255,18 +258,44 @@ const GroupDetails: React.FC = () => {
         }
     }, [groupId]);
 
-    /* 
-         "id": 13,
-            "user_id": 2,
-            "group_wa_id": "120363405526198618@g.us",
-            "name": "when user join",
-            "trigger": "member_joined",
-            "category": "send_group_message",
-            "message": "Hello",
-            "is_active": false,
-            "created_at": "2026-04-11T13:27:45.898Z",
-            "updated_at": "2026-04-11T13:27:45.898Z"
-    */
+
+
+
+
+    const handleToggle = async (id: number) => {
+        if (toggleBtnLoading) return; 
+
+        const automation = groupAutomations.find(a => a.id === id);
+        if (!automation) return;
+
+        const originalState = automation.is_active;
+        const newState = !originalState;
+
+       
+        setGroupAutomations(prev =>
+            prev.map(a => a.id === id ? { ...a, is_active: newState } : a)
+        );
+        setToggleBtnLoading(true);
+
+        try {
+            const res = await ToggleAutomationButton(id, newState);
+            if (res && !res.success) {
+                throw new Error("Failed to update automation");
+            }
+        } catch (err) {
+            console.log(err);
+         
+            setGroupAutomations(prev =>
+                prev.map(a => a.id === id ? { ...a, is_active: originalState } : a)
+            );
+            alert("Failed to update automation");
+        } finally {
+            setToggleBtnLoading(false);
+        }
+    };
+
+
+
 
     const fetchAutomation = React.useCallback(async () => {
         setLoading(true);
@@ -289,13 +318,16 @@ const GroupDetails: React.FC = () => {
         fetchAutomation();
     }, [fetchGroups, fetchAutomation]);
 
-    const toggleAutomation = (index: number) => {
-        setGroupAutomations((prev) =>
-            prev.map((item, i) =>
-                i === index ? { ...item, is_active: !item.is_active } : item
-            )
-        );
-    };
+
+
+
+    // const toggleAutomation = (index: number) => {
+    //     setGroupAutomations((prev) =>
+    //         prev.map((item, i) =>
+    //             i === index ? { ...item, is_active: !item.is_active } : item
+    //         )
+    //     );
+    // };
 
     const handleAutomationSubmit = async (data: AutomationFormData) => {
         // setSubmitted(data);
@@ -476,9 +508,10 @@ const GroupDetails: React.FC = () => {
                             <div className="flex items-center gap-3">
                                 <button
                                     type="button"
-                                    onClick={() => toggleAutomation(index)}
+                                    disabled={toggleBtnLoading}
+                                    onClick={() => handleToggle(automation.id)}
                                     aria-label={`Toggle ${automation.name}`}
-                                    className={`w-10 h-6 rounded-full flex items-center p-1 transition-all duration-duration-500 ${automation.is_active ? 'bg-black' : 'bg-gray-300'}`}
+                                    className={`w-10 h-6 rounded-full flex items-center p-1 transition-all duration-500 ${automation.is_active ? 'bg-black' : 'bg-gray-300'} ${toggleBtnLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 >
                                     <div className={`w-4 h-4 bg-white rounded-full transition-all duration-500 ${automation.is_active ? 'ml-auto' : ''}`} />
                                 </button>

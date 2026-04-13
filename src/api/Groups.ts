@@ -90,9 +90,9 @@ export const GetAllAutomation = async (group_wa_id: string) => {
 
     try {
         const res = await axios.post(`https://manajer-22u7.onrender.com/automation/all`,
-            { 
-                 group_wa_id: group_wa_id
-            }, 
+            {
+                group_wa_id: group_wa_id
+            },
             { withCredentials: true, }
         );
         return res.data;
@@ -127,5 +127,18 @@ export const ScheduleMessage = async (data: ScheduleMessageData) => {
         return res.data;
     } catch (error) {
         console.log(error);
+    }
+}
+
+export const ToggleAutomationButton = async (id: number, isActive: boolean) => {
+
+    try {
+        const res = await axios.get(`https://manajer-22u7.onrender.com/automation/toggle?automationId=${id}&isActive=${isActive}`,
+            { withCredentials: true, }
+        );
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
     }
 }
