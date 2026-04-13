@@ -151,12 +151,19 @@ export default function Groups() {
                                             </h2>
                                             <p className="text-sm text-[#999999] font-medium max-w-md mt-[3px]">
                                                 {group.description || 'No Description'}
+                                                {
+                                                    group.description && (
+                                                       group?.description?.length > 50 ? group?.description.slice(0, 50) + "..." : group?.description
+                                        
+                                                )
+                                        }
+
                                             </p>
 
                                         </div>
                                     </div>
 
-                                    <section className="flex justify-between w-full  mt-[22px]">
+                                    <section className="flex justify-between w-full ">
                                         <div className="flex items-center gap-2 mt-2 text-xs text-[#999999] font-medium">
                                             <span>
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -168,9 +175,9 @@ export default function Groups() {
                                         </div>
 
                                         <div className="flex justify-end">
-                                            <button 
-                                            onClick={() => navigate(`/Groups/${group.group_wa_id}`)}
-                                            className="px-[13px] py-3 rounded-full font-bold text-[#181925] text-xs border transition">
+                                            <button
+                                                onClick={() => navigate(`/Groups/${group.group_wa_id}`)}
+                                                className="px-[13px] py-3 rounded-full font-bold text-[#181925] text-xs border transition">
                                                 View Group
                                             </button>
                                         </div>
@@ -190,57 +197,57 @@ export default function Groups() {
 
                 {!loading && totalPages > 0 && (
                     <div className="flex items-center justify-start gap-2 mt-[16px]">
-                    <button
-                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                        disabled={currentPage === 1}
-                        className={`text-gray-400 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15.204 15.9991L18.9165 19.7116L17.856 20.7721L13.083 15.9991L17.856 11.2261L18.9165 12.2866L15.204 15.9991Z" fill="#999999" />
-                        </svg>
-                    </button>
+                        <button
+                            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                            disabled={currentPage === 1}
+                            className={`text-gray-400 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.204 15.9991L18.9165 19.7116L17.856 20.7721L13.083 15.9991L17.856 11.2261L18.9165 12.2866L15.204 15.9991Z" fill="#999999" />
+                            </svg>
+                        </button>
 
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => {
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => {
 
-                        if (
-                            pageNumber === 1 ||
-                            pageNumber === totalPages ||
-                            (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
-                        ) {
-                            return (
-                                <button
-                                    key={pageNumber}
-                                    onClick={() => setCurrentPage(pageNumber)}
-                                    className={`w-8 h-8 rounded-lg text-sm ${pageNumber === currentPage
+                            if (
+                                pageNumber === 1 ||
+                                pageNumber === totalPages ||
+                                (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
+                            ) {
+                                return (
+                                    <button
+                                        key={pageNumber}
+                                        onClick={() => setCurrentPage(pageNumber)}
+                                        className={`w-8 h-8 rounded-lg text-sm ${pageNumber === currentPage
                                             ? "bg-gray-200 text-gray-800"
                                             : "text-gray-400"
-                                        }`}
-                                >
-                                    {pageNumber}
-                                </button>
-                            );
-                        } else if (
-                            (pageNumber === currentPage - 2 && currentPage > 3) ||
-                            (pageNumber === currentPage + 2 && currentPage < totalPages - 2)
-                        ) {
+                                            }`}
+                                    >
+                                        {pageNumber}
+                                    </button>
+                                );
+                            } else if (
+                                (pageNumber === currentPage - 2 && currentPage > 3) ||
+                                (pageNumber === currentPage + 2 && currentPage < totalPages - 2)
+                            ) {
 
-                            if (pageNumber === 1 || pageNumber === totalPages) return null;
-                            return <span key={pageNumber} className="text-gray-400 px-1">...</span>;
-                        }
-                        return null;
-                    })}
+                                if (pageNumber === 1 || pageNumber === totalPages) return null;
+                                return <span key={pageNumber} className="text-gray-400 px-1">...</span>;
+                            }
+                            return null;
+                        })}
 
-                    <button
-                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                        disabled={currentPage === totalPages || totalPages === 0}
-                        className={`text-gray-400 ${currentPage === totalPages || totalPages === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16.7955 15.9991L13.083 12.2866L14.1435 11.2261L18.9165 15.9991L14.1435 20.7721L13.083 19.7116L16.7955 15.9991Z" fill="#999999" />
-                        </svg>
+                        <button
+                            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                            disabled={currentPage === totalPages || totalPages === 0}
+                            className={`text-gray-400 ${currentPage === totalPages || totalPages === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16.7955 15.9991L13.083 12.2866L14.1435 11.2261L18.9165 15.9991L14.1435 20.7721L13.083 19.7116L16.7955 15.9991Z" fill="#999999" />
+                            </svg>
 
-                    </button>
-                </div>
+                        </button>
+                    </div>
                 )}
             </div>
         </div>

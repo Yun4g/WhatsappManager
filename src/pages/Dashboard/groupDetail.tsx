@@ -208,6 +208,7 @@ const GroupDetails: React.FC = () => {
     const [groupData, setGroupData] = React.useState<WhatsAppGroup | null>(null);
     const [loading, setLoading] = React.useState<boolean>(true);
     const [automationLoading, setAutomationLoading] = React.useState<boolean>(true);
+    const [scheduleLoading, setScheduleLoading] = React.useState<boolean>(true);
     const [notificationTitle, setNotificationTitle] = React.useState<string>("");
     const [trigger, setTrigger] = React.useState<string>("")
     console.log(trigger)
@@ -340,19 +341,16 @@ const GroupDetails: React.FC = () => {
 
 
     const fetchSchedule = React.useCallback(async () => {
-        setAutomationLoading(true);
+        setScheduleLoading(true);
         try {
             const res = await GetScheduleMessage(groupId);
             if (res?.success) {
-                console.log(res.messages, 'schdule message')
                 setScheduleMsg(res.messages || []);
-            } else if (res?.message === "No automations added for this group") {
-                // setGroupAutomations([]);
             }
         } catch (error: unknown) {
             console.log(error);
         } finally {
-            // setAutomationLoading(false);
+            setScheduleLoading(false);
         }
     }, [groupId]);
 
@@ -697,8 +695,34 @@ const GroupDetails: React.FC = () => {
                         <h2 className="font-bold  text-base">Scheduled Messages</h2>
                         <p className="text-sm text-[#999999] font-medium">Automate settings</p>
                     </div>
+             
 
-                    {currentPageItems.map((item, i) => (
+               {scheduleLoading ? (
+                        <div className="space-y-3 p-4">
+                            {[1, 2].map((i) => (
+                                <div key={i} className="flex items-center justify-between animate-pulse">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-gray-200" />
+                                        <div>
+                                            <div className="h-4 w-32 bg-gray-200 rounded mb-1" />
+                                            <div className="h-3 w-24 bg-gray-200 rounded" />
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-6 bg-gray-200 rounded-full" />
+                                        <div className="w-4 h-4 bg-gray-200 rounded" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : currentPageItems.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
+                            <p className="text-sm text-[#999999] font-medium">
+                                No automations added for this group
+                            </p>
+                        </div>
+                    ) : (
+                    currentPageItems.map((item, i) => (
                         <div
                             key={i}
                             className="flex flex-row items-start md:items-center justify-between px-5 gap-3"
@@ -765,7 +789,7 @@ const GroupDetails: React.FC = () => {
 
                             </div>
                         </div>
-                    ))}
+                    )))}
 
 
                     <div className="flex flex-wrap md:flex-nowrap items-center justify-between mt-6 border-t p-[15px]">
@@ -811,6 +835,7 @@ const GroupDetails: React.FC = () => {
                             </button>
 
                         </div>
+                    
                         <button
                             onClick={() => setScheduleMessage(true)}
                             className="px-3 py-3 my-10  md:my-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">
