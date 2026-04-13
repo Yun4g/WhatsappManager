@@ -8,6 +8,7 @@ import { CreateAutomation, GetAllAutomation, GetGroupById, GetScheduleMessage, T
 import { useNavigate } from "react-router-dom";
 import { NewGroupsAutomationModal } from "@/Component/NewAutomationModal";
 import ScheduledMessage from "@/Component/scheduleMessage";
+import { AxiosError } from "axios";
 
 
 
@@ -393,15 +394,17 @@ const GroupDetails: React.FC = () => {
                 setShowSuccessModal(false);
             }
         } catch (error: unknown) {
-            if (error instanceof Error) {
+            console.log(error, 'Automtion');
+            setNotificationTitle("Automation failed");
+            setShowErrorModal(true);
+            setShowSuccessModal(false);
+
+            if (error instanceof AxiosError) {
+                setErrMsg(error.response?.data?.message || "Something went wrong");
+            } else if (error instanceof Error) {
                 setErrMsg(error.message);
-                console.log(error, 'Automtion')
-                setNotificationTitle("Automation failed");
-                setShowErrorModal(true);
-                setShowSuccessModal(false);
             } else {
                 setErrMsg("Something went wrong");
-                setNotificationTitle("Automation failed");
             }
             console.log(error);
         } finally {

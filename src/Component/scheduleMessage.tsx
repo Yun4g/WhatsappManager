@@ -1,5 +1,6 @@
 
 import { ScheduleMessage } from "@/api/Groups";
+import { AxiosError } from "axios";
 import { useState, useRef, useEffect } from "react";
 
 type Tab = "group" | "direct";
@@ -178,9 +179,16 @@ export default function ScheduledMessage({ onClose, groupData, setSuccessMsg, se
                     setSuccessMsg(res?.message);
                 }, 1000);
             }
-        } catch (error) {
-            console.log(error)
-            if (setErrorMsg) setErrorMsg("An error occurred while scheduling your message.");
+        } catch (error: unknown) {
+            console.log(error);
+            let errorMessage = "An error occurred while scheduling your message.";
+
+            if (error instanceof AxiosError) {
+                errorMessage = error.response?.data?.message || errorMessage;
+            } else if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            if (setErrorMsg) setErrorMsg(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -347,6 +355,7 @@ export default function ScheduledMessage({ onClose, groupData, setSuccessMsg, se
                                 ref={inputRef}
                                 type="date"
                                 value={date}
+                                min={new Date().toISOString().split("T")[0]}
                                 onChange={(e) => setDate(e.target.value)}
                                 className="flex-1 text-sm bg-transparent focus:outline-none text-gray-800 appearance-none min-w-0"
                                 style={{ colorScheme: "light" }}
