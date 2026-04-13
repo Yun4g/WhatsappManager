@@ -58,20 +58,20 @@ type MessageStatus = "pending" | "sent" | "failed";
 type MessageType = "group" | "direct";
 
 interface WhatsAppMessage {
-  id: number;
-  user_id: number;
-  group_wa_id: string | null;
-  recipient_wa_id: string | null;
-  type: MessageType;
-  message: string;
-  media_url: string | null;
-  scheduled_at: string; 
-  status: MessageStatus;
-  sent_at: string | null; 
-  error: string | null;
-  created_at: string;
-  updated_at: string; 
-  processing_since: string | null;
+    id: number;
+    user_id: number;
+    group_wa_id: string | null;
+    recipient_wa_id: string | null;
+    type: MessageType;
+    message: string;
+    media_url: string | null;
+    scheduled_at: string;
+    status: MessageStatus;
+    sent_at: string | null;
+    error: string | null;
+    created_at: string;
+    updated_at: string;
+    processing_since: string | null;
 }
 
 
@@ -261,15 +261,14 @@ const GroupDetails: React.FC = () => {
     const [successMsg, setSuccessMsg] = React.useState<string>("");
     console.log(errMsg, 'ErrMsg');
     const [scheduleMsg, setScheduleMsg] = React.useState<WhatsAppMessage[]>([]);
-    console.log(scheduleMsg , 'scheduleMsg')
+    console.log(scheduleMsg, 'scheduleMsg')
     const [groupAutomations, setGroupAutomations] = React.useState<GroupAutomation[]>([]);
     console.log(groupAutomations, 'group Automation')
-    const scheduledMessages: ScheduledMessage[] = mockData.scheduledMessages;
     const navigate = useNavigate();
     console.log(groupData, 'group data in group details');
     const itemsPerPage = 4;
-    const totalPages = Math.max(1, Math.ceil(scheduledMessages.length / itemsPerPage));
-    const currentPageItems = scheduledMessages.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const totalPages = Math.max(1, Math.ceil(scheduleMsg.length / itemsPerPage));
+    const currentPageItems = scheduleMsg.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     const fetchGroups = React.useCallback(async () => {
         setLoading(true);
@@ -288,7 +287,7 @@ const GroupDetails: React.FC = () => {
 
 
     const handleToggle = async (id: number) => {
-        if (toggleBtnLoading) return; 
+        if (toggleBtnLoading) return;
 
         const automation = groupAutomations.find(a => a.id === id);
         if (!automation) return;
@@ -296,7 +295,7 @@ const GroupDetails: React.FC = () => {
         const originalState = automation.is_active;
         const newState = !originalState;
 
-       
+
         setGroupAutomations(prev =>
             prev.map(a => a.id === id ? { ...a, is_active: newState } : a)
         );
@@ -309,7 +308,7 @@ const GroupDetails: React.FC = () => {
             }
         } catch (err) {
             console.log(err);
-         
+
             setGroupAutomations(prev =>
                 prev.map(a => a.id === id ? { ...a, is_active: originalState } : a)
             );
@@ -340,13 +339,13 @@ const GroupDetails: React.FC = () => {
 
 
 
-    const fetchSchedule= React.useCallback(async () => {
+    const fetchSchedule = React.useCallback(async () => {
         setAutomationLoading(true);
         try {
             const res = await GetScheduleMessage(groupId);
             if (res?.success) {
                 console.log(res.messages, 'schdule message')
-                setScheduleMsg(res.messages || []); 
+                setScheduleMsg(res.messages || []);
             } else if (res?.message === "No automations added for this group") {
                 // setGroupAutomations([]);
             }
@@ -416,7 +415,27 @@ const GroupDetails: React.FC = () => {
 
 
 
+    const formatDate = (isoString: string) => {
+        const date = new Date(isoString);
 
+        const options: Intl.DateTimeFormatOptions = {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+        };
+
+        const datePart = date.toLocaleDateString("en-US", options);
+
+        const timePart = date
+            .toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true,
+            })
+            .replace(" ", "");
+
+        return `${datePart} | ${timePart}`;
+    };
 
 
 
@@ -428,7 +447,7 @@ const GroupDetails: React.FC = () => {
 
     return (
         <div className=" mb-[100px]">
-          
+
             <section className={`
                   ${showSuccessModal ? "translate-y-0 opacity-100" : "-translate-y-72 opacity-0"}
                    fixed top-0 left-0 right-0 z-[100] transition-all duration-300 transform w-full flex justify-center items-center pointer-events-none
@@ -459,7 +478,7 @@ const GroupDetails: React.FC = () => {
                 </div>
             </section>
 
-         
+
             <section className={`
                   ${showErrorModal ? "translate-y-0 opacity-100" : "-translate-y-72 opacity-0"}
                    fixed top-0 left-0 right-0 z-[100] transition-all duration-300 transform w-full flex justify-center items-center pointer-events-none
@@ -609,42 +628,42 @@ const GroupDetails: React.FC = () => {
                         </div>
                     ) : (
                         groupAutomations.map((automation, index) => (
-                        <div key={index} className="flex items-center justify-between p-4 mt-3">
-                            <div className="flex items-center gap-3">
-                                <div>
-                                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#F5F5F5" />
-                                        <path d="M30 14.0001V16.4201C30 18.0001 29 19.0001 27.42 19.0001H24V12.0101C24 10.9001 24.91 9.99008 26.02 10.0001C27.11 10.0101 28.11 10.4501 28.83 11.1701C29.55 11.9001 30 12.9001 30 14.0001Z" fill="#999999" />
-                                        <path opacity="0.4" d="M10 15V29C10 29.83 10.94 30.3 11.6 29.8L13.31 28.52C13.71 28.22 14.27 28.26 14.63 28.62L16.29 30.29C16.68 30.68 17.32 30.68 17.71 30.29L19.39 28.61C19.74 28.26 20.3 28.22 20.69 28.52L22.4 29.8C23.06 30.29 24 29.82 24 29V12C24 10.9 24.9 10 26 10H15H14C11 10 10 11.79 10 14V15Z" fill="#999999" />
-                                        <path d="M20 20.2598H17C16.59 20.2598 16.25 20.5998 16.25 21.0098C16.25 21.4198 16.59 21.7598 17 21.7598H20C20.41 21.7598 20.75 21.4198 20.75 21.0098C20.75 20.5998 20.41 20.2598 20 20.2598Z" fill="#999999" />
-                                        <path d="M17 17.7598H20C20.41 17.7598 20.75 17.4198 20.75 17.0098C20.75 16.5998 20.41 16.2598 20 16.2598H17C16.59 16.2598 16.25 16.5998 16.25 17.0098C16.25 17.4198 16.59 17.7598 17 17.7598Z" fill="#999999" />
-                                        <path d="M13.9697 16.0098C13.4097 16.0098 12.9697 16.4598 12.9697 17.0098C12.9697 17.5598 13.4197 18.0098 13.9697 18.0098C14.5197 18.0098 14.9697 17.5598 14.9697 17.0098C14.9697 16.4598 14.5197 16.0098 13.9697 16.0098Z" fill="#999999" />
-                                        <path d="M13.9697 20.0098C13.4097 20.0098 12.9697 20.4598 12.9697 21.0098C12.9697 21.5598 13.4197 22.0098 13.9697 22.0098C14.5197 22.0098 14.9697 21.5598 14.9697 21.0098C14.9697 20.4598 14.5197 20.0098 13.9697 20.0098Z" fill="#999999" />
-                                    </svg>
+                            <div key={index} className="flex items-center justify-between p-4 mt-3">
+                                <div className="flex items-center gap-3">
+                                    <div>
+                                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#F5F5F5" />
+                                            <path d="M30 14.0001V16.4201C30 18.0001 29 19.0001 27.42 19.0001H24V12.0101C24 10.9001 24.91 9.99008 26.02 10.0001C27.11 10.0101 28.11 10.4501 28.83 11.1701C29.55 11.9001 30 12.9001 30 14.0001Z" fill="#999999" />
+                                            <path opacity="0.4" d="M10 15V29C10 29.83 10.94 30.3 11.6 29.8L13.31 28.52C13.71 28.22 14.27 28.26 14.63 28.62L16.29 30.29C16.68 30.68 17.32 30.68 17.71 30.29L19.39 28.61C19.74 28.26 20.3 28.22 20.69 28.52L22.4 29.8C23.06 30.29 24 29.82 24 29V12C24 10.9 24.9 10 26 10H15H14C11 10 10 11.79 10 14V15Z" fill="#999999" />
+                                            <path d="M20 20.2598H17C16.59 20.2598 16.25 20.5998 16.25 21.0098C16.25 21.4198 16.59 21.7598 17 21.7598H20C20.41 21.7598 20.75 21.4198 20.75 21.0098C20.75 20.5998 20.41 20.2598 20 20.2598Z" fill="#999999" />
+                                            <path d="M17 17.7598H20C20.41 17.7598 20.75 17.4198 20.75 17.0098C20.75 16.5998 20.41 16.2598 20 16.2598H17C16.59 16.2598 16.25 16.5998 16.25 17.0098C16.25 17.4198 16.59 17.7598 17 17.7598Z" fill="#999999" />
+                                            <path d="M13.9697 16.0098C13.4097 16.0098 12.9697 16.4598 12.9697 17.0098C12.9697 17.5598 13.4197 18.0098 13.9697 18.0098C14.5197 18.0098 14.9697 17.5598 14.9697 17.0098C14.9697 16.4598 14.5197 16.0098 13.9697 16.0098Z" fill="#999999" />
+                                            <path d="M13.9697 20.0098C13.4097 20.0098 12.9697 20.4598 12.9697 21.0098C12.9697 21.5598 13.4197 22.0098 13.9697 22.0098C14.5197 22.0098 14.9697 21.5598 14.9697 21.0098C14.9697 20.4598 14.5197 20.0098 13.9697 20.0098Z" fill="#999999" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-[#181925] font-bold">
+                                            {automation.name}
+                                        </p>
+                                        <p className="text-xs text-[#5C5C5C] font-medium">
+                                            {automation.trigger}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-sm text-[#181925] font-bold">
-                                        {automation.name}
-                                    </p>
-                                    <p className="text-xs text-[#5C5C5C] font-medium">
-                                        {automation.trigger}
-                                    </p>
-                                </div>
-                            </div>
 
-                            <div className="flex items-center gap-3">
-                                <button
-                                    type="button"
-                                    disabled={toggleBtnLoading}
-                                    onClick={() => handleToggle(automation.id)}
-                                    aria-label={`Toggle ${automation.name}`}
-                                    className={`w-10 h-6 rounded-full flex items-center p-1 transition-all duration-500 ${automation.is_active ? 'bg-black' : 'bg-gray-300'} ${toggleBtnLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                >
-                                    <div className={`w-4 h-4 bg-white rounded-full transition-all duration-500 ${automation.is_active ? 'ml-auto' : ''}`} />
-                                </button>
-                                <Trash2 size={16} className="text-gray-400" />
+                                <div className="flex items-center gap-3">
+                                    <button
+                                        type="button"
+                                        disabled={toggleBtnLoading}
+                                        onClick={() => handleToggle(automation.id)}
+                                        aria-label={`Toggle ${automation.name}`}
+                                        className={`w-10 h-6 rounded-full flex items-center p-1 transition-all duration-500 ${automation.is_active ? 'bg-black' : 'bg-gray-300'} ${toggleBtnLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    >
+                                        <div className={`w-4 h-4 bg-white rounded-full transition-all duration-500 ${automation.is_active ? 'ml-auto' : ''}`} />
+                                    </button>
+                                    <Trash2 size={16} className="text-gray-400" />
+                                </div>
                             </div>
-                        </div>
                         ))
                     )}
 
@@ -697,9 +716,14 @@ const GroupDetails: React.FC = () => {
                                 </div>
 
                                 <div>
-                                    <p className="font-medium text-[#171717] text-sm">{item.title}</p>
+                                    <p className="font-medium text-[#171717] text-sm">
+                                        {item.message.length > 50
+                                            ? item.message.slice(0, 50) + "..."
+                                            : item.message
+                                            }
+                                    </p>
                                     <p
-                                        className={`text-xs flex items-center gap-1 font-medium ${item.status === "Sent"
+                                        className={`text-xs flex items-center gap-1 font-medium ${item.status === "sent"
                                             ? "text-[#1FC16B]"
                                             : "text-[#F6B51E]"
                                             }`}
@@ -710,7 +734,7 @@ const GroupDetails: React.FC = () => {
                                         {" "}
                                         <span className="flex items-center gap-1">
                                             {
-                                                item.status === "Sent" ? (
+                                                item.status === "sent" ? (
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M6 12C2.6862 12 0 9.3138 0 6C0 2.6862 2.6862 0 6 0C9.3138 0 12 2.6862 12 6C12 9.3138 9.3138 12 6 12ZM5.4018 8.4L9.6438 4.1574L8.7954 3.309L5.4018 6.7032L3.7044 5.0058L2.856 5.8542L5.4018 8.4Z" fill="#1FC16B" />
                                                     </svg>
@@ -731,7 +755,7 @@ const GroupDetails: React.FC = () => {
                             <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-xs w-full md:w-auto justify-between">
                                 <div className="flex flex-col items-start sm:items-end gap-1">
                                     <span className=" text-sm text-[#181925] font-medium">{item.type}</span>
-                                    <span className=" text-[#999999] text-xs font-medium">{item.date}</span>
+                                    <span className=" text-[#999999] text-xs font-medium"> {formatDate(item.scheduled_at)}</span>
                                 </div>
 
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
