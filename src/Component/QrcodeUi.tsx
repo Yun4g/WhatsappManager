@@ -149,15 +149,15 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             es.addEventListener("connected", async () => {
                 const res = await getUser();
                 setUser({
-                id: res.user.id,
-                email: res.user.email,
-                name: res.user.name,
-                profile_pic: res.user.profile_pic,
-                connected: res.user.connected,
-                stored_groups: res.user.stored_groups,
-                wa_number: res.user.wa_number,
-                wa_profile_name: res.user.wa_profile_name
-            });
+                    id: res.user.id,
+                    email: res.user.email,
+                    name: res.user.name,
+                    profile_pic: res.user.profile_pic,
+                    connected: res.user.connected,
+                    stored_groups: res.user.stored_groups,
+                    wa_number: res.user.wa_number,
+                    wa_profile_name: res.user.wa_profile_name
+                });
             });
 
             es.onerror = () => {
@@ -292,10 +292,9 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
         <main>
             <section className="w-full bg-white  rounded-3xl  mt-[16px]">
                 {loading && (
-                    <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-                        <div className="bg-white rounded-2xl px-6 py-5 flex items-center gap-3 shadow">
-                            <div className="w-5 h-5 border-2 border-gray-300 border-t-[#8a9f95] rounded-full animate-spin" />
-                            <p className="text-sm font-medium text-gray-700">Processing...</p>
+                    <div className="fixed inset-0 bg-white/40 flex items-center justify-center z-50">
+                        <div>
+                            <img src="/LogoManager.png" className=" animate-ping transition-all duration-500" alt="" />
                         </div>
                     </div>
                 )}
@@ -313,9 +312,11 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                     <div className="bg-[#F9F9F9] h-fit flex flex-col items-center w-full py-[33px] mt-[16px] rounded-[18px]">
                         {
                             initialQrloading ? (
-                                <div className="h-[130px] w-[130px] flex items-center justify-center">
-                                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-[#999999]"></div>
+
+                                <div>
+                                    <img src="/LogoManager.png" className=" animate-ping h-7 w-7  transition-all duration-500" alt="" />
                                 </div>
+
 
                             ) : (
 
