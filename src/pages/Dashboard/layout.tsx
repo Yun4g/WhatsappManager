@@ -106,19 +106,14 @@ function Layout() {
                 connected: res.user.connected,
                 stored_groups: res.user.stored_groups,
                 wa_number: res.user.wa_number,
-                wa_profile_name: res.user.wa_profile_name
+                wa_profile_name: res.user.wa_profile_name,
+                groups_managed: res.user.groups_managed,
+                groups_automation: res.user.groups_automation,
+                scheduled_messages: res.user.scheduled_messages,
+                total: res.user.total,
             });
 
-            //            user: {
-            //     "id": 2,
-            //     "email": "delightvincent487@gmail.com",
-            //     "name": "Delight Vincent",
-            //     "profile_pic": "https://lh3.googleusercontent.com/a/ACg8ocLWoSi4-4tg4_MalJ-dy1j020WwK7uODaHO0JdlSFwfa02G6A=s96-c",
-            //     "connected": false,
-            //     "stored_groups": false,
-            //     "wa_number": null,
-            //     "wa_profile_name": null
-            // }
+     
 
 
         } catch (error) {

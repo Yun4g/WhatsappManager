@@ -5,11 +5,16 @@ interface UserDataType {
   email: string;
   name: string;
   wa_number: string;
-   wa_profile_name: string;
+  wa_profile_name: string;
   profile_pic: string;
   connected: boolean;
-   stored_groups: boolean;
+  stored_groups: boolean;
+  groups_managed: string,
+  groups_automation: string,
+  scheduled_messages: string,
+  total: string
 }
+
 
 interface UserStore {
   user: UserDataType | null;

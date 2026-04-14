@@ -4,7 +4,7 @@ import {
     X,
 
 } from "lucide-react";
-import { CreateAutomation, GetAllAutomation, GetGroupById, GetScheduleMessage, ToggleAutomationButton, } from "@/api/Groups";
+import { CreateAutomation, DeleteAutomation, GetAllAutomation, GetGroupById, GetScheduleMessage, ToggleAutomationButton, } from "@/api/Groups";
 import { useNavigate } from "react-router-dom";
 import { NewGroupsAutomationModal } from "@/Component/NewAutomationModal";
 import ScheduledMessage from "@/Component/scheduleMessage";
@@ -206,6 +206,7 @@ const GroupDetails: React.FC = () => {
     const [open, setOpen] = React.useState<boolean>(false);
     const [scheduleMessage, setScheduleMessage] = React.useState<boolean>(false);
     const [toggleBtnLoading, setToggleBtnLoading] = React.useState<boolean>(false)
+    const [deleteLoadingId, setDeleteLoadingId] = React.useState<number | null>(null);
 
 
     const [showSuccessModal, setShowSuccessModal] = React.useState<boolean>(false)
@@ -358,6 +359,23 @@ const GroupDetails: React.FC = () => {
             setScheduleLoading(false);
         }
     }, [groupId]);
+
+
+
+
+    const handleDeleteAutomation = async (automationId: number) => {
+        setDeleteLoadingId(automationId);
+        try {
+            const res = await  DeleteAutomation(automationId);
+            if (res) {
+                await fetchAutomation()
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setDeleteLoadingId(null);
+        }
+    }
 
 
     useEffect(() => {
@@ -666,7 +684,18 @@ const GroupDetails: React.FC = () => {
                                     >
                                         <div className={`w-4 h-4 bg-white rounded-full transition-all duration-500 ${automation.is_active ? 'ml-auto' : ''}`} />
                                     </button>
-                                    <Trash2 size={16} className="text-gray-400" />
+                                    <button 
+                                        onClick={()=> handleDeleteAutomation(automation.id)}
+                                        disabled={deleteLoadingId === automation.id}
+                                        className={deleteLoadingId === automation.id ? 'opacity-50 cursor-not-allowed' : ''}
+                                    >
+                                        {deleteLoadingId === automation.id ? (
+                                            <span className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                                        ) : (
+                                            <Trash2 size={16} className="text-gray-400" />
+                                        )}
+                                    </button>
+
                                 </div>
                             </div>
                         ))
@@ -702,9 +731,9 @@ const GroupDetails: React.FC = () => {
                         <h2 className="font-bold  text-base">Scheduled Messages</h2>
                         <p className="text-sm text-[#999999] font-medium">Automate settings</p>
                     </div>
-             
 
-               {scheduleLoading ? (
+
+                    {scheduleLoading ? (
                         <div className="space-y-3 p-4">
                             {[1, 2].map((i) => (
                                 <div key={i} className="flex items-center justify-between animate-pulse">
@@ -725,78 +754,78 @@ const GroupDetails: React.FC = () => {
                     ) : currentPageItems.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
                             <p className="text-sm text-[#999999] font-medium">
-                                No automations added for this group
+                                No Message Secheduled added 
                             </p>
                         </div>
                     ) : (
-                    currentPageItems.map((item, i) => (
-                        <div
-                            key={i}
-                            className="flex flex-row items-start md:items-center justify-between px-5 gap-3"
-                        >
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full md:w-auto">
-                                <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#F5F5F5" />
-                                        <path d="M28 14.75C29.5188 14.75 30.75 13.5188 30.75 12C30.75 10.4812 29.5188 9.25 28 9.25C26.4812 9.25 25.25 10.4812 25.25 12C25.25 13.5188 26.4812 14.75 28 14.75Z" fill="#999999" />
-                                        <path opacity="0.4" d="M28 16C25.79 16 24 14.21 24 12C24 11.27 24.21 10.59 24.56 10H15C12.24 10 10 12.23 10 14.98V20.96V21.96C10 24.71 12.24 26.94 15 26.94H16.5C16.77 26.94 17.13 27.12 17.3 27.34L18.8 29.33C19.46 30.21 20.54 30.21 21.2 29.33L22.7 27.34C22.89 27.09 23.19 26.94 23.5 26.94H25C27.76 26.94 30 24.71 30 21.96V15.44C29.41 15.79 28.73 16 28 16Z" fill="#999999" />
-                                        <path d="M20 20C19.44 20 19 19.55 19 19C19 18.45 19.45 18 20 18C20.55 18 21 18.45 21 19C21 19.55 20.56 20 20 20Z" fill="#999999" />
-                                        <path d="M24 20C23.44 20 23 19.55 23 19C23 18.45 23.45 18 24 18C24.55 18 25 18.45 25 19C25 19.55 24.56 20 24 20Z" fill="#999999" />
-                                        <path d="M16 20C15.44 20 15 19.55 15 19C15 18.45 15.45 18 16 18C16.55 18 17 18.45 17 19C17 19.55 16.56 20 16 20Z" fill="#999999" />
+                        currentPageItems.map((item, i) => (
+                            <div
+                                key={i}
+                                className="flex flex-row items-start md:items-center justify-between px-5 gap-3"
+                            >
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full md:w-auto">
+                                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#F5F5F5" />
+                                            <path d="M28 14.75C29.5188 14.75 30.75 13.5188 30.75 12C30.75 10.4812 29.5188 9.25 28 9.25C26.4812 9.25 25.25 10.4812 25.25 12C25.25 13.5188 26.4812 14.75 28 14.75Z" fill="#999999" />
+                                            <path opacity="0.4" d="M28 16C25.79 16 24 14.21 24 12C24 11.27 24.21 10.59 24.56 10H15C12.24 10 10 12.23 10 14.98V20.96V21.96C10 24.71 12.24 26.94 15 26.94H16.5C16.77 26.94 17.13 27.12 17.3 27.34L18.8 29.33C19.46 30.21 20.54 30.21 21.2 29.33L22.7 27.34C22.89 27.09 23.19 26.94 23.5 26.94H25C27.76 26.94 30 24.71 30 21.96V15.44C29.41 15.79 28.73 16 28 16Z" fill="#999999" />
+                                            <path d="M20 20C19.44 20 19 19.55 19 19C19 18.45 19.45 18 20 18C20.55 18 21 18.45 21 19C21 19.55 20.56 20 20 20Z" fill="#999999" />
+                                            <path d="M24 20C23.44 20 23 19.55 23 19C23 18.45 23.45 18 24 18C24.55 18 25 18.45 25 19C25 19.55 24.56 20 24 20Z" fill="#999999" />
+                                            <path d="M16 20C15.44 20 15 19.55 15 19C15 18.45 15.45 18 16 18C16.55 18 17 18.45 17 19C17 19.55 16.56 20 16 20Z" fill="#999999" />
+                                        </svg>
+                                    </div>
+
+                                    <div>
+                                        <p className="font-medium text-[#171717] text-sm">
+                                            {item.message.length > 50
+                                                ? item.message.slice(0, 50) + "..."
+                                                : item.message
+                                            }
+                                        </p>
+                                        <p
+                                            className={`text-xs flex items-center gap-1 font-medium ${item.status === "sent"
+                                                ? "text-[#1FC16B]"
+                                                : "text-[#F6B51E]"
+                                                }`}
+                                        >
+                                            <span className=" text-xs text-[#999999] font-medium">
+                                                Status {" "}•
+                                            </span>
+                                            {" "}
+                                            <span className="flex items-center gap-1">
+                                                {
+                                                    item.status === "sent" ? (
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M6 12C2.6862 12 0 9.3138 0 6C0 2.6862 2.6862 0 6 0C9.3138 0 12 2.6862 12 6C12 9.3138 9.3138 12 6 12ZM5.4018 8.4L9.6438 4.1574L8.7954 3.309L5.4018 6.7032L3.7044 5.0058L2.856 5.8542L5.4018 8.4Z" fill="#1FC16B" />
+                                                        </svg>
+                                                    ) : (
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M0 6C0 9.31368 2.68629 12 6 12C9.31368 12 12 9.31368 12 6C12 2.68629 9.31368 0 6 0C2.68629 0 0 2.68629 0 6ZM10.8 6C10.8 8.65098 8.65098 10.8 6 10.8C3.34903 10.8 1.2 8.65098 1.2 6C1.2 3.34903 3.34903 1.2 6 1.2C8.65098 1.2 10.8 3.34903 10.8 6ZM9.6 6C9.6 7.98822 7.98822 9.6 6 9.6V2.4C7.98822 2.4 9.6 4.01177 9.6 6Z" fill="#F6B51E" />
+                                                        </svg>
+
+                                                    )
+                                                }
+                                                {item.status}
+                                            </span>
+
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-xs w-full md:w-auto justify-between">
+                                    <div className="flex flex-col items-start sm:items-end gap-1">
+                                        <span className=" text-sm text-[#181925] font-medium">{item.type}</span>
+                                        <span className=" text-[#999999] text-xs font-medium"> {formatDate(item.scheduled_at)}</span>
+                                    </div>
+
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12.1253 18.0582C15.7003 17.1165 18.3337 13.8665 18.3337 9.99984C18.3337 5.39984 14.6337 1.6665 10.0003 1.6665C4.44199 1.6665 1.66699 6.29984 1.66699 6.29984M1.66699 6.29984V2.49984M1.66699 6.29984H3.34199H5.36699" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M1.66699 10C1.66699 14.6 5.40033 18.3333 10.0003 18.3333" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3" />
                                     </svg>
-                                </div>
 
-                                <div>
-                                    <p className="font-medium text-[#171717] text-sm">
-                                        {item.message.length > 50
-                                            ? item.message.slice(0, 50) + "..."
-                                            : item.message
-                                            }
-                                    </p>
-                                    <p
-                                        className={`text-xs flex items-center gap-1 font-medium ${item.status === "sent"
-                                            ? "text-[#1FC16B]"
-                                            : "text-[#F6B51E]"
-                                            }`}
-                                    >
-                                        <span className=" text-xs text-[#999999] font-medium">
-                                            Status {" "}•
-                                        </span>
-                                        {" "}
-                                        <span className="flex items-center gap-1">
-                                            {
-                                                item.status === "sent" ? (
-                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M6 12C2.6862 12 0 9.3138 0 6C0 2.6862 2.6862 0 6 0C9.3138 0 12 2.6862 12 6C12 9.3138 9.3138 12 6 12ZM5.4018 8.4L9.6438 4.1574L8.7954 3.309L5.4018 6.7032L3.7044 5.0058L2.856 5.8542L5.4018 8.4Z" fill="#1FC16B" />
-                                                    </svg>
-                                                ) : (
-                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M0 6C0 9.31368 2.68629 12 6 12C9.31368 12 12 9.31368 12 6C12 2.68629 9.31368 0 6 0C2.68629 0 0 2.68629 0 6ZM10.8 6C10.8 8.65098 8.65098 10.8 6 10.8C3.34903 10.8 1.2 8.65098 1.2 6C1.2 3.34903 3.34903 1.2 6 1.2C8.65098 1.2 10.8 3.34903 10.8 6ZM9.6 6C9.6 7.98822 7.98822 9.6 6 9.6V2.4C7.98822 2.4 9.6 4.01177 9.6 6Z" fill="#F6B51E" />
-                                                    </svg>
-
-                                                )
-                                            }
-                                            {item.status}
-                                        </span>
-
-                                    </p>
                                 </div>
                             </div>
-
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-xs w-full md:w-auto justify-between">
-                                <div className="flex flex-col items-start sm:items-end gap-1">
-                                    <span className=" text-sm text-[#181925] font-medium">{item.type}</span>
-                                    <span className=" text-[#999999] text-xs font-medium"> {formatDate(item.scheduled_at)}</span>
-                                </div>
-
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12.1253 18.0582C15.7003 17.1165 18.3337 13.8665 18.3337 9.99984C18.3337 5.39984 14.6337 1.6665 10.0003 1.6665C4.44199 1.6665 1.66699 6.29984 1.66699 6.29984M1.66699 6.29984V2.49984M1.66699 6.29984H3.34199H5.36699" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M1.66699 10C1.66699 14.6 5.40033 18.3333 10.0003 18.3333" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3" />
-                                </svg>
-
-                            </div>
-                        </div>
-                    )))}
+                        )))}
 
 
                     <div className="flex flex-wrap md:flex-nowrap items-center justify-between mt-6 border-t p-[15px]">
@@ -842,7 +871,7 @@ const GroupDetails: React.FC = () => {
                             </button>
 
                         </div>
-                    
+
                         <button
                             onClick={() => setScheduleMessage(true)}
                             className="px-3 py-3 my-10  md:my-0 flex items-center gap-1 text-[#181925] rounded-full border text-sm">

@@ -160,3 +160,15 @@ export const ToggleAutomationButton = async (id: number, isActive: boolean) => {
         throw error;
     }
 }
+
+
+export const DeleteAutomation = async (automationId: number) => {
+    try {
+        const res = await axios.get(`https://manajer-22u7.onrender.com/data/l/automation/remove/${automationId}`, {
+            withCredentials: true,
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
