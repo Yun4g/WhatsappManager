@@ -84,6 +84,10 @@ export interface AutomationFormData {
     trigger: string;
     category: string;
     message: string;
+    trigger_config?: {
+        inactivity_days?: number;
+        milestone?: number;
+    };
 }
 
 
@@ -400,7 +404,7 @@ const GroupDetails: React.FC = () => {
             setShowSuccessModal(false);
 
             if (error instanceof AxiosError) {
-                setErrMsg(error.response?.data?.message || "Something went wrong");
+                setErrMsg(error?.response?.data?.message || "Something went wrong");
             } else if (error instanceof Error) {
                 setErrMsg(error.message);
             } else {

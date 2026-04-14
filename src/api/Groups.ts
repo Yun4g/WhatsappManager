@@ -63,19 +63,20 @@ export const GetTriggersAndCategory = async () => {
 }
 
 export const CreateAutomation = async (data: AutomationFormData) => {
-    const payload = {
-        userId: data.userId,
-        group_wa_id: data.group_wa_id,
-        name: data.name,
-        trigger: data.trigger,
-        category: data.category,
-        message: data.message
-    }
+   
 
 
     try {
         const res = await axios.post(`https://manajer-22u7.onrender.com/automation/create`,
-            { payload }, { withCredentials: true, }
+            {
+                userId: data.userId,
+                group_wa_id: data.group_wa_id,
+                name: data.name,
+                trigger: data.trigger,
+                trigger_config: data.trigger_config,
+                category: data.category,
+                message: data.message
+            }, { withCredentials: true, }
         );
         return res.data;
     } catch (error) {
@@ -128,7 +129,7 @@ export const ScheduleMessage = async (data: ScheduleMessageData) => {
     } catch (error) {
         console.log(error);
     }
-} 
+}
 
 
 export const GetScheduleMessage = async (data: string) => {

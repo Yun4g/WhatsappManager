@@ -21,7 +21,7 @@ function Select({ value, onValueChange, options, placeholder, isLoading }: Selec
         <SelectPrimitive.Root value={value} onValueChange={onValueChange} disabled={isLoading}>
             <SelectPrimitive.Trigger
                 className="
-          flex items-center justify-between w-full
+          flex items-center justify-between w-full overflow-hidden whitespace-nowrap text-ellipsis
           text-[15px] font-normal text-gray-800
           focus:outline-none focus:ring-0
           data-[placeholder]:text-gray-400
@@ -161,6 +161,10 @@ interface AutomationFormData {
     trigger: string;
     category: string;
     message: string;
+    trigger_config?: {
+        inactivity_days?: number;
+        milestone?: number;
+    };
 }
 
 interface Trigger {
@@ -182,15 +186,31 @@ export function NewGroupsAutomationModal({
         trigger: "",
         category: "",
         message: "",
+        trigger_config: undefined,
     });
     const [automationTriggers, setAutomationTriggers] = useState<Trigger[]>([]);
     const [automationCategories, setAutomationCategories] = useState<Trigger[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const setConfigField = (field: string, value: string) => {
+        const numValue = parseInt(value);
+        setForm((prev) => ({
+            ...prev,
+            trigger_config: {
+                ...prev.trigger_config,
+                [field]: isNaN(numValue) ? undefined : numValue,
+            },
+        }));
+    };
+
     const setField =
         (field: keyof AutomationFormData) =>
             (value: string) =>
-                setForm((prev) => ({ ...prev, [field]: value }));
+                setForm((prev) => {
+                    const updated = { ...prev, [field]: value };
+                    if (field === "trigger") updated.trigger_config = undefined;
+                    return updated;
+                });
 
     const handleSubmit = () => {
         if (onSubmit) onSubmit(form);
@@ -212,10 +232,10 @@ export function NewGroupsAutomationModal({
                 if (isMounted) {
                     const res = await GetTriggersAndCategory();
                     console.log("triggers and category", res);
- 
+
                     setAutomationTriggers(res.data.trigger || []);
                     setAutomationCategories(res.data.category || []);
-               
+
                 }
             } catch (error) {
                 console.log(error);
@@ -347,6 +367,52 @@ export function NewGroupsAutomationModal({
                 </div>
 
 
+                {form.trigger === "member_inactive" && (
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1.5">
+                            <label className="text-[14px] font-semibold text-gray-800">
+                                Inactivity Days
+                            </label>
+                            <InfoIcon />
+                        </div>
+                        <input
+                            type="number"
+                            value={form.trigger_config?.inactivity_days || ""}
+                            onChange={(e) => setConfigField("inactivity_days", e.target.value)}
+                            placeholder="e.g. 14"
+                            className="
+                w-full bg-transparent border-0 border-b border-gray-200
+                text-[15px] text-gray-800 placeholder:text-gray-400 font-normal
+                py-2 focus:outline-none focus:border-gray-400
+                transition-colors duration-150
+              "
+                        />
+                    </div>
+                )}
+
+                {form.trigger === "member_milestone" && (
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1.5">
+                            <label className="text-[14px] font-semibold text-gray-800">
+                                Milestone Number
+                            </label>
+                            <InfoIcon />
+                        </div>
+                        <input
+                            type="number"
+                            value={form.trigger_config?.milestone || ""}
+                            onChange={(e) => setConfigField("milestone", e.target.value)}
+                            placeholder="e.g. 100"
+                            className="
+                w-full bg-transparent border-0 border-b border-gray-200
+                text-[15px] text-gray-800 placeholder:text-gray-400 font-normal
+                py-2 focus:outline-none focus:border-gray-400
+                transition-colors duration-150
+              "
+                        />
+                    </div>
+                )}
+
                 <div className="space-y-2">
                     <div className="flex items-center gap-1.5">
                         <label
@@ -393,11 +459,11 @@ export function NewGroupsAutomationModal({
                     style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.18)" }}
                 >
                     {createLoading ? (
-                            <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     ) : (
                         <span>
                             Add automation
-                            </span>
+                        </span>
                     )}
                 </button>
             </div>
