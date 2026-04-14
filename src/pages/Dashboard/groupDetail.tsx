@@ -754,7 +754,7 @@ const GroupDetails: React.FC = () => {
                     ) : currentPageItems.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
                             <p className="text-sm text-[#999999] font-medium">
-                                No Message Secheduled added 
+                                No Message Sechedule added 
                             </p>
                         </div>
                     ) : (
