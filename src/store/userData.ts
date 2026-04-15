@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface UserDataType {
+export interface UserDataType {
   id: string;
   email: string;
   name: string;
@@ -9,7 +9,7 @@ interface UserDataType {
   profile_pic: string;
   connected: boolean;
   stored_groups: boolean;
-  groups_managed: string,
+  groups_managed: number,
   groups_automation: string,
   scheduled_messages: string,
   total: string

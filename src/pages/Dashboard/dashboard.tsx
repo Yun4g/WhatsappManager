@@ -1,5 +1,6 @@
 
 // import { getUser } from "@/api/user";
+import GroupStats from "@/Component/groupStat";
 import GroupManager from "@/Component/GroupsUi";
 import NoGroupsCard from "@/Component/NoGroupUi";
 
@@ -7,7 +8,7 @@ import PhonePairingUi from "@/Component/phoneConnectUi";
 import QrcodeUi from "@/Component/QrcodeUi";
 
 import { useUserStore } from "@/store/userData";
-import {  useState } from "react";
+import { useState } from "react";
 
 
 
@@ -16,7 +17,7 @@ function Dashboard() {
     const user = useUserStore((state) => state.user);
     console.log(user, 'user in dashboard');
     // const setUser = useUserStore((state) => state.setUserData);
-   
+
     // const getUserData = useCallback(async () => {
     //     const userData = await getUser();
     //     if (userData) {
@@ -25,11 +26,11 @@ function Dashboard() {
     // }, [setUser]);
 
     const [connectMethod, setConnectMethod] = useState<'qr' | 'phone'>('qr');
-     console.log(connectMethod, 'connectMethod');
+    console.log(connectMethod, 'connectMethod');
 
-      const activeMethod = user?.connected ? 'qr' : connectMethod;
+    const activeMethod = user?.connected ? 'qr' : connectMethod;
 
- console.log(user, 'user data');
+    console.log(user, 'user data');
 
     return (
         <section className="" >
@@ -46,7 +47,7 @@ function Dashboard() {
 
                             <QrcodeUi
                                 isConnected={user?.connected ?? false}
-                                
+
                                 setConnectMethodPhone={() => setConnectMethod('phone')}
                             />
                         </>
@@ -60,7 +61,18 @@ function Dashboard() {
 
             <section className="w-full h-fit bg-white rounded-3xl  mt-[16px] mb-[300px]">
                 {user?.connected ? (
-                    <GroupManager />
+                    <section>
+
+                        {
+                            user?.groups_managed > 2 ? (
+                                <GroupStats />
+                            ) : (
+                                <GroupManager />
+                            )
+                        }
+
+                    </section>
+
                 ) : (
                     <NoGroupsCard />
                 )}
