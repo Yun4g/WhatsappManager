@@ -364,7 +364,7 @@ const GroupDetails: React.FC = () => {
 
 
     const handleDeleteAutomation = async (automationId: number) => {
-        alert("hello")
+    
         setDeleteLoadingId(automationId);
         try {
             const res = await DeleteAutomation(automationId);
