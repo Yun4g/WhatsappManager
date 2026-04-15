@@ -189,6 +189,7 @@ export function NewGroupsAutomationModal({
         trigger_config: undefined,
     });
     const [automationTriggers, setAutomationTriggers] = useState<Trigger[]>([]);
+    console.log(automationTriggers, 'automation triggers')
     const [automationCategories, setAutomationCategories] = useState<Trigger[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
