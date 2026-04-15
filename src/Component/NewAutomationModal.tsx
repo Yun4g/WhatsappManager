@@ -233,8 +233,8 @@ export function NewGroupsAutomationModal({
                     const res = await GetTriggersAndCategory();
                     console.log("triggers and category", res);
 
-                    setAutomationTriggers(res.data.trigger || []);
-                    setAutomationCategories(res.data.category || []);
+                    setAutomationTriggers(res.trigger || []);
+                    setAutomationCategories(res.category || []);
 
                 }
             } catch (error) {

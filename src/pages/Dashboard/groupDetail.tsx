@@ -216,8 +216,8 @@ const GroupDetails: React.FC = () => {
     const [automationLoading, setAutomationLoading] = React.useState<boolean>(true);
     const [scheduleLoading, setScheduleLoading] = React.useState<boolean>(true);
     const [notificationTitle, setNotificationTitle] = React.useState<string>("");
-    const [trigger, setTrigger] = React.useState<string>("")
-    console.log(trigger)
+    const [automationName, setAutomationName] = React.useState<string>("")
+    console.log(automationName)
     const mockData = {
         groupMembers: 237,
         messages: "1.6k messages",
@@ -364,9 +364,10 @@ const GroupDetails: React.FC = () => {
 
 
     const handleDeleteAutomation = async (automationId: number) => {
+        alert("hello")
         setDeleteLoadingId(automationId);
         try {
-            const res = await  DeleteAutomation(automationId);
+            const res = await DeleteAutomation(automationId);
             if (res) {
                 await fetchAutomation()
             }
@@ -585,7 +586,7 @@ const GroupDetails: React.FC = () => {
                             <p className="text-[#999999] text-sm font-medium">Automation Usage</p>
                             <h3 className="text-xl text-[#171717] font-bold ">{mockData.automationUsage}</h3>
                             <p className="text-xs text-gray-400 mt-7 flex items-center gap-1">
-                                4/{mockData.automationUsage} used
+                                {groupAutomations.length}/{mockData.automationUsage} used
                                 <span>
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6.9421 11.9798L13.5054 5.4165L14.5837 6.49476L8.02035 13.0581H13.8051V14.5832H5.41699V6.19507H6.9421V11.979V11.9798Z" fill="#FB3748" />
@@ -603,7 +604,7 @@ const GroupDetails: React.FC = () => {
                             <p className="text-[#999999] text-sm font-medium">Scheduled Message</p>
                             <h3 className="text-xl text-[#171717] font-bold ">5</h3>
                             <p className="text-xs text-gray-400 mt-7 flex items-center gap-1">
-                                3/5 used
+                                {scheduleMsg.length}/5 used
                                 <span>
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6.9421 11.9798L13.5054 5.4165L14.5837 6.49476L8.02035 13.0581H13.8051V14.5832H5.41699V6.19507H6.9421V11.979V11.9798Z" fill="#FB3748" />
@@ -684,13 +685,16 @@ const GroupDetails: React.FC = () => {
                                     >
                                         <div className={`w-4 h-4 bg-white rounded-full transition-all duration-500 ${automation.is_active ? 'ml-auto' : ''}`} />
                                     </button>
-                                    <button 
-                                        onClick={()=> handleDeleteAutomation(automation.id)}
+                                    <button
+                                        onClick={() => handleDeleteAutomation(automation.id)}
                                         disabled={deleteLoadingId === automation.id}
                                         className={deleteLoadingId === automation.id ? 'opacity-50 cursor-not-allowed' : ''}
                                     >
                                         {deleteLoadingId === automation.id ? (
-                                            <span className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                                            <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                                            </svg>
                                         ) : (
                                             <Trash2 size={16} className="text-gray-400" />
                                         )}
@@ -754,7 +758,7 @@ const GroupDetails: React.FC = () => {
                     ) : currentPageItems.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
                             <p className="text-sm text-[#999999] font-medium">
-                                No Message Sechedule added 
+                                No Message Sechedule added
                             </p>
                         </div>
                     ) : (
@@ -902,7 +906,7 @@ const GroupDetails: React.FC = () => {
                             setOpen(false)
                         }}
 
-                        setTrigger={(data) => setTrigger(data)}
+                        setTrigger={(data) => setAutomationName(data)}
                         onSubmit={(data) => handleAutomationSubmit(data)}
                     />
                 </section>

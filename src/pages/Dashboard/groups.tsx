@@ -150,13 +150,11 @@ export default function Groups() {
                                                 {group.name}
                                             </h2>
                                             <p className="text-sm text-[#999999] font-medium max-w-md mt-[3px]">
-                                                {group.description || 'No Description'}
-                                                {
-                                                    group.description && (
-                                                       group?.description?.length > 50 ? group?.description.slice(0, 50) + "..." : group?.description
-                                        
-                                                )
-                                        }
+                                                {!group.description ? 'No Description' : 
+                                                    group.description.length > 50 
+                                                    ? group.description.slice(0, 50) + "..." 
+                                                    : group.description
+                                                }
 
                                             </p>
 

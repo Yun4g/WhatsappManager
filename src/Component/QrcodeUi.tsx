@@ -76,7 +76,11 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                         connected: res.user.connected,
                         stored_groups: res.user.stored_groups,
                         wa_number: res.user.wa_number,
-                        wa_profile_name: res.user.wa_profile_name
+                        wa_profile_name: res.user.wa_profile_name,
+                        groups_managed: res.user.groups_managed,
+                        groups_automation: res.user.groups_automation,
+                        scheduled_messages: res.user.scheduled_messages,
+                        total: res.user.total,
                     });
 
                 } catch (error) {
@@ -156,7 +160,11 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                     connected: res.user.connected,
                     stored_groups: res.user.stored_groups,
                     wa_number: res.user.wa_number,
-                    wa_profile_name: res.user.wa_profile_name
+                    wa_profile_name: res.user.wa_profile_name,
+                    groups_managed: res.user.groups_managed,
+                    groups_automation: res.user.groups_automation,
+                    scheduled_messages: res.user.scheduled_messages,
+                    total: res.user.total,
                 });
             });
 
@@ -237,7 +245,11 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                         connected: res.user.connected,
                         stored_groups: res.user.stored_groups,
                         wa_number: res.user.wa_number,
-                        wa_profile_name: res.user.wa_profile_name
+                        wa_profile_name: res.user.wa_profile_name,
+                        groups_managed: res.user.groups_managed,
+                        groups_automation: res.user.groups_automation,
+                        scheduled_messages: res.user.scheduled_messages,
+                        total: res.user.total,
                     });
 
                     es?.close();
