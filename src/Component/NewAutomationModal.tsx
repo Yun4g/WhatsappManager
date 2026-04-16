@@ -161,16 +161,31 @@ interface AutomationFormData {
     trigger: string;
     category: string;
     message: string;
-    trigger_config?: {
-        inactivity_days?: number;
-        milestone?: number;
-    };
+    trigger_config?: Record<string, string >;
 }
+
+/* 
+
+ {
+  "group_wa_id": "120363...@g.us",
+  "name": "Welcome every 5 members",
+  "trigger": "member_joined",
+  "trigger_config": { "threshold": 10 }, New thing
+  "category": "send_group_message",
+  "message": "Welcome to our newest members!"
+}
+*/
 
 interface Trigger {
     id: string;
     key: string;
     label: string;
+    config_fields?: Array<{
+        name: string;
+        type: string;
+        label: string;
+        placeholder: string;
+    }>;
 }
 export function NewGroupsAutomationModal({
     createLoading,
@@ -194,12 +209,11 @@ export function NewGroupsAutomationModal({
     const [isLoading, setIsLoading] = useState(true);
 
     const setConfigField = (field: string, value: string) => {
-        const numValue = parseInt(value);
         setForm((prev) => ({
             ...prev,
             trigger_config: {
                 ...prev.trigger_config,
-                [field]: isNaN(numValue) ? undefined : numValue,
+                [field]: value,
             },
         }));
     };
@@ -368,51 +382,31 @@ export function NewGroupsAutomationModal({
                 </div>
 
 
-                {form.trigger === "member_inactive" && (
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-1.5">
-                            <label className="text-[14px] font-semibold text-gray-800">
-                                Inactivity Days
-                            </label>
-                            <InfoIcon />
+                {form.trigger && (() => {
+                    const selectedTrigger = automationTriggers.find(t => t.key === form.trigger);
+                    return selectedTrigger?.config_fields?.map(field => (
+                        <div key={field.name} className="space-y-2">
+                            <div className="flex items-center gap-1.5">
+                                <label className="text-[14px] font-semibold text-gray-800">
+                                    {field.label}
+                                </label>
+                                <InfoIcon />
+                            </div>
+                            <input
+                                type={field.type}
+                                value={form.trigger_config?.[field.name] || ""}
+                                onChange={(e) => setConfigField(field.name, e.target.value)}
+                                placeholder={field.placeholder}
+                                className="
+                    w-full bg-transparent border-0 border-b border-gray-200
+                    text-[15px] text-gray-800 placeholder:text-gray-400 font-normal
+                    py-2 focus:outline-none focus:border-gray-400
+                    transition-colors duration-150
+                  "
+                            />
                         </div>
-                        <input
-                            type="number"
-                            value={form.trigger_config?.inactivity_days || ""}
-                            onChange={(e) => setConfigField("inactivity_days", e.target.value)}
-                            placeholder="e.g. 14"
-                            className="
-                w-full bg-transparent border-0 border-b border-gray-200
-                text-[15px] text-gray-800 placeholder:text-gray-400 font-normal
-                py-2 focus:outline-none focus:border-gray-400
-                transition-colors duration-150
-              "
-                        />
-                    </div>
-                )}
-
-                {form.trigger === "member_milestone" && (
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-1.5">
-                            <label className="text-[14px] font-semibold text-gray-800">
-                                Milestone Number
-                            </label>
-                            <InfoIcon />
-                        </div>
-                        <input
-                            type="number"
-                            value={form.trigger_config?.milestone || ""}
-                            onChange={(e) => setConfigField("milestone", e.target.value)}
-                            placeholder="e.g. 100"
-                            className="
-                w-full bg-transparent border-0 border-b border-gray-200
-                text-[15px] text-gray-800 placeholder:text-gray-400 font-normal
-                py-2 focus:outline-none focus:border-gray-400
-                transition-colors duration-150
-              "
-                        />
-                    </div>
-                )}
+                    ));
+                })()}
 
                 <div className="space-y-2">
                     <div className="flex items-center gap-1.5">

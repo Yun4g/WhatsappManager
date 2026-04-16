@@ -466,8 +466,9 @@ const GroupDetails: React.FC = () => {
     if (loading) {
         return <GroupDetailsSkeleton />;
     }
-
-
+const GroupAutomationpercentage = (groupAutomations.length / 10) * 100;
+const GroupSchedulepercentage = (scheduleMsg.length / 10) * 100;
+ console.log( GroupAutomationpercentage , 'percentage')
 
     return (
         <div className=" mb-[100px]">
@@ -584,9 +585,9 @@ const GroupDetails: React.FC = () => {
 
                         <div>
                             <p className="text-[#999999] text-sm font-medium">Automation Usage</p>
-                            <h3 className="text-xl text-[#171717] font-bold ">{mockData.automationUsage}</h3>
+                            <h3 className="text-xl text-[#171717] font-bold ">{groupAutomations.length}</h3>
                             <p className="text-xs text-gray-400 mt-7 flex items-center gap-1">
-                                {groupAutomations.length}/{mockData.automationUsage} used
+                                {groupAutomations.length}/10 used
                                 <span>
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6.9421 11.9798L13.5054 5.4165L14.5837 6.49476L8.02035 13.0581H13.8051V14.5832H5.41699V6.19507H6.9421V11.979V11.9798Z" fill="#FB3748" />
@@ -595,16 +596,18 @@ const GroupDetails: React.FC = () => {
                                 </span>
                             </p>
                             <div className="w-full h-2 bg-gray-200 rounded-full mt-2">
-                                <div className="w-[40%] h-full bg-[#FA7319] rounded-full" />
+                                <div 
+                                 style={{ width: `${GroupAutomationpercentage}%` }}
+                                className={` h-full bg-[#FA7319] rounded-full`}/>
                             </div>
                         </div>
 
 
                         <div>
                             <p className="text-[#999999] text-sm font-medium">Scheduled Message</p>
-                            <h3 className="text-xl text-[#171717] font-bold ">5</h3>
+                            <h3 className="text-xl text-[#171717] font-bold ">{scheduleMsg.length}</h3>
                             <p className="text-xs text-gray-400 mt-7 flex items-center gap-1">
-                                {scheduleMsg.length}/5 used
+                                {scheduleMsg.length}/10 used
                                 <span>
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6.9421 11.9798L13.5054 5.4165L14.5837 6.49476L8.02035 13.0581H13.8051V14.5832H5.41699V6.19507H6.9421V11.979V11.9798Z" fill="#FB3748" />
@@ -613,7 +616,9 @@ const GroupDetails: React.FC = () => {
                                 </span>
                             </p>
                             <div className="w-full h-2 bg-gray-200 rounded-full mt-2">
-                                <div className="w-[60%] h-full bg-[#335CFF] rounded-full" />
+                                <div 
+                                    style={{ width: `${GroupSchedulepercentage}%` }}
+                                className="h-full bg-[#335CFF] rounded-full" />
                             </div>
                         </div>
                     </div>
