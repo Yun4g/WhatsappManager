@@ -304,7 +304,7 @@ export default function GroupManager() {
 
                             {open && (
                                 <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-4">
-                                    <div className="bg-white w-full max-w-md rounded-3xl p-8">
+                                    <div className="bg-white w-full  max-h-[80%] overflow-y-auto hide-scrollbar max-w-md rounded-3xl p-8">
                                         <div className="flex justify-between items-center">
                                             <div>
                                                 <h3 className="text-lg font-semibold">Confirm Group</h3>

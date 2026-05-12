@@ -848,7 +848,7 @@ const GroupSchedulepercentage = (scheduleMsg.length / 10) * 100;
                             </button>
 
                             {[...Array(totalPages)].map((_, i) => {
-                                const page = i + 1;
+                                const page = i + 1; 
                                 if (page > 5) return null;
 
                                 return (
@@ -857,15 +857,15 @@ const GroupSchedulepercentage = (scheduleMsg.length / 10) * 100;
                                         onClick={() => setCurrentPage(page)}
                                         className={`w-8 h-8 p-[4px] rounded-lg text-sm flex text-[#999999] items-center justify-center transition ${currentPage === page
                                             ? "bg-[#F9F9F9] font-semibold"
-                                            : "border"
+                                            : "border" 
                                             }`}
                                     >
                                         {page}
                                     </button>
                                 );
                             })}
-
-                            {totalPages > 5 && (
+ 
+                            {totalPages > 5 && (  
                                 <span className="px-2 text-gray-400">...</span>
                             )}
 

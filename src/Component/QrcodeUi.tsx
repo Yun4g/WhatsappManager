@@ -219,7 +219,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             );
 
             es.addEventListener("qr", (event) => {
-
+              console.log(event, 'events data')
                 try {
                     const data = JSON.parse(event.data);
                     console.log(data, 'qr code data')
