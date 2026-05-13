@@ -1,4 +1,8 @@
+import { Payments } from "@/api/dashboard";
+import { useNavigate } from "react-router-dom";
+
 export default function PricingPage() {
+    const navigate = useNavigate()
     const plans = [
         {
             name: 'Free',
@@ -29,6 +33,19 @@ export default function PricingPage() {
             cta: 'Subscribe to Pro Plan',
         },
     ];
+
+
+    const handlePayment = async(name: string)=> {
+           if(name === "Free") return;
+
+           const res =  await Payments();
+           console.log(res);
+
+           if(res.authorization_url){
+                navigate(res.authorization_url);
+           }
+
+    }
 
     return (
         <div >
@@ -93,7 +110,9 @@ export default function PricingPage() {
                                             <span>Pricing renews automatically unless cancelled.</span>
                                         </div>
 
-                                        <button className="w-full sm:w-auto rounded-full bg-[#181925]  text-white  px-[14px] py-[13px] text-[12px] font-semibold shadow-sm hover:opacity-95 transition">
+                                        <button 
+                                         onClick={()=> handlePayment(plan.name)}
+                                        className="w-full sm:w-auto rounded-full bg-[#181925]  text-white  px-[14px] py-[13px] text-[12px] font-semibold shadow-sm hover:opacity-95 transition">
                                             {plan.cta}
                                         </button>
                                     </>

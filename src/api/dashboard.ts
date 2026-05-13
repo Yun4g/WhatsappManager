@@ -3,6 +3,7 @@ import axios from "axios";
 
 
 
+
 export const ConnectToWhatsappQrCode = async (userId: string)=> {
      try {
         const res = await axios.get(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${userId}&type=qr`, 
@@ -28,3 +29,18 @@ export const ConnectToWhatsappPhoneNumber = async ( userId: string, phoneNumber:
      
      }
 }
+
+
+export const  Payments = async () => {
+  try {
+    const res = await axios.get(
+      "https://manajer-22u7.onrender.com/payment/subscription",
+      { withCredentials: true }
+    );
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
