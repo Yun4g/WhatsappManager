@@ -50,7 +50,7 @@ export const  Payments = async () => {
             if (data.message) message = data.message;
           } else if (typeof axiosError.response?.data === 'string') {
             message = axiosError.response.data;
-          }
+          }         
         }
         return message;
       },

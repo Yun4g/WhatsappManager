@@ -64,7 +64,7 @@ function Dashboard() {
                     <section>
 
                         {
-                            user?.groups_managed > 2 ? (
+                            user?.groups_managed >= 2 ? (
                                 <GroupStats />
                             ) : (
                                 <GroupManager />
