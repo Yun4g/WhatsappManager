@@ -178,6 +178,8 @@ export default function ScheduledMessage({ onClose, groupData, setSuccessMsg, se
                     if (onClose) onClose();
                     setSuccessMsg(res?.message);
                 }, 1000);
+            } else {
+                if (setErrorMsg) setErrorMsg(res?.message || "Failed to schedule message");
             }
         } catch (error: unknown) {
             console.log(error);

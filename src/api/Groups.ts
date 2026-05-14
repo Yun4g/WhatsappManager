@@ -13,6 +13,7 @@ export const GetGroups = async () => {
         return res.data;
     } catch (error) {
         console.log(error);
+        throw error;
     }
 }
 
@@ -34,6 +35,7 @@ export const SavedGroups = async () => {
         return res.data;
     } catch (error) {
         console.log(error);
+        throw error;
     }
 }
 

@@ -481,9 +481,11 @@ const GroupSchedulepercentage = (scheduleMsg.length / 10) * 100;
                 <div className="w-full lg:w-[500px] bg-white mb-4 rounded-b-[28px] px-6 md:px-10 py-3 md:py-6 relative shadow-2xl pointer-events-auto">
                     <button
                         onClick={() => {
-                            fetchGroups()
+                            fetchGroups();
                             setOpen(false);
+                            setScheduleMessage(false);
                             fetchAutomation();
+                            fetchSchedule();
                             setShowSuccessModal(false);
                         }}
                         className="absolute top-1 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 transition"
@@ -512,8 +514,6 @@ const GroupSchedulepercentage = (scheduleMsg.length / 10) * 100;
                 <div className="w-full lg:w-[500px] bg-white mb-4 rounded-b-[28px] shadow-2xl px-6 md:px-10 py-3 md:py-6 relative pointer-events-auto">
                     <button
                         onClick={() => {
-                            setOpen(false);
-                            fetchAutomation();
                             setShowErrorModal(false)
                         }}
                         className="absolute top-1 z-50 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-200 transition"
@@ -930,6 +930,7 @@ const GroupSchedulepercentage = (scheduleMsg.length / 10) * 100;
                                 setNotificationTitle("Message Scheduled");
                                 setSuccessMsg(msg);
                                 setShowSuccessModal(true);
+                                fetchSchedule();
                             }}
                             setErrorMsg={(msg) => {
                                 setNotificationTitle("Scheduling Failed");
