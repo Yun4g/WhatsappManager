@@ -80,7 +80,8 @@ export const CreateAutomation = async (data: AutomationFormData) => {
         );
         return res.data;
     } catch (error) {
-        console.log(error);
+        console.log(error, 'error automation');
+        throw error; 
     }
 }
 
