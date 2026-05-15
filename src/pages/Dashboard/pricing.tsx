@@ -1,8 +1,8 @@
 import { Payments } from "@/api/dashboard";
-import { useNavigate } from "react-router-dom";
+
 
 export default function PricingPage() {
-    const navigate = useNavigate()
+
     const plans = [
         {
             name: 'Free',
@@ -42,7 +42,7 @@ export default function PricingPage() {
            console.log(res);
 
            if(res.authorization_url){
-                navigate(res.authorization_url);
+              window.open(res.authorization_url, '_self')
            }
 
     }

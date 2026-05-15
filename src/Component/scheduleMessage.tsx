@@ -282,7 +282,7 @@ export default function ScheduledMessage({ onClose, groupData, setSuccessMsg, se
                         Message <InfoDot />
                     </label>
                     <section>
-                        <textarea
+                         <textarea
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             placeholder="Type message"
