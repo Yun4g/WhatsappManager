@@ -25,7 +25,7 @@ const Auth: React.FC = () => {
 
                     <div className='mt-[56px]'>
                         <button 
-                         onClick={() => window.location.href = 'https://manajer-22u7.onrender.com/auth/google'}
+                         onClick={() => window.location.href = 'https://manajer-x4iu.onrender.com/auth/google'}
                         className='flex py-[16px] px-4 md:px-[56px] items-center justify-center gap-2 w-full bg-[#F5F5F5] text-[#181925] text-[16px] font-bold  rounded-full'>
                             <span>
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 export const ConnectToWhatsappQrCode = async (userId: string)=> {
      try {
-        const res = await axios.get(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${userId}&type=qr`, 
+        const res = await axios.get(`https://manajer-x4iu.onrender.com/data/whatsapp/connect?userId=${userId}&type=qr`, 
              {withCredentials: true}
     )
         return res.data;
@@ -19,7 +19,7 @@ export const ConnectToWhatsappQrCode = async (userId: string)=> {
 
 export const ConnectToWhatsappPhoneNumber = async ( userId: string, phoneNumber: string)=> {
      try {
-        const res = await axios.get(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${userId}&type=phone&phoneNumber=${phoneNumber}`, 
+        const res = await axios.get(`https://manajer-x4iu.onrender.com/data/whatsapp/connect?userId=${userId}&type=phone&phoneNumber=${phoneNumber}`, 
              {withCredentials: true}
     )
         return res.data;
@@ -34,7 +34,7 @@ export const ConnectToWhatsappPhoneNumber = async ( userId: string, phoneNumber:
 export const  Payments = async () => {
   try {
     const paymentPromise = axios.get(
-      "https://manajer-22u7.onrender.com/payment/subscription",
+      "https://manajer-x4iu.onrender.com/payment/subscription",
       { withCredentials: true }
     );
 

@@ -68,7 +68,7 @@ export default function GroupManager() {
             setLoading(true);
             setGroups([]);
             es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/groups`, { withCredentials: true }
+                `https://manajer-x4iu.onrender.com/data/whatsapp/groups`, { withCredentials: true }
             );
 
             es.addEventListener("groups_batch", (event) => {
@@ -90,7 +90,7 @@ export default function GroupManager() {
                 if (es) es.close();
 
 
-                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/groups`, {
+                fetch(`https://manajer-x4iu.onrender.com/data/whatsapp/groups`, {
                     method: 'HEAD',
                     credentials: 'include'
                 },)

@@ -49,7 +49,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
 
         try {
             es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, { withCredentials: true }
+                `https://manajer-x4iu.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, { withCredentials: true }
             );
 
             es.addEventListener("qr", (event) => {
@@ -92,7 +92,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             es.onerror = () => {
                 console.log("SSE error");
                 es?.close();
-                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, {
+                fetch(`https://manajer-x4iu.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, {
                     method: 'HEAD',
                     credentials: 'include'
                 })
@@ -133,7 +133,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             setLoading(true);
 
             es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`, { withCredentials: true }
+                `https://manajer-x4iu.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`, { withCredentials: true }
             );
 
             es.addEventListener("phone", (event) => {
@@ -172,7 +172,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 console.log("SSE error");
                 es?.close();
 
-                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`, {
+                fetch(`https://manajer-x4iu.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phone}`, {
                     method: 'HEAD',
                     credentials: 'include'
                 })
@@ -215,7 +215,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
             setInitialQrLoading(true);
 
             es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, { withCredentials: true }
+                `https://manajer-x4iu.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, { withCredentials: true }
             );
 
             es.addEventListener("qr", (event) => {
@@ -266,7 +266,7 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                 es?.close();
 
 
-                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, {
+                fetch(`https://manajer-x4iu.onrender.com/data/whatsapp/connect?userId=${user.id}&type=qr`, {
                     method: 'HEAD',
                     credentials: 'include'
                 })

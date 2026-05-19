@@ -39,7 +39,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
             setLoading(true);
 
             es = new EventSource(
-                `https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phoneInStore}`, { withCredentials: true }
+                `https://manajer-x4iu.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phoneInStore}`, { withCredentials: true }
             );
 
             es.addEventListener("phone", (event) => {
@@ -79,7 +79,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                 console.log("SSE error");
                 es?.close();
 
-                fetch(`https://manajer-22u7.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phoneInStore}`, {
+                fetch(`https://manajer-x4iu.onrender.com/data/whatsapp/connect?userId=${user.id}&type=phone&phoneNumber=${phoneInStore}`, {
                     method: 'HEAD',
                     credentials: 'include'
                 })

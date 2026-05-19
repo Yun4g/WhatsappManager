@@ -7,7 +7,7 @@ import axios from "axios";
 
 export const GetGroups = async () => {
     try {
-        const res = await axios.get('https://manajer-22u7.onrender.com/data/whatsapp/groups', {
+        const res = await axios.get('https://manajer-x4iu.onrender.com/data/whatsapp/groups', {
             withCredentials: true,
         });
         return res.data;
@@ -19,7 +19,7 @@ export const GetGroups = async () => {
 
 export const SelectGroups = async (groups: Group[]) => {
     const res = await axios.post(
-        'https://manajer-22u7.onrender.com/data/whatsapp/store-groups',
+        'https://manajer-x4iu.onrender.com/data/whatsapp/store-groups',
         { groups },
         { withCredentials: true }
     );
@@ -28,7 +28,7 @@ export const SelectGroups = async (groups: Group[]) => {
 
 export const SavedGroups = async () => {
     try {
-        const res = await axios.get('https://manajer-22u7.onrender.com/data/whatsapp/saved-groups'
+        const res = await axios.get('https://manajer-x4iu.onrender.com/data/whatsapp/saved-groups'
             , {
                 withCredentials: true,
             });
@@ -43,7 +43,7 @@ export const SavedGroups = async () => {
 
 export const GetGroupById = async (groupId: string) => {
     try {
-        const res = await axios.get(`https://manajer-22u7.onrender.com/data/whatsapp/groups/${groupId}`, {
+        const res = await axios.get(`https://manajer-x4iu.onrender.com/data/whatsapp/groups/${groupId}`, {
             withCredentials: true,
         });
         return res.data;
@@ -55,7 +55,7 @@ export const GetGroupById = async (groupId: string) => {
 
 export const GetTriggersAndCategory = async () => {
     try {
-        const res = await axios.get(`https://manajer-22u7.onrender.com/automation/triggers`, {
+        const res = await axios.get(`https://manajer-x4iu.onrender.com/automation/triggers`, {
             withCredentials: true,
         });
         return res.data;
@@ -69,7 +69,7 @@ export const CreateAutomation = async (data: AutomationFormData) => {
 
 
     try {
-        const res = await axios.post(`https://manajer-22u7.onrender.com/automation/create`,
+        const res = await axios.post(`https://manajer-x4iu.onrender.com/automation/create`,
             {
                 userId: data.userId,
                 group_wa_id: data.group_wa_id,
@@ -93,7 +93,7 @@ export const GetAllAutomation = async (group_wa_id: string) => {
 
 
     try {
-        const res = await axios.post(`https://manajer-22u7.onrender.com/automation/all`,
+        const res = await axios.post(`https://manajer-x4iu.onrender.com/automation/all`,
             {
                 group_wa_id: group_wa_id
             },
@@ -117,7 +117,7 @@ interface ScheduleMessageData {
 export const ScheduleMessage = async (data: ScheduleMessageData) => {
 
     try {
-        const res = await axios.post(`https://manajer-22u7.onrender.com/schedule/message`,
+        const res = await axios.post(`https://manajer-x4iu.onrender.com/schedule/message`,
             {
                 type: data.type,
                 group_wa_id: data.group_wa_id,
@@ -138,7 +138,7 @@ export const ScheduleMessage = async (data: ScheduleMessageData) => {
 export const GetScheduleMessage = async (data: string) => {
 
     try {
-        const res = await axios.post(`https://manajer-22u7.onrender.com/schedule/all `,
+        const res = await axios.post(`https://manajer-x4iu.onrender.com/schedule/all `,
             {
                 group_wa_id: data,
             },
@@ -154,7 +154,7 @@ export const GetScheduleMessage = async (data: string) => {
 export const ToggleAutomationButton = async (id: number, isActive: boolean) => {
 
     try {
-        const res = await axios.get(`https://manajer-22u7.onrender.com/automation/toggle?automationId=${id}&isActive=${isActive}`,
+        const res = await axios.get(`https://manajer-x4iu.onrender.com/automation/toggle?automationId=${id}&isActive=${isActive}`,
             { withCredentials: true, }
         );
         return res.data;
@@ -167,7 +167,7 @@ export const ToggleAutomationButton = async (id: number, isActive: boolean) => {
 
 export const DeleteAutomation = async (automationId: number) => {
     try {
-        const res = await axios.delete(`https://manajer-22u7.onrender.com/automation/remove/?automationId=${automationId}`, {
+        const res = await axios.delete(`https://manajer-x4iu.onrender.com/automation/remove/?automationId=${automationId}`, {
             withCredentials: true,
         });
         return res.data;
