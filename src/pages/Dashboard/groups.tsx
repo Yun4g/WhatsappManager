@@ -1,9 +1,9 @@
 
 import { SavedGroups } from "@/api/Groups";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-
+import { Link, useNavigate } from "react-router-dom";
+import { useUserStore } from "@/store/userData";
+import ConnectPrompt from "@/Component/ConnectPrompt";
 
 interface Group {
     id: number;
@@ -26,6 +26,8 @@ export default function Groups() {
     const [currentPage, setCurrentPage] = useState(1);
     const [groups, setGroups] = useState<Group[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const user = useUserStore((state) => state.user);
+    const isConnected = user?.connected ?? false;
     console.log(groups, 'groups view');
     const navigate = useNavigate();
 
@@ -48,6 +50,17 @@ export default function Groups() {
 
     useEffect(() => {
         let isMounted = true;
+
+        if (!isConnected) {
+            if (isMounted) {
+                setGroups([]);
+                setLoading(false);
+            }
+            return () => {
+                isMounted = false;
+            };
+        }
+
         const fetchGroups = async () => {
             setLoading(true);
             try {
@@ -65,7 +78,7 @@ export default function Groups() {
         return () => {
             isMounted = false;
         };
-    }, []);
+    }, [isConnected]);
 
 
 
@@ -76,6 +89,7 @@ export default function Groups() {
 
     return (
         <div className="min-h-screen">
+            <ConnectPrompt visible={!isConnected} />
             <div className=" mb-[170px] md:mb-7">
                 <h1 className="text-2xl font-bold text-[#181925] ">Groups</h1>
                 <p className="text-XS font-meduim text-[#999999] mb-4">Manage your groups</p>
@@ -98,7 +112,22 @@ export default function Groups() {
 
 
                     <div className="divide-y">
-                        {loading ? (
+                        {!isConnected ? (
+                            <div className="p-8 text-center text-gray-600">
+                                <p className="text-lg font-semibold text-[#181925]">Connect your WhatsApp account</p>
+                                <p className="mt-3 text-sm text-[#64748b]">
+                                    You must connect before you can view groups or group details.
+                                </p>
+                                <div className="mt-6 flex justify-center">
+                                    <Link
+                                        to="/dashboard"
+                                        className="rounded-full bg-[#181925] px-5 py-3 text-sm font-semibold text-white hover:bg-slate-900 transition"
+                                    >
+                                        Go connect now
+                                    </Link>
+                                </div>
+                            </div>
+                        ) : loading ? (
                             <div className="space-y-4 p-4">
                                 {[...Array(5)].map((_, i) => (
                                     <div key={i} className={`flex flex-col animate-pulse ${i !== 0 ? 'border-t border-[#F0F0F0] pt-4' : ''} gap-4`}>

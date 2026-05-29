@@ -8,6 +8,8 @@ import { CreateAutomation, DeleteAutomation, GetAllAutomation, GetGroupById, Get
 import { useNavigate } from "react-router-dom";
 import { NewGroupsAutomationModal } from "@/Component/NewAutomationModal";
 import ScheduledMessage from "@/Component/scheduleMessage";
+import { useUserStore } from "@/store/userData";
+import ConnectPrompt from "@/Component/ConnectPrompt";
 import { AxiosError } from "axios";
 
 
@@ -215,6 +217,8 @@ const GroupDetails: React.FC = () => {
     const [loading, setLoading] = React.useState<boolean>(true);
     const [automationLoading, setAutomationLoading] = React.useState<boolean>(true);
     const [scheduleLoading, setScheduleLoading] = React.useState<boolean>(true);
+    const user = useUserStore((state) => state.user);
+    const isConnected = user?.connected ?? false;
     const [notificationTitle, setNotificationTitle] = React.useState<string>("");
     const [automationName, setAutomationName] = React.useState<string>("")
     console.log(automationName)
@@ -380,10 +384,11 @@ const GroupDetails: React.FC = () => {
 
 
     useEffect(() => {
+        if (!isConnected) return;
         fetchGroups();
         fetchAutomation();
         fetchSchedule();
-    }, [fetchGroups, fetchAutomation, fetchSchedule]);
+    }, [isConnected, fetchGroups, fetchAutomation, fetchSchedule]);
 
 
 
@@ -463,10 +468,25 @@ const GroupDetails: React.FC = () => {
 
 
 
+    if (!isConnected) {
+        return (
+            <div className="min-h-screen bg-[#F9F9F9] pt-28 pb-10 px-4">
+                <ConnectPrompt visible={!isConnected} />
+                <div className="mx-auto max-w-3xl rounded-[28px] bg-white p-8 shadow-sm border border-slate-200 text-center">
+                    <h1 className="text-2xl font-semibold text-[#181925]">Connect to WhatsApp</h1>
+                    <p className="mt-3 text-sm text-slate-600">
+                        You must connect your WhatsApp account before viewing group details.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
     if (loading) {
         return <GroupDetailsSkeleton />;
     }
-const GroupAutomationpercentage = (groupAutomations.length / 10) * 100;
+
+    const GroupAutomationpercentage = (groupAutomations.length / 10) * 100;
 const GroupSchedulepercentage = (scheduleMsg.length / 10) * 100;
  console.log( GroupAutomationpercentage , 'percentage')
 

@@ -1,5 +1,6 @@
 import { Payments } from "@/api/dashboard";
-
+import { useUserStore } from "@/store/userData";
+import ConnectPrompt from "@/Component/ConnectPrompt";
 
 export default function PricingPage() {
 
@@ -35,8 +36,15 @@ export default function PricingPage() {
     ];
 
 
+    const user = useUserStore((state) => state.user);
+    const isConnected = user?.connected ?? false;
+
     const handlePayment = async(name: string)=> {
            if(name === "Free") return;
+
+           if (!isConnected) {
+             return;
+           }
 
            const res =  await Payments();
            console.log(res);
@@ -49,6 +57,7 @@ export default function PricingPage() {
 
     return (
         <div >
+            <ConnectPrompt visible={!isConnected} message="Connect your WhatsApp account before using payments." />
             <div className="w-full ">
                 <div className="mb-6">
                     <h1 className="text-[24px] font-bold  text-[#181925]">
@@ -112,7 +121,8 @@ export default function PricingPage() {
 
                                         <button 
                                          onClick={()=> handlePayment(plan.name)}
-                                        className="w-full sm:w-auto rounded-full bg-[#181925]  text-white  px-[14px] py-[13px] text-[12px] font-semibold shadow-sm hover:opacity-95 transition">
+                                         disabled={!isConnected}
+                                        className={`w-full sm:w-auto rounded-full text-white px-[14px] py-[13px] text-[12px] font-semibold shadow-sm transition ${isConnected ? 'bg-[#181925] hover:opacity-95' : 'bg-gray-300 cursor-not-allowed opacity-70'}`}>
                                             {plan.cta}
                                         </button>
                                     </>
