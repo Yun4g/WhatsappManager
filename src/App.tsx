@@ -24,9 +24,9 @@ function App() {
 
         <Route element={<Layout/>}>
          <Route path='/dashboard' element={<Dashboard/>}/>
-          <Route path='/Groups' element={<Groups/>}/>
-           <Route path='/Groups/:id' element={<GroupDetails/>}/>
-           <Route path='/Pricing' element={<PricingPage/>}/>
+          <Route path='/groups' element={<Groups/>}/>
+           <Route path='/groups/:id' element={<GroupDetails/>}/>
+           <Route path='/pricing' element={<PricingPage/>}/>
         </Route>
        
       
