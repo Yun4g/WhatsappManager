@@ -89,7 +89,7 @@ export default function Groups() {
 
     return (
         <div className="min-h-screen">
-            <ConnectPrompt visible={!isConnected} />
+            <ConnectPrompt visible={isConnected} />
             <div className=" mb-[170px] md:mb-7">
                 <h1 className="text-2xl font-bold text-[#181925] ">Groups</h1>
                 <p className="text-XS font-meduim text-[#999999] mb-4">Manage your groups</p>

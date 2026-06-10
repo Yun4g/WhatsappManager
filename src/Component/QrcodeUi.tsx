@@ -346,9 +346,12 @@ function QrcodeUi({ isConnected, setConnectMethodPhone }: PropsType) {
                             )
                         }
 
-                        <p className="text-[#999999] text-[12px] mt-[5px] font-bold">
+                        <p className="text-[#999999] text-[12px] mt-[5px] font-bold  text-center">
                             Sync WhatsApp to App
                         </p>
+                         <p className="text-[#999999] text-[12px] mt-[5px] font-bold text-center">
+                            Test with a separate WhatsApp account Not your personal Whatsapp account
+                         </p>
 
                         <div className="mt-[5px]">
                             <svg width="73" height="42" viewBox="0 0 73 42" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">

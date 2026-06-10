@@ -12,7 +12,7 @@ export default function ConnectPrompt({ visible, message }: ConnectPromptProps) 
         visible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
       }`}
     >
-      <div className="mx-auto max-w-3xl px-4 pt-4">
+      <div className="mx-auto max-w-lg px-4 pt-4">
         <div className="rounded-b-[28px] bg-white p-6 shadow-2xl border border-slate-200">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -23,9 +23,9 @@ export default function ConnectPrompt({ visible, message }: ConnectPromptProps) 
             </div>
             <Link
               to="/dashboard"
-              className="inline-flex items-center justify-center rounded-full bg-[#181925] px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-900 transition"
+              className="inline-flex items-center justify-center text-center rounded-full bg-[#181925] px-3 py-3 text-xs font-semibold text-white shadow-sm hover:bg-slate-900 transition"
             >
-              Connect now
+              Connect
             </Link>
           </div>
         </div>
