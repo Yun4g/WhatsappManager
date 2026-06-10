@@ -51,6 +51,19 @@ const Auth: React.FC = () => {
 
 
 
+                <div className='w-full max-w-[360px] h-auto rounded-[24px]  mt-5 bg-white py-[10px] px-6 md:px-[24px] flex flex-col items-center '>
+            
+                    <div className='mt-[14px] text-center'>
+                        <h1 className='text-[#181925] font-bold text-base'>DISCLAIMER</h1>
+
+                        <p className=' text-[#666666] text-[10px] mb-2 leading-4 mt-[12px] font-medium'>
+                            This app uses the unofficial Baileys library to automate WhatsApp group actions; it may conflict with WhatsApp’s Terms of Service and could put your account at risk of suspension, permanent ban, or security breaches—use at your own risk.
+                        </p>
+                    </div>                   
+                </div>
+
+
+
                 <footer className='absolute bottom-6 left-0 w-full px-6 md:px-[44px] flex justify-between items-center'>
                     <p className='text-[#5C5C5C] text-sm font-semibold'>
                         © {new Date().getFullYear()}  Group Manager
