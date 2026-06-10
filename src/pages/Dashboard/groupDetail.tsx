@@ -813,8 +813,8 @@ const GroupSchedulepercentage = (scheduleMsg.length / 10) * 100;
                                         </p>
                                         <p
                                             className={`text-xs flex items-center gap-1 font-medium ${item.status === "sent"
-                                                ? "text-[#1FC16B]"
-                                                : "text-[#F6B51E]"
+                                                ? "text-[#1FC16B]" : item.status === "pending"
+                                                ? "text-[#F6B51E]" : "text-[#fc0b0b]"
                                                 }`}
                                         >
                                             <span className=" text-xs text-[#999999] font-medium">
