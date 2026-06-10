@@ -131,6 +131,15 @@ export const ScheduleMessage = async (data: ScheduleMessageData) => {
         return res.data;
     } catch (error) {
         console.log(error);
+        // If the server returned a response (e.g., 403 with a message), return that body
+        // so callers can surface the meaningful API message to users.
+        // Otherwise return a generic error object.
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        if (error?.response?.data) return error.response.data;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return { success: false, message: error?.message || 'Failed to schedule message' };
     }
 }
 
