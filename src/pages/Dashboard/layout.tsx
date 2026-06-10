@@ -2,7 +2,7 @@
 import { getUser } from "@/api/user";
 import { useUserStore } from "@/store/userData";
 import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { Outlet, useLocation } from "react-router-dom";
@@ -81,10 +81,10 @@ function Layout() {
         },
     ];
     const [loading, setLoading] = useState<boolean>(false)
-
+    const hasFetchedUser = useRef(false);
 
     const fetchUser = async () => {
-        if (user?.name || user) {
+        if (user) {
             console.log(user, 'user Data')
             return;
         }
@@ -136,8 +136,10 @@ function Layout() {
     };
 
     useEffect(() => {
-        fetchUser()
-    }, []);
+        if (user || hasFetchedUser.current) return;
+        hasFetchedUser.current = true;
+        fetchUser();
+    }, [user]);
 
 
 
@@ -148,7 +150,7 @@ function Layout() {
 
 
 
-    if (loading) {
+    if (loading && !user) {
         return (
             <div className="fixed inset-0 bg-white/40 flex items-center justify-center z-50">
                 <div>

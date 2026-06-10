@@ -215,7 +215,7 @@ const GroupDetails: React.FC = () => {
     const [showErrorModal, setShowErrorModal] = React.useState<boolean>(false)
     const [groupData, setGroupData] = React.useState<WhatsAppGroup | null>(null);
     const [loading, setLoading] = React.useState<boolean>(true);
-    const [automationLoading, setAutomationLoading] = React.useState<boolean>(true);
+    const [automationLoading, setAutomationLoading] = React.useState<boolean>(false);
     const [scheduleLoading, setScheduleLoading] = React.useState<boolean>(true);
     const user = useUserStore((state) => state.user);
     const isConnected = user?.connected ?? false;
