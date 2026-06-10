@@ -179,12 +179,12 @@ export default function ScheduledMessage({ onClose, groupData, setSuccessMsg, se
                     setSuccessMsg(res?.message);
                 }, 1000);
             } else {
-                if (setErrorMsg) setErrorMsg(res?.message || "Failed to schedule message");
+                const errMsg = res?.message || res?.data?.message || res?.data?.error || "Failed to schedule message";
+                if (setErrorMsg) setErrorMsg(errMsg);
             }
         } catch (error: unknown) {
             console.log(error);
             let errorMessage = "An error occurred while scheduling your message.";
-
             if (error instanceof AxiosError) {
                 errorMessage = error.response?.data?.message || errorMessage;
             } else if (error instanceof Error) {
