@@ -5,7 +5,7 @@ import {
 
 } from "lucide-react";
 import { CreateAutomation, DeleteAutomation, GetAllAutomation, GetGroupById, GetScheduleMessage, ToggleAutomationButton, } from "@/api/Groups";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { NewGroupsAutomationModal } from "@/Component/NewAutomationModal";
 import ScheduledMessage from "@/Component/scheduleMessage";
 import { useUserStore } from "@/store/userData";
@@ -203,7 +203,7 @@ const GroupDetailsSkeleton: React.FC = () => {
 
 
 const GroupDetails: React.FC = () => {
-    const groupId = window.location.pathname.split("/Groups/")[1];
+    const { id: groupId } = useParams<{ id: string }>();
     console.log(groupId, 'groupId in group details');
     const [open, setOpen] = React.useState<boolean>(false);
     const [scheduleMessage, setScheduleMessage] = React.useState<boolean>(false);
@@ -282,6 +282,7 @@ const GroupDetails: React.FC = () => {
     const currentPageItems = scheduleMsg.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     const fetchGroups = React.useCallback(async () => {
+        if (!groupId) return;
         setLoading(true);
         try {
             const res = await GetGroupById(groupId);
@@ -333,6 +334,7 @@ const GroupDetails: React.FC = () => {
 
 
     const fetchAutomation = React.useCallback(async () => {
+        if (!groupId) return;
         setAutomationLoading(true);
         try {
             const res = await GetAllAutomation(groupId);
@@ -351,6 +353,7 @@ const GroupDetails: React.FC = () => {
 
 
     const fetchSchedule = React.useCallback(async () => {
+        if (!groupId) return;
         setScheduleLoading(true);
         try {
             const res = await GetScheduleMessage(groupId);
