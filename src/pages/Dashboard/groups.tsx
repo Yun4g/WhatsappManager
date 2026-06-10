@@ -203,7 +203,7 @@ export default function Groups() {
 
                                         <div className="flex justify-end">
                                             <button
-                                                onClick={() => navigate(`/Groups/${group.group_wa_id}`)}
+                                                onClick={() => navigate(`/groups/${group.group_wa_id}`)}
                                                 className="px-[13px] py-3 rounded-full font-bold text-[#181925] text-xs border transition">
                                                 View Group
                                             </button>
