@@ -53,7 +53,7 @@ function Layout() {
                 </svg>
             ),
             label: "Groups",
-            path: "/Groups",
+            path: "/groups",
         },
         {
             icon: (
@@ -77,7 +77,7 @@ function Layout() {
                 </svg>
             ),
             label: "Pricing",
-            path: "/Pricing",
+            path: "/pricing",
         },
     ];
     const [loading, setLoading] = useState<boolean>(false)
