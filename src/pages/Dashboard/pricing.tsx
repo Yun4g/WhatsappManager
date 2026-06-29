@@ -37,6 +37,7 @@ export default function PricingPage() {
 
 
     const user = useUserStore((state) => state.user);
+
     const isConnected = user?.connected ?? false;
 
     const handlePayment = async(name: string)=> {
@@ -121,8 +122,8 @@ export default function PricingPage() {
 
                                         <button 
                                          onClick={()=> handlePayment(plan.name)}
-                                         disabled={!isConnected}
-                                        className={`w-full sm:w-auto rounded-full text-white px-[14px] py-[13px] text-[12px] font-semibold shadow-sm transition ${isConnected ? 'bg-[#181925] hover:opacity-95' : 'bg-gray-300 cursor-not-allowed opacity-70'}`}>
+                                         disabled={!isConnected || user?.plan === "premuim"}
+                                        className={`w-full sm:w-auto rounded-full text-white px-[14px] py-[13px] text-[12px] font-semibold shadow-sm transition ${isConnected || user?.plan !== "premuim" ? 'bg-[#181925] hover:opacity-95' : 'bg-gray-300 cursor-not-allowed opacity-70'}`}>
                                             {plan.cta}
                                         </button>
                                     </>

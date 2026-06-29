@@ -104,6 +104,7 @@ function Layout() {
                 name: res.user.name,
                 profile_pic: res.user.profile_pic,
                 connected: res.user.connected,
+                plan: res.user.plan,
                 stored_groups: res.user.stored_groups,
                 wa_number: res.user.wa_number,
                 wa_profile_name: res.user.wa_profile_name,
