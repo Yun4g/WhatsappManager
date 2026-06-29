@@ -66,6 +66,7 @@ export default function PhonePairingUI({ setConnectMethodPhone }: propType) {
                         connected: res.user.connected,
                         stored_groups: res.user.stored_groups,
                         wa_number: res.user.wa_number,
+                        plan: res.user.plan,
                         wa_profile_name: res.user.wa_profile_name,
                         groups_managed: res.user.groups_managed,
                         groups_automation: res.user.groups_automation,
