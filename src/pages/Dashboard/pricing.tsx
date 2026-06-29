@@ -37,22 +37,23 @@ export default function PricingPage() {
 
 
     const user = useUserStore((state) => state.user);
+    console.log(user, 'User from pricing')
 
     const isConnected = user?.connected ?? false;
 
-    const handlePayment = async(name: string)=> {
-           if(name === "Free") return;
+    const handlePayment = async (name: string) => {
+        if (name === "Free") return;
 
-           if (!isConnected) {
-             return;
-           }
+        if (!isConnected) {
+            return;
+        }
 
-           const res =  await Payments();
-           console.log(res);
+        const res = await Payments();
+        console.log(res);
 
-           if(res.authorization_url){
-              window.open(res.authorization_url, '_self')
-           }
+        if (res.authorization_url) {
+            window.open(res.authorization_url, '_self')
+        }
 
     }
 
@@ -120,10 +121,14 @@ export default function PricingPage() {
                                             <span>Pricing renews automatically unless cancelled.</span>
                                         </div>
 
-                                        <button 
-                                         onClick={()=> handlePayment(plan.name)}
-                                         disabled={!isConnected || user?.plan === "premuim"}
-                                        className={`w-full sm:w-auto rounded-full text-white px-[14px] py-[13px] text-[12px] font-semibold shadow-sm transition ${isConnected || user?.plan !== "premuim" ? 'bg-[#181925] hover:opacity-95' : 'bg-gray-300 cursor-not-allowed opacity-70'}`}>
+                                        <button
+                                            onClick={() => handlePayment(plan.name)}
+                                            disabled={!isConnected || user?.plan === "premium"}
+                                            className={`w-full sm:w-auto rounded-full text-white px-[14px] py-[13px] text-[12px] font-semibold shadow-sm transition 
+                                                ${!isConnected || user?.plan === "premium"
+                                                    ? 'bg-gray-300 cursor-not-allowed opacity-70'  
+                                                    : 'bg-[#181925] hover:opacity-95'             
+                                                }`}>
                                             {plan.cta}
                                         </button>
                                     </>

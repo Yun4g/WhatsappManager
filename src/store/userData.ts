@@ -9,7 +9,7 @@ export interface UserDataType {
   profile_pic: string;
   connected: boolean;
   stored_groups: boolean;
-  plan: 'free' | 'premuim' | 'owner'
+  plan: 'free' | 'premium' | 'owner'
   groups_managed: number,
   groups_automation: string,
   scheduled_messages: string,
